@@ -827,17 +827,11 @@ neo<bool> operator==(neo<T> const& lhs, neo<U> const& rhs)
     return T{lhs} == U{rhs};
 }
 
-template<typename T, typename U, typename = std::enable_if_t<!are_similar<T, U>::value>, typename = void>
-neo<bool> operator==(neo<T> const& lhs, neo<U> const& rhs) = delete;
-
 template<typename T, typename U, typename = std::enable_if_t<are_similar<T, U>::value>>
 neo<bool> operator!=(neo<T> const& lhs, neo<U> const& rhs)
 {
     return T{lhs} != U{rhs};
 }
-
-template<typename T, typename U, typename = std::enable_if_t<!are_similar<T, U>::value>, typename = void>
-neo<bool> operator!=(neo<T> const& lhs, neo<U> const& rhs) = delete;
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<bool> operator<(neo<T> const& lhs, neo<U> const& rhs)
@@ -845,17 +839,11 @@ neo<bool> operator<(neo<T> const& lhs, neo<U> const& rhs)
     return T{lhs} < U{rhs};
 }
 
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_numeric<T, U>::value>, typename = void>
-neo<bool> operator<(neo<T> const& lhs, neo<U> const& rhs) = delete;
-
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<bool> operator<=(neo<T> const& lhs, neo<U> const& rhs)
 {
     return T{lhs} <= U{rhs};
 }
-
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_numeric<T, U>::value>, typename = void>
-neo<bool> operator<=(neo<T> const& lhs, neo<U> const& rhs) = delete;
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<bool> operator>(neo<T> const& lhs, neo<U> const& rhs)
@@ -863,17 +851,11 @@ neo<bool> operator>(neo<T> const& lhs, neo<U> const& rhs)
     return T{lhs} > U{rhs};
 }
 
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_numeric<T, U>::value>, typename = void>
-neo<bool> operator>(neo<T> const& lhs, neo<U> const& rhs) = delete;
-
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<bool> operator>=(neo<T> const& lhs, neo<U> const& rhs)
 {
     return T{lhs} >= U{rhs};
 }
-
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_numeric<T, U>::value>, typename = void>
-neo<bool> operator>=(neo<T> const& lhs, neo<U> const& rhs) = delete;
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator+(neo<T> const& lhs, neo<U> const& rhs)
@@ -881,17 +863,11 @@ neo<wider_t<T, U>> operator+(neo<T> const& lhs, neo<U> const& rhs)
     return T{lhs} + U{rhs};
 }
 
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_numeric<T, U>::value>, typename = void>
-neo<wider_t<T, U>> operator+(neo<T> const& lhs, neo<U> const& rhs) = delete;
-
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator-(neo<T> const& lhs, neo<U> const& rhs)
 {
     return T{lhs} - U{rhs};
 }
-
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_numeric<T, U>::value>, typename = void>
-neo<wider_t<T, U>> operator-(neo<T> const& lhs, neo<U> const& rhs) = delete;
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator*(neo<T> const& lhs, neo<U> const& rhs)
@@ -899,17 +875,11 @@ neo<wider_t<T, U>> operator*(neo<T> const& lhs, neo<U> const& rhs)
     return T{lhs} * U{rhs};
 }
 
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_numeric<T, U>::value>, typename = void>
-neo<wider_t<T, U>> operator*(neo<T> const& lhs, neo<U> const& rhs) = delete;
-
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator/(neo<T> const& lhs, neo<U> const& rhs)
 {
     return T{lhs} / U{rhs};
 }
-
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_numeric<T, U>::value>, typename = void>
-neo<wider_t<T, U>> operator/(neo<T> const& lhs, neo<U> const& rhs) = delete;
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator%(neo<T> const& lhs, neo<U> const& rhs)
@@ -917,17 +887,11 @@ neo<wider_t<T, U>> operator%(neo<T> const& lhs, neo<U> const& rhs)
     return T{lhs} % U{rhs};
 }
 
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_numeric<T, U>::value>, typename = void>
-neo<wider_t<T, U>> operator%(neo<T> const& lhs, neo<U> const& rhs) = delete;
-
 template<typename T, typename U, typename = std::enable_if_t<are_similar_unsigned_integral<T, U>::value>>
 neo<wider_t<T, U>> operator&(neo<T> const& lhs, neo<U> const& rhs)
 {
     return T{lhs} & U{rhs};
 }
-
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_unsigned_integral<T, U>::value>, typename = void>
-neo<wider_t<T, U>> operator&(neo<T> const& lhs, neo<U> const& rhs) = delete;
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_unsigned_integral<T, U>::value>>
 neo<wider_t<T, U>> operator|(neo<T> const& lhs, neo<U> const& rhs)
@@ -935,17 +899,11 @@ neo<wider_t<T, U>> operator|(neo<T> const& lhs, neo<U> const& rhs)
     return T{lhs} | U{rhs};
 }
 
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_unsigned_integral<T, U>::value>, typename = void>
-neo<wider_t<T, U>> operator|(neo<T> const& lhs, neo<U> const& rhs) = delete;
-
 template<typename T, typename U, typename = std::enable_if_t<are_similar_unsigned_integral<T, U>::value>>
 neo<wider_t<T, U>> operator^(neo<T> const& lhs, neo<U> const& rhs)
 {
     return T{lhs} ^ U{rhs};
 }
-
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_unsigned_integral<T, U>::value>, typename = void>
-neo<wider_t<T, U>> operator^(neo<T> const& lhs, neo<U> const& rhs) = delete;
 
 template<typename T, typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
 neo<T> operator<<(neo<T> const& lhs, neo<U> const& rhs)
@@ -953,23 +911,11 @@ neo<T> operator<<(neo<T> const& lhs, neo<U> const& rhs)
     return T{lhs} << U{rhs};
 }
 
-//template<typename T, typename U, typename = std::enable_if_t<!(is_unsigned_integral<T>::value && std::is_integral<U>::value)>, typename = void>
-//neo<T> operator<<(neo<T> const& lhs, neo<U> const& rhs) = delete;
-
 template<typename T, typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
 neo<T> operator>>(neo<T> const& lhs, neo<U> const& rhs)
 {
     return T{lhs} >> U{rhs};
 }
-
-//template<typename T, typename U, typename = std::enable_if_t<!(is_unsigned_integral<T>::value && std::is_integral<U>::value)>, typename = void>
-//neo<T> operator>>(neo<T> const& lhs, neo<U> const& rhs) = delete;
-
-//template<typename T, typename U, typename = std::enable_if_t<!(is_bool<T>::value && is_bool<U>::value)>>
-//bool operator&&(neo<T> const& lhs, neo<U> const& rhs) = delete;
-
-//template<typename T, typename U, typename = std::enable_if_t<!(is_bool<T>::value && is_bool<U>::value)>>
-//bool operator||(neo<T> const& lhs, neo<U> const& rhs) = delete;
 
 // neo<T> - U
 //------------
@@ -980,17 +926,11 @@ neo<bool> operator==(neo<T> const& lhs, U const& rhs)
     return T{lhs} == rhs;
 }
 
-template<typename T, typename U, typename = std::enable_if_t<!are_similar<T, U>::value>, typename = void>
-neo<bool> operator==(neo<T> const& lhs, U const& rhs) = delete;
-
 template<typename T, typename U, typename = std::enable_if_t<are_similar<T, U>::value>>
 neo<bool> operator!=(neo<T> const& lhs, U const& rhs)
 {
     return T{lhs} != rhs;
 }
-
-template<typename T, typename U, typename = std::enable_if_t<!are_similar<T, U>::value>, typename = void>
-neo<bool> operator!=(neo<T> const& lhs, U const& rhs) = delete;
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<bool> operator<(neo<T> const& lhs, U const& rhs)
@@ -998,17 +938,11 @@ neo<bool> operator<(neo<T> const& lhs, U const& rhs)
     return T{lhs} < rhs;
 }
 
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_numeric<T, U>::value>, typename = void>
-neo<bool> operator<(neo<T> const& lhs, U const& rhs) = delete;
-
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<bool> operator<=(neo<T> const& lhs, U const& rhs)
 {
     return T{lhs} <= rhs;
 }
-
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_numeric<T, U>::value>, typename = void>
-neo<bool> operator<=(neo<T> const& lhs, U const& rhs) = delete;
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<bool> operator>(neo<T> const& lhs, U const& rhs)
@@ -1016,17 +950,11 @@ neo<bool> operator>(neo<T> const& lhs, U const& rhs)
     return T{lhs} > rhs;
 }
 
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_numeric<T, U>::value>, typename = void>
-neo<bool> operator>(neo<T> const& lhs, U const& rhs) = delete;
-
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<bool> operator>=(neo<T> const& lhs, U const& rhs)
 {
     return T{lhs} >= rhs;
 }
-
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_numeric<T, U>::value>, typename = void>
-neo<bool> operator>=(neo<T> const& lhs, U const& rhs) = delete;
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator+(neo<T> const& lhs, U const& rhs)
@@ -1034,17 +962,11 @@ neo<wider_t<T, U>> operator+(neo<T> const& lhs, U const& rhs)
     return T{lhs} + rhs;
 }
 
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_numeric<T, U>::value>, typename = void>
-neo<wider_t<T, U>> operator+(neo<T> const& lhs, U const& rhs) = delete;
-
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator-(neo<T> const& lhs, U const& rhs)
 {
     return T{lhs} - rhs;
 }
-
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_numeric<T, U>::value>, typename = void>
-neo<wider_t<T, U>> operator-(neo<T> const& lhs, U const& rhs) = delete;
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator*(neo<T> const& lhs, U const& rhs)
@@ -1052,17 +974,11 @@ neo<wider_t<T, U>> operator*(neo<T> const& lhs, U const& rhs)
     return T{lhs} * rhs;
 }
 
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_numeric<T, U>::value>, typename = void>
-neo<wider_t<T, U>> operator*(neo<T> const& lhs, U const& rhs) = delete;
-
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator/(neo<T> const& lhs, U const& rhs)
 {
     return T{lhs} / rhs;
 }
-
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_numeric<T, U>::value>, typename = void>
-neo<wider_t<T, U>> operator/(neo<T> const& lhs, U const& rhs) = delete;
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator%(neo<T> const& lhs, U const& rhs)
@@ -1070,17 +986,11 @@ neo<wider_t<T, U>> operator%(neo<T> const& lhs, U const& rhs)
     return T{lhs} % rhs;
 }
 
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_numeric<T, U>::value>, typename = void>
-neo<wider_t<T, U>> operator%(neo<T> const& lhs, U const& rhs) = delete;
-
 template<typename T, typename U, typename = std::enable_if_t<are_similar_unsigned_integral<T, U>::value>>
 neo<wider_t<T, U>> operator&(neo<T> const& lhs, U const& rhs)
 {
     return T{lhs} & rhs;
 }
-
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_unsigned_integral<T, U>::value>, typename = void>
-neo<wider_t<T, U>> operator&(neo<T> const& lhs, U const& rhs) = delete;
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_unsigned_integral<T, U>::value>>
 neo<wider_t<T, U>> operator|(neo<T> const& lhs, U const& rhs)
@@ -1088,17 +998,11 @@ neo<wider_t<T, U>> operator|(neo<T> const& lhs, U const& rhs)
     return T{lhs} | rhs;
 }
 
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_unsigned_integral<T, U>::value>, typename = void>
-neo<wider_t<T, U>> operator|(neo<T> const& lhs, U const& rhs) = delete;
-
 template<typename T, typename U, typename = std::enable_if_t<are_similar_unsigned_integral<T, U>::value>>
 neo<wider_t<T, U>> operator^(neo<T> const& lhs, U const& rhs)
 {
     return T{lhs} ^ rhs;
 }
-
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_unsigned_integral<T, U>::value>, typename = void>
-neo<wider_t<T, U>> operator^(neo<T> const& lhs, U const& rhs) = delete;
 
 template<typename T, typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
 neo<T> operator<<(neo<T> const& lhs, U const& rhs)
@@ -1106,17 +1010,11 @@ neo<T> operator<<(neo<T> const& lhs, U const& rhs)
     return T{lhs} << rhs;
 }
 
-//template<typename T, typename U, typename = std::enable_if_t<!(is_unsigned_integral<T>::value && std::is_integral<U>::value)>, typename = void>
-//neo<T> operator<<(neo<T> const& lhs, U const& rhs) = delete;
-
 template<typename T, typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
 neo<T> operator>>(neo<T> const& lhs, U const& rhs)
 {
     return T{lhs} >> rhs;
 }
-
-//template<typename T, typename U, typename = std::enable_if_t<!(is_unsigned_integral<T>::value && std::is_integral<U>::value)>, typename = void>
-//neo<T> operator>>(neo<T> const& lhs, U const& rhs) = delete;
 
 template<typename T, typename = std::enable_if_t<is_numeric<T>::value>>
 bool operator&&(neo<bool> const& lhs, T const& rhs) = delete;
@@ -1133,17 +1031,11 @@ neo<bool> operator==(U const& lhs, neo<T> const& rhs)
     return lhs == T{rhs};
 }
 
-template<typename T, typename U, typename = std::enable_if_t<!are_similar<T, U>::value>, typename = void>
-neo<bool> operator==(U const& lhs, neo<T> const& rhs) = delete;
-
 template<typename T, typename U, typename = std::enable_if_t<are_similar<T, U>::value>>
 neo<bool> operator!=(U const& lhs, neo<T> const& rhs)
 {
     return lhs != T{rhs};
 }
-
-template<typename T, typename U, typename = std::enable_if_t<!are_similar<T, U>::value>, typename = void>
-neo<bool> operator!=(U const& lhs, neo<T> const& rhs) = delete;
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<bool> operator<(U const& lhs, neo<T> const& rhs)
@@ -1151,17 +1043,11 @@ neo<bool> operator<(U const& lhs, neo<T> const& rhs)
     return lhs < T{rhs};
 }
 
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_numeric<T, U>::value>, typename = void>
-neo<bool> operator<(U const& lhs, neo<T> const& rhs) = delete;
-
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<bool> operator<=(U const& lhs, neo<T> const& rhs)
 {
     return lhs <= T{rhs};
 }
-
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_numeric<T, U>::value>, typename = void>
-neo<bool> operator<=(U const& lhs, neo<T> const& rhs) = delete;
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<bool> operator>(U const& lhs, neo<T> const& rhs)
@@ -1169,17 +1055,11 @@ neo<bool> operator>(U const& lhs, neo<T> const& rhs)
     return lhs > T{rhs};
 }
 
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_numeric<T, U>::value>, typename = void>
-neo<bool> operator>(U const& lhs, neo<T> const& rhs) = delete;
-
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<bool> operator>=(U const& lhs, neo<T> const& rhs)
 {
     return lhs >= T{rhs};
 }
-
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_numeric<T, U>::value>, typename = void>
-neo<bool> operator>=(U const& lhs, neo<T> const& rhs) = delete;
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator+(U const& lhs, neo<T> const& rhs)
@@ -1187,17 +1067,11 @@ neo<wider_t<T, U>> operator+(U const& lhs, neo<T> const& rhs)
     return lhs + T{rhs};
 }
 
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_numeric<T, U>::value>, typename = void>
-neo<wider_t<T, U>> operator+(U const& lhs, neo<T> const& rhs) = delete;
-
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator-(U const& lhs, neo<T> const& rhs)
 {
     return lhs - T{rhs};
 }
-
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_numeric<T, U>::value>, typename = void>
-neo<wider_t<T, U>> operator-(U const& lhs, neo<T> const& rhs) = delete;
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator*(U const& lhs, neo<T> const& rhs)
@@ -1205,17 +1079,11 @@ neo<wider_t<T, U>> operator*(U const& lhs, neo<T> const& rhs)
     return lhs * T{rhs};
 }
 
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_numeric<T, U>::value>, typename = void>
-neo<wider_t<T, U>> operator*(U const& lhs, neo<T> const& rhs) = delete;
-
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator/(U const& lhs, neo<T> const& rhs)
 {
     return lhs / T{rhs};
 }
-
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_numeric<T, U>::value>, typename = void>
-neo<wider_t<T, U>> operator/(U const& lhs, neo<T> const& rhs) = delete;
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator%(U const& lhs, neo<T> const& rhs)
@@ -1223,17 +1091,11 @@ neo<wider_t<T, U>> operator%(U const& lhs, neo<T> const& rhs)
     return lhs % T{rhs};
 }
 
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_numeric<T, U>::value>, typename = void>
-neo<wider_t<T, U>> operator%(U const& lhs, neo<T> const& rhs) = delete;
-
 template<typename T, typename U, typename = std::enable_if_t<are_similar_unsigned_integral<T, U>::value>>
 neo<wider_t<T, U>> operator&(U const& lhs, neo<T> const& rhs)
 {
     return lhs & T{rhs};
 }
-
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_unsigned_integral<T, U>::value>, typename = void>
-neo<wider_t<T, U>> operator&(U const& lhs, neo<T> const& rhs) = delete;
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_unsigned_integral<T, U>::value>>
 neo<wider_t<T, U>> operator|(U const& lhs, neo<T> const& rhs)
@@ -1241,17 +1103,11 @@ neo<wider_t<T, U>> operator|(U const& lhs, neo<T> const& rhs)
     return lhs | T{rhs};
 }
 
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_unsigned_integral<T, U>::value>, typename = void>
-neo<wider_t<T, U>> operator|(U const& lhs, neo<T> const& rhs) = delete;
-
 template<typename T, typename U, typename = std::enable_if_t<are_similar_unsigned_integral<T, U>::value>>
 neo<wider_t<T, U>> operator^(U const& lhs, neo<T> const& rhs)
 {
     return lhs ^ T{rhs};
 }
-
-template<typename T, typename U, typename = std::enable_if_t<!are_similar_unsigned_integral<T, U>::value>, typename = void>
-neo<wider_t<T, U>> operator^(U const& lhs, neo<T> const& rhs) = delete;
 
 template<typename T, typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
 neo<T> operator<<(T const& lhs, neo<U> const& rhs)
@@ -1259,17 +1115,11 @@ neo<T> operator<<(T const& lhs, neo<U> const& rhs)
     return lhs << U{rhs};
 }
 
-//template<typename T, typename U, typename = std::enable_if_t<!(is_unsigned_integral<T>::value && std::is_integral<U>::value)>, typename = void>
-//neo<T> operator<<(T const& lhs, neo<U> const& rhs) = delete;
-
 template<typename T, typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
 neo<T> operator>>(T const& lhs, neo<U> const& rhs)
 {
     return lhs >> U{rhs};
 }
-
-//template<typename T, typename U, typename = std::enable_if_t<!(is_unsigned_integral<T>::value && std::is_integral<U>::value)>, typename = void>
-//neo<T> operator>>(T const& lhs, neo<U> const& rhs) = delete;
 
 template<typename T, typename = std::enable_if_t<is_numeric<T>::value>>
 bool operator&&(T const& lhs, neo<bool> const& rhs) = delete;
@@ -1364,9 +1214,6 @@ neo<std::ptrdiff_t> operator-(neo<T*> const& lhs, neo<T*> const& rhs)
     return (T*){lhs} - (T*){rhs};
 }
 
-template<typename T, typename U>
-neo<std::ptrdiff_t> operator-(neo<T*> const& lhs, neo<U*> const& rhs) = delete;
-
 // neo<T*> - U*
 //--------------
 
@@ -1376,9 +1223,6 @@ neo<std::ptrdiff_t> operator-(neo<T*> const& lhs, T* rhs)
     return (T*){lhs} - rhs;
 }
 
-template<typename T, typename U>
-neo<std::ptrdiff_t> operator-(neo<T*> const& lhs, U* rhs) = delete;
-
 // U* - neo<T*>
 //--------------
 
@@ -1387,9 +1231,6 @@ neo<std::ptrdiff_t> operator-(T* lhs, neo<T*> const& rhs)
 {
     return lhs - (T*){rhs};
 }
-
-template<typename T, typename U>
-neo<std::ptrdiff_t> operator-(U* lhs, neo<T*> const& rhs) = delete;
 
 // neo<T*> - neo<std::ptrdiff_t>
 //-------------------------------
