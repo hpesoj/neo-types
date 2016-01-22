@@ -1414,6 +1414,13 @@ std::ostream& operator<<(std::ostream& s, neo<T> const& v)
     return s;
 }
 
+template<typename T>
+std::istream& operator>>(std::istream& s, neo<T>& v)
+{
+    s >> static_cast<T&>(v);
+    return s;
+}
+
 using neo_void = neo<void>;
 
 using neo_bool = neo<bool>;
