@@ -818,6 +818,129 @@ public:
     }
 };
 
+template<>
+class neo<void const*>
+{
+private:
+    void const* m_value;
+
+public:
+    neo() :
+        m_value()
+    {
+    }
+
+    neo(undefined_t)
+    {
+    }
+
+    neo(neo const& other) :
+        m_value(other)
+    {
+    }
+
+    neo& operator=(neo const& other)
+    {
+        m_value = other;
+        return *this;
+    }
+
+    neo(neo&& other) :
+        m_value(other.m_value)
+    {
+        other = nullptr;
+    }
+
+    neo& operator=(neo&& other)
+    {
+        m_value = other;
+        other = nullptr;
+        return *this;
+    }
+
+    template<typename U>
+    neo(neo<U const*> const& other) :
+        m_value(other)
+    {
+    }
+
+    template<typename U>
+    neo& operator=(neo<U const*> const& other)
+    {
+        m_value = other;
+        return *this;
+    }
+
+    template<typename U>
+    neo(neo<U const*>&& other) :
+        m_value(other)
+    {
+        other = nullptr;
+    }
+
+    template<typename U>
+    neo& operator=(neo<U const*>&& other)
+    {
+        m_value = other;
+        other = nullptr;
+        return *this;
+    }
+
+    neo(std::nullptr_t) :
+        m_value()
+    {
+    }
+
+    neo& operator=(std::nullptr_t)
+    {
+        m_value = nullptr;
+        return *this;
+    }
+
+    neo(void const* value) :
+        m_value(value)
+    {
+    }
+
+    neo& operator=(void const* value)
+    {
+        m_value = value;
+        return *this;
+    }
+
+    operator void const*() const
+    {
+        return m_value;
+    }
+
+    template<typename U>
+    explicit operator U const*() const
+    {
+        return static_cast<U const*>(m_value);
+    }
+
+    template<typename U>
+    explicit operator neo<U const*>() const
+    {
+        return static_cast<U*>(m_value);
+    }
+
+    explicit operator bool() const
+    {
+        return m_value != nullptr;
+    }
+
+    explicit operator neo<bool>() const
+    {
+        return static_cast<bool>(*this);
+    }
+
+    void const* get() const
+    {
+        return m_value;
+    }
+};
+
 // neo<T> - neo<T>
 //-----------------
 
@@ -1016,12 +1139,6 @@ neo<T> operator>>(neo<T> const& lhs, U const& rhs)
     return T{lhs} >> rhs;
 }
 
-template<typename T, typename = std::enable_if_t<is_numeric<T>::value>>
-bool operator&&(neo<bool> const& lhs, T const& rhs) = delete;
-
-template<typename T, typename = std::enable_if_t<is_numeric<T>::value>>
-bool operator||(neo<bool> const& lhs, T const& rhs) = delete;
-
 // U - neo<T>
 //------------
 
@@ -1120,6 +1237,15 @@ neo<T> operator>>(T const& lhs, neo<U> const& rhs)
 {
     return lhs >> U{rhs};
 }
+
+// Deleted neo<bool> boolean operations
+//--------------------------------------
+
+template<typename T, typename = std::enable_if_t<is_numeric<T>::value>>
+bool operator&&(neo<bool> const& lhs, T const& rhs) = delete;
+
+template<typename T, typename = std::enable_if_t<is_numeric<T>::value>>
+bool operator||(neo<bool> const& lhs, T const& rhs) = delete;
 
 template<typename T, typename = std::enable_if_t<is_numeric<T>::value>>
 bool operator&&(T const& lhs, neo<bool> const& rhs) = delete;
