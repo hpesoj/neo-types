@@ -59,11 +59,9 @@
 #define NEO_TYPES_HPP
 
 #include <cstddef>
-#include <cstdint>
 #include <iosfwd>
 #include <limits>
 #include <type_traits>
-#include <utility>
 
 namespace neo_types
 {
