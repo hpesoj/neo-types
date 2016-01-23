@@ -264,14 +264,8 @@ public:
         return *this;
     }
 
-    template<typename = void>
-    operator T() const
-    {
-        return m_value;
-    }
-
-    template<typename = void>
-    operator T&()
+    template<typename U, typename = std::enable_if_t<std::is_same<T, U>::value>>
+    operator U&()
     {
         return m_value;
     }
