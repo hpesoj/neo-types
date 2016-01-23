@@ -59,6 +59,9 @@ struct derived : base
 
 TEST_CASE("neo<T> is the same size as T", "neo<T>")
 {
+    neo_ptr<float> f;
+    f += 0;
+
     base b0;
     derived d0;
     neo_ptr<base> b1 = &d0;
@@ -858,7 +861,7 @@ TEST_CASE("neo_ptr cannot be deleted", "neo_ptr")
     neo_ptr<void> v = p;
     p = static_cast<neo_ptr<int>>(v);
 
-    CHECK(p[0] == 42);
+    CHECK(p[0u] == 42);
     CHECK(*(p + 0) == 42);
 
     delete p.get();

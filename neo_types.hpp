@@ -693,7 +693,13 @@ public:
         return m_value;
     }
 
-    T& operator[](std::ptrdiff_t index) const
+    T& operator[](neo<std::size_t> index) const
+    {
+        return (*this)[index.get()];
+    }
+
+    template<typename U, typename = std::enable_if_t<std::is_same<U, std::size_t>::value>>
+    T& operator[](U const& index) const
     {
         return m_value[index];
     }
@@ -722,10 +728,11 @@ public:
 
     neo& operator+=(neo<std::ptrdiff_t> const& rhs)
     {
-        return *this += std::ptrdiff_t{rhs};
+        return *this += rhs.get();
     }
 
-    neo& operator+=(std::ptrdiff_t const& rhs)
+    template<typename U, typename = std::enable_if_t<std::is_same<U, std::ptrdiff_t>::value>>
+    neo& operator+=(U const& rhs)
     {
         m_value += rhs;
         return *this;
@@ -733,10 +740,11 @@ public:
 
     neo& operator-=(neo<std::ptrdiff_t> const& rhs)
     {
-        return *this -= std::ptrdiff_t{rhs};
+        return *this -= rhs.get();
     }
 
-    neo& operator-=(std::ptrdiff_t const& rhs)
+    template<typename U, typename = std::enable_if_t<std::is_same<U, std::ptrdiff_t>::value>>
+    neo& operator-=(U const& rhs)
     {
         m_value -= rhs;
         return *this;
@@ -1389,8 +1397,44 @@ neo<bool> operator>=(std::nullptr_t, neo<T*> const& rhs)
     return nullptr >= (T*){rhs};
 }
 
-// neo<T*> - neo<U*>
-//-------------------
+// Pointer arithmetic
+//--------------------
+
+template<typename T>
+neo<T*> operator+(neo<T*> const& lhs, neo<std::ptrdiff_t> const& rhs)
+{
+    return lhs + rhs.get();
+}
+
+template<typename T, typename U, typename = std::enable_if_t<std::is_same<U, std::ptrdiff_t>::value>>
+neo<T*> operator+(neo<T*> const& lhs, U const& rhs)
+{
+    return lhs.get() + rhs;
+}
+
+template<typename T>
+neo<T*> operator+(neo<std::ptrdiff_t> const& lhs, neo<T*> const& rhs)
+{
+    return lhs.get() + rhs;
+}
+
+template<typename T, typename U, typename = std::enable_if_t<std::is_same<U, std::ptrdiff_t>::value>>
+neo<T*> operator+(U const& lhs, neo<T*> const& rhs)
+{
+    return lhs + rhs.get();
+}
+
+template<typename T>
+neo<T*> operator-(neo<T*> const& lhs, neo<std::ptrdiff_t> const& rhs)
+{
+    return lhs - rhs.get();
+}
+
+template<typename T, typename U, typename = std::enable_if_t<std::is_same<U, std::ptrdiff_t>::value>>
+neo<T*> operator-(neo<T*> const& lhs, U const& rhs)
+{
+    return lhs.get() - rhs;
+}
 
 template<typename T>
 neo<std::ptrdiff_t> operator-(neo<T*> const& lhs, neo<T*> const& rhs)
@@ -1398,70 +1442,16 @@ neo<std::ptrdiff_t> operator-(neo<T*> const& lhs, neo<T*> const& rhs)
     return (T*){lhs} - (T*){rhs};
 }
 
-// neo<T*> - U*
-//--------------
-
 template<typename T>
 neo<std::ptrdiff_t> operator-(neo<T*> const& lhs, T* rhs)
 {
     return (T*){lhs} - rhs;
 }
 
-// U* - neo<T*>
-//--------------
-
 template<typename T>
 neo<std::ptrdiff_t> operator-(T* lhs, neo<T*> const& rhs)
 {
     return lhs - (T*){rhs};
-}
-
-// neo<T*> - neo<std::ptrdiff_t>
-//-------------------------------
-
-template<typename T>
-neo<T*> operator+(neo<T*> const& lhs, neo<std::ptrdiff_t> const& rhs)
-{
-    return (T*){lhs} + std::ptrdiff_t{rhs};
-}
-
-template<typename T>
-neo<T*> operator-(neo<T*> const& lhs, neo<std::ptrdiff_t> const& rhs)
-{
-    return (T*){lhs} - std::ptrdiff_t{rhs};
-}
-
-// neo<T*> - std::ptrdiff_t
-//--------------------------
-
-template<typename T>
-neo<T*> operator+(neo<T*> const& lhs, std::ptrdiff_t const& rhs)
-{
-    return (T*){lhs} + rhs;
-}
-
-template<typename T>
-neo<T*> operator-(neo<T*> const& lhs, std::ptrdiff_t const& rhs)
-{
-    return (T*){lhs} - rhs;
-}
-
-// neo<std::ptrdiff_t> - neo<T*>
-//-------------------------------
-
-template<typename T>
-neo<T*> operator+(neo<std::ptrdiff_t> const& lhs, neo<T*> const& rhs)
-{
-    return std::ptrdiff_t{lhs} + (T*){rhs};
-}
-
-// std::ptrdiff_t - neo<T*>
-//--------------------------
-
-template<typename T>
-neo<T*> operator+(std::ptrdiff_t const& lhs, neo<T*> const& rhs)
-{
-    return lhs + (T*){rhs};
 }
 
 // IOStream
