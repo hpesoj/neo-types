@@ -326,6 +326,48 @@ public:
         return *this;
     }
 
+    template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
+    neo& operator*=(neo<U> const& other)
+    {
+        m_value *= U{other};
+        return *this;
+    }
+
+    template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
+    neo& operator*=(U const& other)
+    {
+        m_value *= other;
+        return *this;
+    }
+
+    template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
+    neo& operator/=(neo<U> const& other)
+    {
+        m_value /= U{other};
+        return *this;
+    }
+
+    template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
+    neo& operator/=(U const& other)
+    {
+        m_value /= other;
+        return *this;
+    }
+
+    template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
+    neo& operator%=(neo<U> const& other)
+    {
+        m_value %= U{other};
+        return *this;
+    }
+
+    template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
+    neo& operator%=(U const& other)
+    {
+        m_value %= other;
+        return *this;
+    }
+
     template<typename = std::enable_if_t<std::is_integral<T>::value>>
     neo& operator++()
     {
