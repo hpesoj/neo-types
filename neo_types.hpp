@@ -294,7 +294,12 @@ public:
         return static_cast<U>(m_value);
     }
 
-    T get() const
+    T const& get() const
+    {
+        return m_value;
+    }
+
+    T& get()
     {
         return m_value;
     }
@@ -491,8 +496,7 @@ public:
     {
     }
 
-    template<typename U, typename = std::enable_if_t<is_bool<U>::value>>
-    operator U() const
+    operator bool() const
     {
         return m_value;
     }
@@ -502,7 +506,12 @@ public:
         return !m_value;
     }
 
-    bool get() const
+    bool const& get() const
+    {
+        return m_value;
+    }
+
+    bool& get()
     {
         return m_value;
     }
@@ -628,7 +637,12 @@ public:
         return static_cast<bool>(*this);
     }
 
-    T* get() const
+    T* const& get() const
+    {
+        return m_value;
+    }
+
+    T*& get()
     {
         return m_value;
     }
@@ -810,7 +824,12 @@ public:
         return static_cast<bool>(*this);
     }
 
-    void* get() const
+    void* const& get() const
+    {
+        return m_value;
+    }
+
+    void*& get()
     {
         return m_value;
     }
@@ -933,7 +952,12 @@ public:
         return static_cast<bool>(*this);
     }
 
-    void const* get() const
+    void const* const& get() const
+    {
+        return m_value;
+    }
+
+    void const*& get()
     {
         return m_value;
     }
