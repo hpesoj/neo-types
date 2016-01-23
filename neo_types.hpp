@@ -299,72 +299,72 @@ public:
     }
 
     template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
-    neo& operator+=(neo<U> const& other)
+    neo& operator+=(neo<U> const& rhs)
     {
-        m_value += U{other};
+        m_value += rhs.get();
         return *this;
     }
 
     template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
-    neo& operator+=(U const& other)
+    neo& operator+=(U const& rhs)
     {
-        m_value += other;
+        m_value += rhs;
         return *this;
     }
 
     template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
-    neo& operator-=(neo<U> const& other)
+    neo& operator-=(neo<U> const& rhs)
     {
-        m_value -= U{other};
+        m_value -= rhs.get();
         return *this;
     }
 
     template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
-    neo& operator-=(U const& other)
+    neo& operator-=(U const& rhs)
     {
-        m_value -= other;
+        m_value -= rhs;
         return *this;
     }
 
     template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
-    neo& operator*=(neo<U> const& other)
+    neo& operator*=(neo<U> const& rhs)
     {
-        m_value *= U{other};
+        m_value *= rhs.get();
         return *this;
     }
 
     template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
-    neo& operator*=(U const& other)
+    neo& operator*=(U const& rhs)
     {
-        m_value *= other;
+        m_value *= rhs;
         return *this;
     }
 
     template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
-    neo& operator/=(neo<U> const& other)
+    neo& operator/=(neo<U> const& rhs)
     {
-        m_value /= U{other};
+        m_value /= rhs.get();
         return *this;
     }
 
     template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
-    neo& operator/=(U const& other)
+    neo& operator/=(U const& rhs)
     {
-        m_value /= other;
+        m_value /= rhs;
         return *this;
     }
 
     template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
-    neo& operator%=(neo<U> const& other)
+    neo& operator%=(neo<U> const& rhs)
     {
-        m_value %= U{other};
+        m_value %= rhs.get();
         return *this;
     }
 
     template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
-    neo& operator%=(U const& other)
+    neo& operator%=(U const& rhs)
     {
-        m_value %= other;
+        m_value %= rhs;
         return *this;
     }
 
@@ -405,72 +405,72 @@ public:
     }
 
     template<typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && is_widening<U, T>::value>>
-    neo& operator&=(neo<U> const& other)
+    neo& operator&=(neo<U> const& rhs)
     {
-        m_value &= U{other};
+        m_value &= rhs.get();
         return *this;
     }
 
     template<typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && is_widening<U, T>::value>>
-    neo& operator&=(U const& other)
+    neo& operator&=(U const& rhs)
     {
-        m_value &= other;
+        m_value &= rhs;
         return *this;
     }
 
     template<typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && is_widening<U, T>::value>>
-    neo& operator|=(neo<U> const& other)
+    neo& operator|=(neo<U> const& rhs)
     {
-        m_value |= U{other};
+        m_value |= rhs.get();
         return *this;
     }
 
     template<typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && is_widening<U, T>::value>>
-    neo& operator|=(U const& other)
+    neo& operator|=(U const& rhs)
     {
-        m_value |= other;
+        m_value |= rhs;
         return *this;
     }
 
     template<typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && is_widening<U, T>::value>>
-    neo& operator^=(neo<U> const& other)
+    neo& operator^=(neo<U> const& rhs)
     {
-        m_value ^= U{other};
+        m_value ^= rhs.get();
         return *this;
     }
 
     template<typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && is_widening<U, T>::value>>
-    neo& operator^=(U const& other)
+    neo& operator^=(U const& rhs)
     {
-        m_value ^= other;
+        m_value ^= rhs;
         return *this;
     }
 
     template<typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
-    neo& operator<<=(neo<U> const& other)
+    neo& operator<<=(neo<U> const& rhs)
     {
-        m_value <<= U{other};
+        m_value <<= rhs.get();
         return *this;
     }
 
     template<typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
-    neo& operator<<=(U const& other)
+    neo& operator<<=(U const& rhs)
     {
-        m_value <<= other;
+        m_value <<= rhs;
         return *this;
     }
 
     template<typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
-    neo& operator>>=(neo<U> const& other)
+    neo& operator>>=(neo<U> const& rhs)
     {
-        m_value >>= U{other};
+        m_value >>= rhs.get();
         return *this;
     }
 
     template<typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
-    neo& operator>>=(U const& other)
+    neo& operator>>=(U const& rhs)
     {
-        m_value >>= other;
+        m_value >>= rhs;
         return *this;
     }
 
@@ -670,7 +670,7 @@ public:
 
     explicit operator neo<bool>() const
     {
-        return static_cast<bool>(*this);
+        return m_value != nullptr;
     }
 
     T* const& get() const
@@ -695,7 +695,7 @@ public:
 
     T& operator[](neo<std::size_t> index) const
     {
-        return (*this)[index.get()];
+        return m_value[index.get()];
     }
 
     template<typename U, typename = std::enable_if_t<std::is_same<U, std::size_t>::value>>
@@ -728,7 +728,8 @@ public:
 
     neo& operator+=(neo<std::ptrdiff_t> const& rhs)
     {
-        return *this += rhs.get();
+        m_value += rhs.get();
+        return *this;
     }
 
     template<typename U, typename = std::enable_if_t<std::is_same<U, std::ptrdiff_t>::value>>
@@ -740,7 +741,8 @@ public:
 
     neo& operator-=(neo<std::ptrdiff_t> const& rhs)
     {
-        return *this -= rhs.get();
+        m_value -= rhs.get();
+        return *this;
     }
 
     template<typename U, typename = std::enable_if_t<std::is_same<U, std::ptrdiff_t>::value>>
@@ -865,7 +867,7 @@ public:
 
     explicit operator neo<bool>() const
     {
-        return static_cast<bool>(*this);
+        return m_value != nullptr;
     }
 
     void* const& get() const
@@ -993,7 +995,7 @@ public:
 
     explicit operator neo<bool>() const
     {
-        return static_cast<bool>(*this);
+        return m_value != nullptr;
     }
 
     void const* const& get() const
@@ -1013,97 +1015,97 @@ public:
 template<typename T, typename U, typename = std::enable_if_t<are_similar<T, U>::value>>
 neo<bool> operator==(neo<T> const& lhs, neo<U> const& rhs)
 {
-    return T{lhs} == U{rhs};
+    return lhs.get() == rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar<T, U>::value>>
 neo<bool> operator!=(neo<T> const& lhs, neo<U> const& rhs)
 {
-    return T{lhs} != U{rhs};
+    return lhs.get() != rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<bool> operator<(neo<T> const& lhs, neo<U> const& rhs)
 {
-    return T{lhs} < U{rhs};
+    return lhs.get() < rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<bool> operator<=(neo<T> const& lhs, neo<U> const& rhs)
 {
-    return T{lhs} <= U{rhs};
+    return lhs.get() <= rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<bool> operator>(neo<T> const& lhs, neo<U> const& rhs)
 {
-    return T{lhs} > U{rhs};
+    return lhs.get() > rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<bool> operator>=(neo<T> const& lhs, neo<U> const& rhs)
 {
-    return T{lhs} >= U{rhs};
+    return lhs.get() >= rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator+(neo<T> const& lhs, neo<U> const& rhs)
 {
-    return T{lhs} + U{rhs};
+    return lhs.get() + rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator-(neo<T> const& lhs, neo<U> const& rhs)
 {
-    return T{lhs} - U{rhs};
+    return lhs.get() - rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator*(neo<T> const& lhs, neo<U> const& rhs)
 {
-    return T{lhs} * U{rhs};
+    return lhs.get() * rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator/(neo<T> const& lhs, neo<U> const& rhs)
 {
-    return T{lhs} / U{rhs};
+    return lhs.get() / rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator%(neo<T> const& lhs, neo<U> const& rhs)
 {
-    return T{lhs} % U{rhs};
+    return lhs.get() % rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_unsigned_integral<T, U>::value>>
 neo<wider_t<T, U>> operator&(neo<T> const& lhs, neo<U> const& rhs)
 {
-    return T{lhs} & U{rhs};
+    return lhs.get() & rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_unsigned_integral<T, U>::value>>
 neo<wider_t<T, U>> operator|(neo<T> const& lhs, neo<U> const& rhs)
 {
-    return T{lhs} | U{rhs};
+    return lhs.get() | rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_unsigned_integral<T, U>::value>>
 neo<wider_t<T, U>> operator^(neo<T> const& lhs, neo<U> const& rhs)
 {
-    return T{lhs} ^ U{rhs};
+    return lhs.get() ^ rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
 neo<T> operator<<(neo<T> const& lhs, neo<U> const& rhs)
 {
-    return T{lhs} << U{rhs};
+    return lhs.get() << rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
 neo<T> operator>>(neo<T> const& lhs, neo<U> const& rhs)
 {
-    return T{lhs} >> U{rhs};
+    return lhs.get() >> rhs.get();
 }
 
 // neo<T> - U
@@ -1112,97 +1114,97 @@ neo<T> operator>>(neo<T> const& lhs, neo<U> const& rhs)
 template<typename T, typename U, typename = std::enable_if_t<are_similar<T, U>::value>>
 neo<bool> operator==(neo<T> const& lhs, U const& rhs)
 {
-    return T{lhs} == rhs;
+    return lhs.get() == rhs;
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar<T, U>::value>>
 neo<bool> operator!=(neo<T> const& lhs, U const& rhs)
 {
-    return T{lhs} != rhs;
+    return lhs.get() != rhs;
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<bool> operator<(neo<T> const& lhs, U const& rhs)
 {
-    return T{lhs} < rhs;
+    return lhs.get() < rhs;
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<bool> operator<=(neo<T> const& lhs, U const& rhs)
 {
-    return T{lhs} <= rhs;
+    return lhs.get() <= rhs;
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<bool> operator>(neo<T> const& lhs, U const& rhs)
 {
-    return T{lhs} > rhs;
+    return lhs.get() > rhs;
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<bool> operator>=(neo<T> const& lhs, U const& rhs)
 {
-    return T{lhs} >= rhs;
+    return lhs.get() >= rhs;
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator+(neo<T> const& lhs, U const& rhs)
 {
-    return T{lhs} + rhs;
+    return lhs.get() + rhs;
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator-(neo<T> const& lhs, U const& rhs)
 {
-    return T{lhs} - rhs;
+    return lhs.get() - rhs;
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator*(neo<T> const& lhs, U const& rhs)
 {
-    return T{lhs} * rhs;
+    return lhs.get() * rhs;
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator/(neo<T> const& lhs, U const& rhs)
 {
-    return T{lhs} / rhs;
+    return lhs.get() / rhs;
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator%(neo<T> const& lhs, U const& rhs)
 {
-    return T{lhs} % rhs;
+    return lhs.get() % rhs;
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_unsigned_integral<T, U>::value>>
 neo<wider_t<T, U>> operator&(neo<T> const& lhs, U const& rhs)
 {
-    return T{lhs} & rhs;
+    return lhs.get() & rhs;
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_unsigned_integral<T, U>::value>>
 neo<wider_t<T, U>> operator|(neo<T> const& lhs, U const& rhs)
 {
-    return T{lhs} | rhs;
+    return lhs.get() | rhs;
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_unsigned_integral<T, U>::value>>
 neo<wider_t<T, U>> operator^(neo<T> const& lhs, U const& rhs)
 {
-    return T{lhs} ^ rhs;
+    return lhs.get() ^ rhs;
 }
 
 template<typename T, typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
 neo<T> operator<<(neo<T> const& lhs, U const& rhs)
 {
-    return T{lhs} << rhs;
+    return lhs.get() << rhs;
 }
 
 template<typename T, typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
 neo<T> operator>>(neo<T> const& lhs, U const& rhs)
 {
-    return T{lhs} >> rhs;
+    return lhs.get() >> rhs;
 }
 
 // U - neo<T>
@@ -1211,97 +1213,97 @@ neo<T> operator>>(neo<T> const& lhs, U const& rhs)
 template<typename T, typename U, typename = std::enable_if_t<are_similar<T, U>::value>>
 neo<bool> operator==(U const& lhs, neo<T> const& rhs)
 {
-    return lhs == T{rhs};
+    return lhs == rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar<T, U>::value>>
 neo<bool> operator!=(U const& lhs, neo<T> const& rhs)
 {
-    return lhs != T{rhs};
+    return lhs != rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<bool> operator<(U const& lhs, neo<T> const& rhs)
 {
-    return lhs < T{rhs};
+    return lhs < rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<bool> operator<=(U const& lhs, neo<T> const& rhs)
 {
-    return lhs <= T{rhs};
+    return lhs <= rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<bool> operator>(U const& lhs, neo<T> const& rhs)
 {
-    return lhs > T{rhs};
+    return lhs > rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<bool> operator>=(U const& lhs, neo<T> const& rhs)
 {
-    return lhs >= T{rhs};
+    return lhs >= rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator+(U const& lhs, neo<T> const& rhs)
 {
-    return lhs + T{rhs};
+    return lhs + rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator-(U const& lhs, neo<T> const& rhs)
 {
-    return lhs - T{rhs};
+    return lhs - rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator*(U const& lhs, neo<T> const& rhs)
 {
-    return lhs * T{rhs};
+    return lhs * rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator/(U const& lhs, neo<T> const& rhs)
 {
-    return lhs / T{rhs};
+    return lhs / rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
 neo<wider_t<T, U>> operator%(U const& lhs, neo<T> const& rhs)
 {
-    return lhs % T{rhs};
+    return lhs % rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_unsigned_integral<T, U>::value>>
 neo<wider_t<T, U>> operator&(U const& lhs, neo<T> const& rhs)
 {
-    return lhs & T{rhs};
+    return lhs & rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_unsigned_integral<T, U>::value>>
 neo<wider_t<T, U>> operator|(U const& lhs, neo<T> const& rhs)
 {
-    return lhs | T{rhs};
+    return lhs | rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_similar_unsigned_integral<T, U>::value>>
 neo<wider_t<T, U>> operator^(U const& lhs, neo<T> const& rhs)
 {
-    return lhs ^ T{rhs};
+    return lhs ^ rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
 neo<T> operator<<(T const& lhs, neo<U> const& rhs)
 {
-    return lhs << U{rhs};
+    return lhs << rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
 neo<T> operator>>(T const& lhs, neo<U> const& rhs)
 {
-    return lhs >> U{rhs};
+    return lhs >> rhs.get();
 }
 
 // Deleted neo<bool> boolean operations
@@ -1325,37 +1327,37 @@ bool operator||(T const& lhs, neo<bool> const& rhs) = delete;
 template<typename T>
 neo<bool> operator==(neo<T*> const& lhs, std::nullptr_t)
 {
-    return (T*){lhs} == nullptr;
+    return lhs.get() == nullptr;
 }
 
 template<typename T>
 neo<bool> operator!=(neo<T*> const& lhs, std::nullptr_t)
 {
-    return (T*){lhs} != nullptr;
+    return lhs.get() != nullptr;
 }
 
 template<typename T>
 neo<bool> operator<(neo<T*> const& lhs, std::nullptr_t)
 {
-    return (T*){lhs} < nullptr;
+    return lhs.get() < nullptr;
 }
 
 template<typename T>
 neo<bool> operator<=(neo<T*> const& lhs, std::nullptr_t)
 {
-    return (T*){lhs} <= nullptr;
+    return lhs.get() <= nullptr;
 }
 
 template<typename T>
 neo<bool> operator>(neo<T*> const& lhs, std::nullptr_t)
 {
-    return (T*){lhs} > nullptr;
+    return lhs.get() > nullptr;
 }
 
 template<typename T>
 neo<bool> operator>=(neo<T*> const& lhs, std::nullptr_t)
 {
-    return (T*){lhs} >= nullptr;
+    return lhs.get() >= nullptr;
 }
 
 // std::nullptr_t - neo<T*>
@@ -1364,37 +1366,37 @@ neo<bool> operator>=(neo<T*> const& lhs, std::nullptr_t)
 template<typename T>
 neo<bool> operator==(std::nullptr_t, neo<T*> const& rhs)
 {
-    return nullptr == (T*){rhs};
+    return nullptr == rhs.get();
 }
 
 template<typename T>
 neo<bool> operator!=(std::nullptr_t, neo<T*> const& rhs)
 {
-    return nullptr != (T*){rhs};
+    return nullptr != rhs.get();
 }
 
 template<typename T>
 neo<bool> operator<(std::nullptr_t, neo<T*> const& rhs)
 {
-    return nullptr < (T*){rhs};
+    return nullptr < rhs.get();
 }
 
 template<typename T>
 neo<bool> operator<=(std::nullptr_t, neo<T*> const& rhs)
 {
-    return nullptr <= (T*){rhs};
+    return nullptr <= rhs.get();
 }
 
 template<typename T>
 neo<bool> operator>(std::nullptr_t, neo<T*> const& rhs)
 {
-    return nullptr > (T*){rhs};
+    return nullptr > rhs.get();
 }
 
 template<typename T>
 neo<bool> operator>=(std::nullptr_t, neo<T*> const& rhs)
 {
-    return nullptr >= (T*){rhs};
+    return nullptr >= rhs.get();
 }
 
 // Pointer arithmetic
@@ -1403,7 +1405,7 @@ neo<bool> operator>=(std::nullptr_t, neo<T*> const& rhs)
 template<typename T>
 neo<T*> operator+(neo<T*> const& lhs, neo<std::ptrdiff_t> const& rhs)
 {
-    return lhs + rhs.get();
+    return lhs.get() + rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<std::is_same<U, std::ptrdiff_t>::value>>
@@ -1415,7 +1417,7 @@ neo<T*> operator+(neo<T*> const& lhs, U const& rhs)
 template<typename T>
 neo<T*> operator+(neo<std::ptrdiff_t> const& lhs, neo<T*> const& rhs)
 {
-    return lhs.get() + rhs;
+    return lhs.get() + rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<std::is_same<U, std::ptrdiff_t>::value>>
@@ -1427,7 +1429,7 @@ neo<T*> operator+(U const& lhs, neo<T*> const& rhs)
 template<typename T>
 neo<T*> operator-(neo<T*> const& lhs, neo<std::ptrdiff_t> const& rhs)
 {
-    return lhs - rhs.get();
+    return lhs.get() - rhs.get();
 }
 
 template<typename T, typename U, typename = std::enable_if_t<std::is_same<U, std::ptrdiff_t>::value>>
@@ -1439,19 +1441,19 @@ neo<T*> operator-(neo<T*> const& lhs, U const& rhs)
 template<typename T>
 neo<std::ptrdiff_t> operator-(neo<T*> const& lhs, neo<T*> const& rhs)
 {
-    return (T*){lhs} - (T*){rhs};
+    return lhs.get() - lhs.get();
 }
 
 template<typename T>
 neo<std::ptrdiff_t> operator-(neo<T*> const& lhs, T* rhs)
 {
-    return (T*){lhs} - rhs;
+    return lhs.get() - rhs;
 }
 
 template<typename T>
 neo<std::ptrdiff_t> operator-(T* lhs, neo<T*> const& rhs)
 {
-    return lhs - (T*){rhs};
+    return lhs - lhs.get();
 }
 
 // IOStream
@@ -1460,14 +1462,14 @@ neo<std::ptrdiff_t> operator-(T* lhs, neo<T*> const& rhs)
 template<typename T>
 std::ostream& operator<<(std::ostream& s, neo<T> const& v)
 {
-    s << T{v};
+    s << v.get();
     return s;
 }
 
 template<typename T>
 std::istream& operator>>(std::istream& s, neo<T>& v)
 {
-    s >> static_cast<T&>(v);
+    s >> v.get();
     return s;
 }
 
