@@ -91,14 +91,14 @@ struct are_similar
 };
 
 template<typename T1, typename T2>
-struct are_similar<T1, T2, typename std::enable_if<
+struct are_similar<T1, T2, std::enable_if_t<
     std::is_same<std::remove_cv_t<T1>, std::remove_cv_t<T2>>::value || (
         is_numeric<T1>::value == is_numeric<T2>::value &&
         std::is_integral<T1>::value == std::is_integral<T2>::value &&
         std::is_signed<T1>::value == std::is_signed<T2>::value &&
         std::is_floating_point<T1>::value == std::is_floating_point<T2>::value &&
         std::is_pointer<T1>::value == std::is_pointer<T2>::value
-    )>::type>
+    )>>
 {
     static constexpr bool value = true;
 };
