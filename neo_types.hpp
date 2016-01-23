@@ -1473,6 +1473,12 @@ std::istream& operator>>(std::istream& s, neo<T>& v)
     return s;
 }
 
+template<typename T>
+neo<T*> neo_addr(T& object)
+{
+    return &object;
+}
+
 using neo_void = neo<void>;
 
 using neo_bool = neo<bool>;

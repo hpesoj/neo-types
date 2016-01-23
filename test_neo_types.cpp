@@ -59,8 +59,10 @@ struct derived : base
 
 TEST_CASE("neo<T> is the same size as T", "neo<T>")
 {
-    neo_ptr<float> f;
+    auto ff = 1.0f;
+    auto f = neo_addr(ff);
     f += 0;
+    f[0u];
 
     base b0;
     derived d0;
