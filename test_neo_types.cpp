@@ -3,6 +3,7 @@
 #include <catch.hpp>
 
 #include <cmath>
+#include <iostream>
 #include <type_traits>
 
 using namespace neo_types;
@@ -57,17 +58,69 @@ struct derived : base
 {
 };
 
+void something(neo_array<int, 4> values)
+{
+}
+
+struct counter
+{
+    neo_int value;
+
+    counter(neo_int i) :
+        value(i)
+    {
+        std::cout << "constructed\n";
+    }
+
+    counter(counter const&)
+    {
+        std::cout << "copy constructed\n";
+    }
+
+    counter& operator=(counter const&)
+    {
+        std::cout << "copy assigned\n";
+    }
+
+    counter(counter&&)
+    {
+        std::cout << "move constructed\n";
+    }
+
+    counter& operator=(counter&&)
+    {
+        std::cout << "move assigned\n";
+    }
+
+    ~counter()
+    {
+        std::cout << "destructed\n";
+    }
+};
+
 TEST_CASE("neo<T> is the same size as T", "neo<T>")
 {
+    something(neo_array<int, 4>(1, 2, 3, 4));
+    something(neo_array<int, 4>(42));
+
+    //neo_array<counter, 4> counts;
+    neo_array<counter, 1> counts(counter(6));
+    //neo_array<counter, 4> counts(counter(1), counter(2), counter(3), counter(4));
+    //std::cout << counts[0u].value << std::endl;
+    //counter counts[4] = { counter(1), counter(2), counter(3), counter(4) };
+
     auto ff = 1.0f;
     auto f = neo_addr(ff);
     f += 0;
-    f[0u];
+    //f[0u];
 
     base b0;
     derived d0;
     neo_ptr<base> b1 = &d0;
     neo_ptr<derived> d1 = &d0;
+
+    derived ds[10];
+    neo<derived[10]> d10 = ds;
 
     //b1 - d1;
     //byte b = static_cast<neo_byte>(neo_int());
@@ -863,7 +916,7 @@ TEST_CASE("neo_ptr cannot be deleted", "neo_ptr")
     neo_ptr<void> v = p;
     p = static_cast<neo_ptr<int>>(v);
 
-    CHECK(p[0u] == 42);
+    //CHECK(p[0u] == 42);
     CHECK(*(p + 0) == 42);
 
     delete p.get();
@@ -877,7 +930,7 @@ TEST_CASE("neo_ptr", "neo_ptr")
     CHECK(p == nullptr);
 
     neo_int i[] = { 1, 2, 3, 4, 5 };
-    p = i;
+    //p = i;
     p = &i[0];
 
     CHECK(p);

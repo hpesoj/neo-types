@@ -58,8 +58,10 @@
 #ifndef NEO_TYPES_HPP
 #define NEO_TYPES_HPP
 
+#include <algorithm>
 #include <cstddef>
 #include <iosfwd>
+#include <iterator>
 #include <limits>
 #include <type_traits>
 
@@ -633,17 +635,23 @@ public:
     }
 
     template<typename U, typename = std::enable_if_t<std::is_same<T, U>::value || std::is_base_of<T, U>::value>>
-    neo(U* value) :
+    neo(U* const& value) :
         m_value(value)
     {
     }
 
     template<typename U, typename = std::enable_if_t<std::is_same<T, U>::value || std::is_base_of<T, U>::value>>
-    neo& operator=(U* value)
+    neo& operator=(U* const& value)
     {
         m_value = value;
         return *this;
     }
+
+    template<typename U, std::size_t N>
+    neo(U(&)[N]) = delete;
+
+    template<typename U, std::size_t N>
+    neo& operator=(U(&)[N]) = delete;
 
     template<typename U, typename = std::enable_if_t<std::is_same<T, U>::value || std::is_base_of<U, T>::value || std::is_void<U>::value>>
     operator U*() const
@@ -691,17 +699,6 @@ public:
     T* operator->() const
     {
         return m_value;
-    }
-
-    T& operator[](neo<std::size_t> index) const
-    {
-        return m_value[index.get()];
-    }
-
-    template<typename U, typename = std::enable_if_t<std::is_same<U, std::size_t>::value>>
-    T& operator[](U const& index) const
-    {
-        return m_value[index];
     }
 
     neo& operator++()
@@ -1007,6 +1004,153 @@ public:
     {
         return m_value;
     }
+};
+
+template<typename T, std::size_t N>
+class neo<T[N]>
+{
+private:
+    T(m_value)[N];
+
+    struct initialize {};
+    struct default_initialize {};
+
+    template<typename Arg, typename... Args, typename = std::enable_if_t<(sizeof...(Args) < N - 1)>>
+    neo(initialize, Arg const& value, Args const&... values) :
+        neo(initialize(), value, value, values...)
+    {
+    }
+
+    template<typename Arg, typename... Args, typename = std::enable_if_t<sizeof...(Args) == N - 1>, typename = void>
+    neo(initialize, Arg const& value, Args const&... values) :
+        m_value{value, values...}
+    {
+    }
+
+    template<typename Arg, typename... Args, typename = std::enable_if_t<(sizeof...(Args) < N - 1)>>
+    neo(default_initialize, Arg const* value, Args const*... values) :
+        neo(default_initialize(), value, value, values...)
+    {
+    }
+
+    template<typename Arg, typename... Args, typename = std::enable_if_t<sizeof...(Args) == N - 1>, typename = void>
+    neo(default_initialize, Arg const* value, Args const*... values) :
+        m_value{Arg(), Args()...}
+    {
+    }
+
+public:
+    neo() :
+        neo(default_initialize(), static_cast<T*>(nullptr))
+    {
+    }
+
+    neo(neo const& other) :
+        m_value(other)
+    {
+    }
+
+    neo& operator=(neo const& other)
+    {
+        m_value = other;
+        return *this;
+    }
+
+    neo(neo&& other)
+    {
+        std::move(other.begin(), other.end(), begin());
+    }
+
+    neo& operator=(neo&& other)
+    {
+        std::move(other.begin(), other.end(), begin());
+        return *this;
+    }
+
+    explicit neo(T const& value) :
+        neo(initialize(), value)
+    {
+    }
+
+    template<typename... Args, typename = std::enable_if_t<sizeof...(Args) == N>>
+    neo(Args&&... values) :
+        m_value{std::forward<Args>(values)...}
+    {
+    }
+
+    neo(T const(&value)[N]) :
+        m_value(value)
+    {
+    }
+
+    neo& operator=(T const(&value)[N])
+    {
+        m_value = value;
+        return *this;
+    }
+
+    auto get() const -> T const(&)[N]
+    {
+        return m_value;
+    }
+
+    auto get() -> T(&)[N]
+    {
+        return m_value;
+    }
+
+    T const& operator[](neo<std::size_t> index) const
+    {
+        return m_value[index.get()];
+    }
+
+    T& operator[](neo<std::size_t> index)
+    {
+        return m_value[index.get()];
+    }
+
+    template<typename U, typename = std::enable_if_t<std::is_same<U, std::size_t>::value>>
+    T const& operator[](U const& index) const
+    {
+        return m_value[index];
+    }
+
+    template<typename U, typename = std::enable_if_t<std::is_same<U, std::size_t>::value>>
+    T& operator[](U const& index)
+    {
+        return m_value[index];
+    }
+
+    T const* begin() const
+    {
+        return m_value;
+    }
+
+    T* begin()
+    {
+        return m_value;
+    }
+
+    T const* end() const
+    {
+        return m_value + N;
+    }
+
+    T* end()
+    {
+        return m_value + N;
+    }
+
+    T const* cbegin() const
+    {
+        return begin();
+    }
+
+    T const* cend() const
+    {
+        return end();
+    }
+
 };
 
 // neo<T> - neo<T>
@@ -1511,6 +1655,9 @@ using neo_char32 = neo<char32_t>;
 
 template<typename T>
 using neo_ptr = neo<T*>;
+
+template<typename T, std::size_t N>
+using neo_array = neo<T[N]>;
 
 } // namespace neo_types
 
