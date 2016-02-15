@@ -7,6 +7,7 @@
 #include <type_traits>
 
 using namespace neo_types;
+using namespace neo_types::literals;
 using namespace neo_types::operator_traits;
 
 using byte = char;
@@ -58,9 +59,9 @@ struct derived : base
 {
 };
 
-void something(neo_array<int, 4> values)
-{
-}
+//void something(neo_array<int, 4> values)
+//{
+//}
 
 struct counter
 {
@@ -100,11 +101,11 @@ struct counter
 
 TEST_CASE("neo<T> is the same size as T", "neo<T>")
 {
-    something(neo_array<int, 4>(1, 2, 3, 4));
-    something(neo_array<int, 4>(42));
+    //something(neo_array<int, 4>(1, 2, 3, 4));
+    //something(neo_array<int, 4>(42));
 
     //neo_array<counter, 4> counts;
-    neo_array<counter, 1> counts(counter(6));
+    //neo_array<counter, 1> counts(counter(6));
     //neo_array<counter, 4> counts(counter(1), counter(2), counter(3), counter(4));
     //std::cout << counts[0u].value << std::endl;
     //counter counts[4] = { counter(1), counter(2), counter(3), counter(4) };
@@ -120,7 +121,7 @@ TEST_CASE("neo<T> is the same size as T", "neo<T>")
     neo_ptr<derived> d1 = &d0;
 
     derived ds[10];
-    neo<derived[10]> d10 = ds;
+    //neo<derived[10]> d10 = ds;
 
     //b1 - d1;
     //byte b = static_cast<neo_byte>(neo_int());
@@ -154,6 +155,14 @@ TEST_CASE("neo<T> is the same size as T", "neo<T>")
     CHECK(sizeof(neo_ldouble) == sizeof(ldouble));
 
     CHECK(sizeof(neo<int*>) == sizeof(int*));
+}
+
+TEST_CASE("neo<T> has user defined literals", "neo<T>")
+{
+    auto i = 0_ni;
+    CHECK(i == neo_int());
+    CHECK(0_ni == neo_int(0));
+    CHECK(42_ni == neo_int(42));
 }
 
 TEST_CASE("neo_void can be constructed", "neo_void")

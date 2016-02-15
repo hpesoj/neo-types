@@ -58,10 +58,9 @@
 #ifndef NEO_TYPES_HPP
 #define NEO_TYPES_HPP
 
-#include <algorithm>
 #include <cstddef>
+#include <cstdint>
 #include <iosfwd>
-#include <iterator>
 #include <limits>
 #include <type_traits>
 
@@ -635,23 +634,17 @@ public:
     }
 
     template<typename U, typename = std::enable_if_t<std::is_same<T, U>::value || std::is_base_of<T, U>::value>>
-    neo(U* const& value) :
+    neo(U* value) :
         m_value(value)
     {
     }
 
     template<typename U, typename = std::enable_if_t<std::is_same<T, U>::value || std::is_base_of<T, U>::value>>
-    neo& operator=(U* const& value)
+    neo& operator=(U* value)
     {
         m_value = value;
         return *this;
     }
-
-    template<typename U, std::size_t N>
-    neo(U(&)[N]) = delete;
-
-    template<typename U, std::size_t N>
-    neo& operator=(U(&)[N]) = delete;
 
     template<typename U, typename = std::enable_if_t<std::is_same<T, U>::value || std::is_base_of<U, T>::value || std::is_void<U>::value>>
     operator U*() const
@@ -701,6 +694,17 @@ public:
         return m_value;
     }
 
+    T& operator[](neo<std::size_t> index) const
+    {
+        return m_value[index.get()];
+    }
+
+    template<typename U, typename = std::enable_if_t<std::is_same<U, std::size_t>::value>>
+    T& operator[](U const& index) const
+    {
+        return m_value[index];
+    }
+
     neo& operator++()
     {
         ++m_value;
@@ -747,6 +751,136 @@ public:
     {
         m_value -= rhs;
         return *this;
+    }
+};
+
+template<>
+class neo<void const*>
+{
+private:
+    void const* m_value;
+
+public:
+    neo() :
+        m_value()
+    {
+    }
+
+    neo(undefined_t)
+    {
+    }
+
+    neo(neo const& other) :
+        m_value(other)
+    {
+    }
+
+    neo& operator=(neo const& other)
+    {
+        m_value = other;
+        return *this;
+    }
+
+    neo(neo&& other) :
+        m_value(other.m_value)
+    {
+        other = nullptr;
+    }
+
+    neo& operator=(neo&& other)
+    {
+        m_value = other;
+        other = nullptr;
+        return *this;
+    }
+
+    template<typename U>
+    neo(neo<U const*> const& other) :
+        m_value(other)
+    {
+    }
+
+    template<typename U>
+    neo& operator=(neo<U const*> const& other)
+    {
+        m_value = other;
+        return *this;
+    }
+
+    template<typename U>
+    neo(neo<U const*>&& other) :
+        m_value(other)
+    {
+        other = nullptr;
+    }
+
+    template<typename U>
+    neo& operator=(neo<U const*>&& other)
+    {
+        m_value = other;
+        other = nullptr;
+        return *this;
+    }
+
+    neo(std::nullptr_t) :
+        m_value()
+    {
+    }
+
+    neo& operator=(std::nullptr_t)
+    {
+        m_value = nullptr;
+        return *this;
+    }
+
+    template<typename U>
+    neo(U* value) :
+        m_value(value)
+    {
+    }
+
+    template<typename U>
+    neo& operator=(U* value)
+    {
+        m_value = value;
+        return *this;
+    }
+
+    operator void const*() const
+    {
+        return m_value;
+    }
+
+    template<typename U>
+    explicit operator U const*() const
+    {
+        return static_cast<U const*>(m_value);
+    }
+
+    template<typename U>
+    explicit operator neo<U const*>() const
+    {
+        return static_cast<U*>(m_value);
+    }
+
+    explicit operator bool() const
+    {
+        return m_value != nullptr;
+    }
+
+    explicit operator neo<bool>() const
+    {
+        return m_value != nullptr;
+    }
+
+    void const* const& get() const
+    {
+        return m_value;
+    }
+
+    void const*& get()
+    {
+        return m_value;
     }
 };
 
@@ -845,6 +979,17 @@ public:
         return m_value;
     }
 
+    operator neo<void const*>() const
+    {
+        return m_value;
+    }
+
+    template<typename U, typename = std::enable_if_t<std::is_same<U, void>::value>>
+    operator U*() const
+    {
+        return m_value;
+    }
+
     template<typename U>
     explicit operator U*() const
     {
@@ -876,281 +1021,6 @@ public:
     {
         return m_value;
     }
-};
-
-template<>
-class neo<void const*>
-{
-private:
-    void const* m_value;
-
-public:
-    neo() :
-        m_value()
-    {
-    }
-
-    neo(undefined_t)
-    {
-    }
-
-    neo(neo const& other) :
-        m_value(other)
-    {
-    }
-
-    neo& operator=(neo const& other)
-    {
-        m_value = other;
-        return *this;
-    }
-
-    neo(neo&& other) :
-        m_value(other.m_value)
-    {
-        other = nullptr;
-    }
-
-    neo& operator=(neo&& other)
-    {
-        m_value = other;
-        other = nullptr;
-        return *this;
-    }
-
-    template<typename U>
-    neo(neo<U const*> const& other) :
-        m_value(other)
-    {
-    }
-
-    template<typename U>
-    neo& operator=(neo<U const*> const& other)
-    {
-        m_value = other;
-        return *this;
-    }
-
-    template<typename U>
-    neo(neo<U const*>&& other) :
-        m_value(other)
-    {
-        other = nullptr;
-    }
-
-    template<typename U>
-    neo& operator=(neo<U const*>&& other)
-    {
-        m_value = other;
-        other = nullptr;
-        return *this;
-    }
-
-    neo(std::nullptr_t) :
-        m_value()
-    {
-    }
-
-    neo& operator=(std::nullptr_t)
-    {
-        m_value = nullptr;
-        return *this;
-    }
-
-    neo(void const* value) :
-        m_value(value)
-    {
-    }
-
-    neo& operator=(void const* value)
-    {
-        m_value = value;
-        return *this;
-    }
-
-    operator void const*() const
-    {
-        return m_value;
-    }
-
-    template<typename U>
-    explicit operator U const*() const
-    {
-        return static_cast<U const*>(m_value);
-    }
-
-    template<typename U>
-    explicit operator neo<U const*>() const
-    {
-        return static_cast<U*>(m_value);
-    }
-
-    explicit operator bool() const
-    {
-        return m_value != nullptr;
-    }
-
-    explicit operator neo<bool>() const
-    {
-        return m_value != nullptr;
-    }
-
-    void const* const& get() const
-    {
-        return m_value;
-    }
-
-    void const*& get()
-    {
-        return m_value;
-    }
-};
-
-template<typename T, std::size_t N>
-class neo<T[N]>
-{
-private:
-    T(m_value)[N];
-
-    struct initialize {};
-    struct default_initialize {};
-
-    template<typename Arg, typename... Args, typename = std::enable_if_t<(sizeof...(Args) < N - 1)>>
-    neo(initialize, Arg const& value, Args const&... values) :
-        neo(initialize(), value, value, values...)
-    {
-    }
-
-    template<typename Arg, typename... Args, typename = std::enable_if_t<sizeof...(Args) == N - 1>, typename = void>
-    neo(initialize, Arg const& value, Args const&... values) :
-        m_value{value, values...}
-    {
-    }
-
-    template<typename Arg, typename... Args, typename = std::enable_if_t<(sizeof...(Args) < N - 1)>>
-    neo(default_initialize, Arg const* value, Args const*... values) :
-        neo(default_initialize(), value, value, values...)
-    {
-    }
-
-    template<typename Arg, typename... Args, typename = std::enable_if_t<sizeof...(Args) == N - 1>, typename = void>
-    neo(default_initialize, Arg const* value, Args const*... values) :
-        m_value{Arg(), Args()...}
-    {
-    }
-
-public:
-    neo() :
-        neo(default_initialize(), static_cast<T*>(nullptr))
-    {
-    }
-
-    neo(neo const& other) :
-        m_value(other)
-    {
-    }
-
-    neo& operator=(neo const& other)
-    {
-        m_value = other;
-        return *this;
-    }
-
-    neo(neo&& other)
-    {
-        std::move(other.begin(), other.end(), begin());
-    }
-
-    neo& operator=(neo&& other)
-    {
-        std::move(other.begin(), other.end(), begin());
-        return *this;
-    }
-
-    explicit neo(T const& value) :
-        neo(initialize(), value)
-    {
-    }
-
-    template<typename... Args, typename = std::enable_if_t<sizeof...(Args) == N>>
-    neo(Args&&... values) :
-        m_value{std::forward<Args>(values)...}
-    {
-    }
-
-    neo(T const(&value)[N]) :
-        m_value(value)
-    {
-    }
-
-    neo& operator=(T const(&value)[N])
-    {
-        m_value = value;
-        return *this;
-    }
-
-    auto get() const -> T const(&)[N]
-    {
-        return m_value;
-    }
-
-    auto get() -> T(&)[N]
-    {
-        return m_value;
-    }
-
-    T const& operator[](neo<std::size_t> index) const
-    {
-        return m_value[index.get()];
-    }
-
-    T& operator[](neo<std::size_t> index)
-    {
-        return m_value[index.get()];
-    }
-
-    template<typename U, typename = std::enable_if_t<std::is_same<U, std::size_t>::value>>
-    T const& operator[](U const& index) const
-    {
-        return m_value[index];
-    }
-
-    template<typename U, typename = std::enable_if_t<std::is_same<U, std::size_t>::value>>
-    T& operator[](U const& index)
-    {
-        return m_value[index];
-    }
-
-    T const* begin() const
-    {
-        return m_value;
-    }
-
-    T* begin()
-    {
-        return m_value;
-    }
-
-    T const* end() const
-    {
-        return m_value + N;
-    }
-
-    T* end()
-    {
-        return m_value + N;
-    }
-
-    T const* cbegin() const
-    {
-        return begin();
-    }
-
-    T const* cend() const
-    {
-        return end();
-    }
-
 };
 
 // neo<T> - neo<T>
@@ -1618,6 +1488,12 @@ std::istream& operator>>(std::istream& s, neo<T>& v)
 }
 
 template<typename T>
+neo<T> make_neo(T const& value)
+{
+    return neo<T>(value);
+}
+
+template<typename T>
 neo<T*> neo_addr(T& object)
 {
     return &object;
@@ -1653,11 +1529,194 @@ using neo_wchar = neo<wchar_t>;
 using neo_char16 = neo<char16_t>;
 using neo_char32 = neo<char32_t>;
 
+using neo_int8 = neo<std::int8_t>;
+using neo_int16 = neo<std::int16_t>;
+using neo_int32 = neo<std::int32_t>;
+using neo_int64 = neo<std::int64_t>;
+
+using neo_int_fast8 = neo<std::int_fast8_t>;
+using neo_int_fast16 = neo<std::int_fast16_t>;
+using neo_int_fast32 = neo<std::int_fast32_t>;
+using neo_int_fast64 = neo<std::int_fast64_t>;
+
+using neo_int_least8 = neo<std::int_least8_t>;
+using neo_int_least16 = neo<std::int_least16_t>;
+using neo_int_least32 = neo<std::int_least32_t>;
+using neo_int_least64 = neo<std::int_least64_t>;
+
+using neo_intmax = neo<std::intmax_t>;
+using neo_intptr = neo<std::intptr_t>;
+
+using neo_uint8 = neo<std::uint8_t>;
+using neo_uint16 = neo<std::uint16_t>;
+using neo_uint32 = neo<std::uint32_t>;
+using neo_uint64 = neo<std::uint64_t>;
+
+using neo_uint_fast8 = neo<std::uint_fast8_t>;
+using neo_uint_fast16 = neo<std::uint_fast16_t>;
+using neo_uint_fast32 = neo<std::uint_fast32_t>;
+using neo_uint_fast64 = neo<std::uint_fast64_t>;
+
+using neo_uint_least8 = neo<std::uint_least8_t>;
+using neo_uint_least16 = neo<std::uint_least16_t>;
+using neo_uint_least32 = neo<std::uint_least32_t>;
+using neo_uint_least64 = neo<std::uint_least64_t>;
+
+using neo_uintmax = neo<std::uintmax_t>;
+using neo_uintptr = neo<std::uintptr_t>;
+
 template<typename T>
 using neo_ptr = neo<T*>;
 
-template<typename T, std::size_t N>
-using neo_array = neo<T[N]>;
+namespace literals
+{
+
+namespace detail
+{
+
+struct integral_literal_builder
+{
+    template<typename T, unsigned long long Value, char Digit, char... Digits>
+    static constexpr neo<T> build()
+    {
+        static_assert(Digit >= '0' && Digit <= '9', "literal may contain only numeric characters");
+        return build<T, 10 * Value + Digit - '0', Digits...>();
+    }
+
+    template<typename T, unsigned long long Value>
+    static constexpr neo<T> build()
+    {
+        static_assert(Value <= std::numeric_limits<T>::max(), "literal exceeds max value");
+        return static_cast<T>(Value);
+    }
+};
+
+template<typename T, char... Digits>
+constexpr neo<T> build_integral_literal()
+{
+    static_assert(sizeof...(Digits) <= std::numeric_limits<T>::digits10 + 1, "literal exceeds max value");
+    return integral_literal_builder::build<T, 0, Digits...>();
+}
+
+} // namespace detail
+
+static const neo_bool neo_true = true;
+static const neo_bool neo_false = false;
+
+template<char... Digits>
+constexpr neo_byte operator"" _nb()
+{
+    return detail::build_integral_literal<char, Digits...>();
+}
+
+template<char... Digits>
+constexpr neo_short operator"" _ns()
+{
+    return detail::build_integral_literal<short, Digits...>();
+}
+
+template<char... Digits>
+constexpr neo_int operator"" _ni()
+{
+    return detail::build_integral_literal<int, Digits...>();
+}
+
+template<char... Digits>
+constexpr neo_long operator"" _nl()
+{
+    return detail::build_integral_literal<long, Digits...>();
+}
+
+template<char... Digits>
+constexpr neo_llong operator"" _nll()
+{
+    return detail::build_integral_literal<long long, Digits...>();
+}
+
+template<char... Digits>
+constexpr neo_ubyte operator"" _nub()
+{
+    return detail::build_integral_literal<unsigned char, Digits...>();
+}
+
+template<char... Digits>
+constexpr neo_ushort operator"" _nus()
+{
+    return detail::build_integral_literal<unsigned short, Digits...>();
+}
+
+template<char... Digits>
+constexpr neo_uint operator"" _nui()
+{
+    return detail::build_integral_literal<unsigned int, Digits...>();
+}
+
+template<char... Digits>
+constexpr neo_ulong operator"" _nul()
+{
+    return detail::build_integral_literal<unsigned long, Digits...>();
+}
+
+template<char... Digits>
+constexpr neo_ullong operator"" _null()
+{
+    return detail::build_integral_literal<unsigned long long, Digits...>();
+}
+
+inline neo_float operator"" _nf(long double value)
+{
+    return static_cast<float>(value);
+}
+
+inline neo_double operator"" _nd(long double value)
+{
+    return static_cast<double>(value);
+}
+
+inline neo_ldouble operator"" _nld(long double value)
+{
+    return value;
+}
+
+template<char... Digits>
+constexpr neo_size operator"" _nz()
+{
+    return detail::build_integral_literal<std::size_t, Digits...>();
+}
+
+template<char... Digits>
+constexpr neo_ptrdiff operator"" _npd()
+{
+    return detail::build_integral_literal<std::ptrdiff_t, Digits...>();
+}
+
+template<char... Digits>
+constexpr neo_max_align operator"" _nma()
+{
+    return detail::build_integral_literal<std::max_align_t, Digits...>();
+}
+
+inline neo_char operator"" _n(char value)
+{
+    return value;
+}
+
+inline neo_wchar operator"" _n(wchar_t value)
+{
+    return value;
+}
+
+inline neo_char16 operator"" _n(char16_t value)
+{
+    return value;
+}
+
+inline neo_char32 operator"" _n(char32_t value)
+{
+    return value;
+}
+
+} // namespace literals
 
 } // namespace neo_types
 
