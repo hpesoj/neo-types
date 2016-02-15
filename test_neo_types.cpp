@@ -1,4 +1,4 @@
-#include <neo_types.hpp>
+#include <neo/neo.hpp>
 #include <operator_traits.hpp>
 #include <catch.hpp>
 
@@ -6,8 +6,9 @@
 #include <iostream>
 #include <type_traits>
 
-using namespace neo_types;
-using namespace neo_types::literals;
+using namespace neo;
+using namespace neo::aliases;
+using namespace neo::literals;
 using namespace neo_types::operator_traits;
 
 using byte = char;
@@ -111,8 +112,8 @@ TEST_CASE("neo<T> is the same size as T", "neo<T>")
     //counter counts[4] = { counter(1), counter(2), counter(3), counter(4) };
 
     auto ff = 1.0f;
-    auto f = neo_addr(ff);
-    f += 0;
+    //auto f = neo_addr(ff);
+    //f += 0;
     //f[0u];
 
     base b0;
@@ -154,7 +155,7 @@ TEST_CASE("neo<T> is the same size as T", "neo<T>")
     CHECK(sizeof(neo_double) == sizeof(double));
     CHECK(sizeof(neo_ldouble) == sizeof(ldouble));
 
-    CHECK(sizeof(neo<int*>) == sizeof(int*));
+    CHECK(sizeof(neo_ptr<int>) == sizeof(int*));
 }
 
 TEST_CASE("neo<T> has user defined literals", "neo<T>")
@@ -964,4 +965,32 @@ TEST_CASE("neo_ptr", "neo_ptr")
     CHECK(p != nullptr);
     CHECK(p == &i[4]);
     CHECK(*p == 5);
+}
+
+TEST_CASE("neo_ref", "neo_ref")
+{
+    neo_int i[] = { 1, 2, 3, 4, 5 };
+
+    neo_ref<neo_int> p = i[0];
+
+    CHECK(*p == 1);
+    *p = 3;
+    CHECK(i[0] == 3);
+
+    p = i[1];
+
+    CHECK(*p == 2);
+}
+
+TEST_CASE("neo_ref is copyable to const", "neo_ref")
+{
+    neo_int i[] = { 1, 2, 3, 4, 5 };
+
+    neo_ref<neo_int> const p = i[0];
+
+    CHECK(*p == 1);
+
+    neo_ref<neo_int const> q = p;
+
+    std::string const& r = "";
 }
