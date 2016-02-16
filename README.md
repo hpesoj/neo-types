@@ -1,34 +1,38 @@
 # NeoTypes
 
-NeoTypes is a header-only library containing wrappers for the C++ fundamental types (e.g. `bool`, `int`, `float`). These wrappers aim to offer safer, saner, more consistent behaviour than their fundamental counterparts.
+NeoTypes is a header-only library containing wrappers for the C++ fundamental types (e.g. `bool`, `int`, `float`), pointers and references. These wrappers aim to offer safer, saner, more consistent behaviour than their fundamental counterparts.
 
 ## Quick Example
 
-A Neo type, `neo<T>`, may be used in place of any fundamental type, `T`.
+`neo::value<T>`, may be used in place of any fundamental type, `T`.
 
-    neo<int> i;
-    neo<float> f;
-    neo<bool> b;
+    neo::value<int> i;
+    neo::value<float> f;
+    neo::value<bool> b;
 
 Type aliases exist for convenience.
+
+    using namespace neo::aliases;
 
     neo_int i;
     neo_float f;
     neo_bool b;
 
-`neo<T*>` may also be used in place of any pointer, `T*`.
+`neo::ptr<T>` may be used in place of any regular pointer, `T*`.
 
-    neo<int*> p;
+    neo::ptr<int> p;
 
 The `neo_ptr` template type alias may also be used.
 
+    using namespace neo::aliases;
+
     neo_ptr<int> p;
     
-A `neo_ptr` may point to any type, including other Neo types.
+A `neo::ptr` may point to any type, including other Neo types.
 
-    neo_ptr<neo_int> p;
+    neo::ptr<neo_int> p;
 
-Neo types support a safer subset of the operations supported by their corresponding fundamental types, have safer default behaviour, and even have some features not offered by the fundamental types.
+`neo::ref<T>` provides many of the features of a regular reference, `T&`, but has some different syntax and features. As such, `neo::ref` is expected to be useful in specific situations.
 
 ## Features
 
@@ -70,7 +74,7 @@ Moving a fundamental object is the same as copying it. Moving a Neo object sets 
 
 ### No Implicit Narrowing Conversions
 
-Fundamental objects may implicitly convert from type `T` to type `U`, where some values representable by type `T` may not be represented by type `U` (narrowing conversions). Neo objects may only implicitly convert to types which can represent all values representable by the original type.
+Fundamental objects may implicitly convert from type `T` to type `U`, where all values representable by type `T` may be represented by type `U` (widening conversions). You must use `static_cast` to explicitly convert from type `T` to type `U` when some values representable by type `T` may not be represented by type `U` (narrowing conversions).
 
     neo_short s = neo_int();   // invalid: short cannot represent all int values
     
@@ -80,7 +84,9 @@ Fundamental objects may implicitly convert from type `T` to type `U`, where some
     neo_float f = neo_int();   // invalid: float cannot accurately represent all int values
     neo_int   i = neo_float(); // invalid: int cannot represent all float values
 
-> Rationale
+> Rationale: Implicit narrowing conversions may result in unexpected loss and/or corruption of information. If the programmer must explicitly perform narrowing conversions, they are forced to consider the potential dangers and, hopefully, ensure the correctness of their code.
+
+> Note that even though some conversions from unsigned to signed integer types (e.g. `std::uint16_t` to `std::int32_t`) are widening, they not implicitly allowed. This is because signed and unsigned integers have different arithmetic behaviours (unsigned types use modulo arithmetic), and allowing implicit conversion can have surprising results.
 
 ### No Conversion To Bool
 
@@ -94,9 +100,13 @@ The fundamental type, `bool`, is an integral type, and as such may implicitly co
 
 ### No Bitwise Operations On Signed Integers
 
-### No Integer Promotion
+### No Unexpected Integer Promotion
 
 ### No Void Pointer Arithmetic (GCC Extension)
+
+## neo_ref
+
+A `neo_ref<T>` is a mixture between a reference and a pointer. Like a reference, it must be initialized on construction (though it may be `undefined`) and its wrapped reference will be `const` whenever the `neo_ref<T>` itself is `const`. Like a pointer, it may be copied, but a `neo_ref<T> const` may only be copied as a `neo_ref<T const>`. This is because allowing copying as a `neo_ref<T>` would bypass const-correctness, as a `neo_ref<T> const` actually represents a `T const&`.
 
 ## Interesting Use Cases
 
