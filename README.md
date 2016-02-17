@@ -181,6 +181,44 @@ Pet ownership can be rescinded.
 
 ### `std::vector<neo_bool>`
 
+`std::vector<bool>` is not a true STL container, because it does not contain `bool`s, and its `operator[]` does not return a `bool&`, but a _proxy reference object_. `std::vector<neo_bool>` on the other hand is not specialized, and so _is_ a true STL container.
+
+    template<class T>
+    void f(std::vector<T>& v)
+    {
+        for (auto& t : v);
+    }
+    
+    std::vector<bool> sbv;
+    f(sbv); // error
+
+    std::vector<neo_bool> nbv;
+    f(nbv); // valid
+
 ### Uninitialized `std::vector`
+
+`std::vector` is designed to be easy to use safely; as such, `std::vector`s cannot be created or resized without providing values to fill it with. You can ensure that your `std::vector` has allocated enough memory to fit a specific number of values by calling `std::vector::reserve`.
+
+    constexpr int count = 10;
+
+    std::vector<int> v;
+    v.reserve(count);
+
+This works fine, but there may be situations where it would be easier to resize the `std::vector` first, and define its content later. With the Neo types, this is possible.
+
+    template<typename Container, typename... Args>
+    void emplace_back_n(Container& c, std::size_t n, Args const&... args)
+    {
+        for (std::size_t i = 0; i < n; ++i)
+        {
+            c.emplace_back(args...);
+        }
+    }
+
+    constexpr int count = 10;
+
+    std::vector<neo_int> v;
+    v.reserve(count);
+    emplace_back_n(v, count, neo::undefined);
 
 ## Known Issues
