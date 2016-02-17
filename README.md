@@ -34,6 +34,9 @@ A `neo::ptr` may point to any type, including other Neo types.
 
 `neo::ref<T>` provides many of the features of a regular reference, `T&`, but has some different syntax and features. As such, `neo::ref` is expected to be useful in specific situations.
 
+    neo::ref<int> ri = i;
+
+
 ## Features
 
 ### Zero Initialization
@@ -104,9 +107,75 @@ The fundamental type, `bool`, is an integral type, and as such may implicitly co
 
 ### No Void Pointer Arithmetic (GCC Extension)
 
-## neo_ref
+## neo::ref and neo::optional_ref
 
-A `neo_ref<T>` is a mixture between a reference and a pointer. Like a reference, it must be initialized on construction (though it may be `undefined`) and its wrapped reference will be `const` whenever the `neo_ref<T>` itself is `const`. Like a pointer, it may be copied, but a `neo_ref<T> const` may only be copied as a `neo_ref<T const>`. This is because allowing copying as a `neo_ref<T>` would bypass const-correctness, as a `neo_ref<T> const` actually represents a `T const&`.
+A `neo::ref<T>` is a mixture between a reference and a pointer. Like a reference, it must be initialized on construction (though it may be `undefined`) and its wrapped reference will be `const` whenever the `neo::ref<T>` itself is `const`. Like a pointer, it may be copied, but a `neo::ref<T> const` may only be copied as a `neo::ref<T const>`. This is because allowing copying as a `neo::ref<T>` would violate const-correctness, as a `neo::ref<T> const` represents a `T const&`.
+
+             neo_int   i;
+    neo::ref<neo_int> ri = i;
+
+Unlike references, `neo::ref<T const>` cannot bind to and extend the life of r-values.
+
+             int const&  ri = 42; // legal
+    neo::ref<int const> nri = 42; // illegal
+
+This means that `neo::ref` is not suited for use in function parameters. Instead, `neo::ref` is designed as a safer replacement for pointers, where they are used _like_ references (as opposed to arrays or owning pointers). Here is an example.
+
+    struct person
+    {
+        neo::ref<animal> pet;
+    };
+
+Here the person has a pet, but the lifetime of the pet is not tied to the owner. In fact, the person _must_ own a pet, because `person::pet` cannot be default constructed, like with references.
+
+    person bob; // error
+
+So the caller is forced to provide a pet for the person.
+
+    animal fluffy;
+    person bob = { fluffy };
+
+We use pointer-like syntax to interact with the pet.
+
+    bob.pet->walk();
+
+And like with pointers, we _can_ change the person's pet.
+
+    animal fido;
+    bob.pet = fido;
+
+We can check the identity of a person's pet.
+
+    if (bob.pet == fido) { … }
+
+A const person not only cannot switch their pet, they cannot modify their pet in any way. This is unlike with either references or pointers, and ensures that our person is const-correct.
+
+    person const bob = { fluffy };
+    bob.pet = fido; // error: neo_ref<animal>::operator=(animal&) is non-const
+    bob.pet->walk() // error: animal::walk() is non-const
+
+But a person can never have no pet. However, forcing pet ownership seems a bit draconian, so we can use `neo::optional_ref` to allow optional pet ownership.
+
+    struct person
+    {
+        neo::optional_ref<animal> pet;
+    };
+
+Now we are not forced to provide a pet.
+
+    person bob; // legal
+
+Though we can still assign a pet.
+
+    bob.pet = fluffy;
+
+But we may want to check for pet ownership to avoid interacting with a non-existent pet.
+
+    if (bob.pet) bob.pet->walk();
+
+Pet ownership can be rescinded.
+
+    bob.pet = neo::nullref;
 
 ## Interesting Use Cases
 
