@@ -26,7 +26,7 @@ struct implicit_conversion_traits
 };
 
 template<typename T1, typename T2>
-struct implicit_conversion_traits<T1, T2, detail::void_t<decltype(T2{T1()})>>
+struct implicit_conversion_traits<T1, T2, detail::void_t<decltype(T2{*static_cast<T1*>(nullptr)})>>
 {
     static constexpr bool value = true;
 };
@@ -42,6 +42,66 @@ struct explicit_conversion_traits
 
 template<typename T1, typename T2>
 struct explicit_conversion_traits<T1, T2, detail::void_t<decltype(static_cast<T2>(T1()))>>
+{
+    static constexpr bool value = true;
+};
+
+// Copy Construction
+//-------------------
+
+template<typename T1, typename T2, typename = void>
+struct copy_construction_traits
+{
+    static constexpr bool value = false;
+};
+
+template<typename T1, typename T2>
+struct copy_construction_traits<T1, T2, detail::void_t<decltype(T1{*static_cast<T2*>(nullptr)})>>
+{
+    static constexpr bool value = true;
+};
+
+// Move Construction
+//-------------------
+
+template<typename T1, typename T2, typename = void>
+struct move_construction_traits
+{
+    static constexpr bool value = false;
+};
+
+template<typename T1, typename T2>
+struct move_construction_traits<T1, T2, detail::void_t<decltype(T1{std::move(*static_cast<T2*>(nullptr))})>>
+{
+    static constexpr bool value = true;
+};
+
+// Copy Assignment
+//-----------------
+
+template<typename T1, typename T2, typename = void>
+struct copy_assignment_traits
+{
+    static constexpr bool value = false;
+};
+
+template<typename T1, typename T2>
+struct copy_assignment_traits<T1, T2, detail::void_t<decltype(*static_cast<T1*>(nullptr) = *static_cast<T2*>(nullptr))>>
+{
+    static constexpr bool value = true;
+};
+
+// Move Assignment
+//-----------------
+
+template<typename T1, typename T2, typename = void>
+struct move_assignment_traits
+{
+    static constexpr bool value = false;
+};
+
+template<typename T1, typename T2>
+struct move_assignment_traits<T1, T2, detail::void_t<decltype(*static_cast<T1*>(nullptr) = std::move(*static_cast<T2*>(nullptr)))>>
 {
     static constexpr bool value = true;
 };

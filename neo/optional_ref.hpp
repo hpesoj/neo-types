@@ -3,10 +3,9 @@
  * Copyright 2016 Joseph Thomson
  */
 
-#ifndef NEO_REF_HPP
-#define NEO_REF_HPP
+#ifndef NEO_OPTIONAL_REF_HPP
+#define NEO_OPTIONAL_REF_HPP
 
-#include <neo/optional_ref.hpp>
 #include <neo/ptr.hpp>
 #include <neo/type_traits.hpp>
 #include <neo/undefined.hpp>
@@ -14,110 +13,121 @@
 
 #include <iosfwd>
 #include <type_traits>
+#include <utility>
 
 namespace neo
 {
 
+struct nullref_t
+{
+};
+
+constexpr nullref_t nullref;
+
 template<typename T>
-class ref
+class optional_ref
 {
     template<typename U>
-    friend class ref;
+    friend class optional_ref;
 
 private:
     ptr<T> m_value;
 
 public:
-    ref(undefined_t) :
+    optional_ref() = default;
+
+    optional_ref(nullref_t)
+    {
+    }
+
+    optional_ref(undefined_t) :
         m_value(undefined)
     {
     }
 
-    ref(T& value) :
+    optional_ref(T& value) :
         m_value(&value)
     {
     }
 
-    ref& operator=(T& value)
+    optional_ref& operator=(T& value)
     {
         m_value = &value;
         return *this;
     }
 
-    ref(T&& value) = delete;
-    ref& operator=(T&& value) = delete;
+    optional_ref(T&& value) = delete;
+    optional_ref& operator=(T&& value) = delete;
 
-    ref(ref& other) :
+    optional_ref(optional_ref& other) :
         m_value(other.m_value)
     {
     }
 
-    ref& operator=(ref& other)
+    optional_ref& operator=(optional_ref& other)
     {
         m_value = other.m_value;
         return *this;
     }
 
-    ref(ref&& other) :
-        m_value(other.m_value)
+    optional_ref(optional_ref&& other) :
+        m_value(std::move(other.m_value))
     {
     }
 
-    ref& operator=(ref&& other)
+    optional_ref& operator=(optional_ref&& other)
     {
-        m_value = other.m_value;
+        m_value = std::move(other.m_value);
         return *this;
     }
 
     template<typename U, typename = std::enable_if_t<std::is_const<T>::value && (is_same<T, U>::value || std::is_base_of<T, U>::value)>>
-    ref(ref<U> const& other) :
+    optional_ref(optional_ref<U> const& other) :
         m_value(other.m_value)
     {
     }
 
     template<typename U, typename = std::enable_if_t<std::is_const<T>::value && (is_same<T, U>::value || std::is_base_of<T, U>::value)>>
-    ref& operator=(ref<U> const& other)
+    optional_ref& operator=(optional_ref<U> const& other)
     {
         m_value = other.m_value;
         return *this;
     }
 
     template<typename U, typename = std::enable_if_t<!std::is_const<U>::value && std::is_base_of<T, U>::value>>
-    ref(ref<U>& other) :
+    optional_ref(optional_ref<U>& other) :
         m_value(other.m_value)
     {
     }
 
     template<typename U, typename = std::enable_if_t<!std::is_const<U>::value && std::is_base_of<T, U>::value>>
-    ref& operator=(ref<U>& other)
+    optional_ref& operator=(optional_ref<U>& other)
     {
         m_value = other.m_value;
         return *this;
     }
 
     template<typename U, typename = std::enable_if_t<(std::is_const<T>::value || !std::is_const<U>::value) && std::is_base_of<T, U>::value>>
-    ref(ref<U>&& other) :
-        m_value(other.m_value)
+    optional_ref(optional_ref<U>&& other) :
+        m_value(std::move(other.m_value))
     {
     }
 
     template<typename U, typename = std::enable_if_t<(std::is_const<T>::value || !std::is_const<U>::value) && std::is_base_of<T, U>::value>>
-    ref& operator=(ref<U>&& other)
+    optional_ref& operator=(optional_ref<U>&& other)
     {
-        m_value = other.m_value;
+        m_value = std::move(other.m_value);
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<is_same<T, U>::value || std::is_base_of<U, T>::value>>
-    operator optional_ref<U const>() const
+    explicit operator bool() const
     {
-        return m_value;
+        return m_value != nullptr;
     }
 
-    template<typename U, typename = std::enable_if_t<(!std::is_const<T>::value || std::is_const<U>::value) && (is_same<T, U>::value || std::is_base_of<U, T>::value)>>
-    operator optional_ref<U>()
+    explicit operator ptr<bool>() const
     {
-        return m_value;
+        return m_value != nullptr;
     }
 
     T const& operator*() const
@@ -141,47 +151,47 @@ public:
     }
 };
 
-// ref<T> - ref<T>
-//-----------------
+// optional_ref<T> - optional_ref<T>
+//-----------------------------------
 
 template<typename T, typename U, typename = std::enable_if_t<are_related<T, U>::value>>
-value<bool> operator==(ref<T> const& lhs, ref<U> const& rhs)
+value<bool> operator==(optional_ref<T> const& lhs, optional_ref<U> const& rhs)
 {
     return &*lhs == &*rhs;
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_related<T, U>::value>>
-value<bool> operator!=(ref<T> const& lhs, ref<U> const& rhs)
+value<bool> operator!=(optional_ref<T> const& lhs, optional_ref<U> const& rhs)
 {
     return &*lhs != &*rhs;
 }
 
-// ref<T> - U
-//------------
+// optional_ref<T> - U
+//---------------------
 
 template<typename T, typename U, typename = std::enable_if_t<are_related<T, U>::value>>
-value<bool> operator==(ref<T> const& lhs, U const& rhs)
+value<bool> operator==(optional_ref<T> const& lhs, U const& rhs)
 {
     return &*lhs == &rhs;
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_related<T, U>::value>>
-value<bool> operator!=(ref<T> const& lhs, U const& rhs)
+value<bool> operator!=(optional_ref<T> const& lhs, U const& rhs)
 {
     return &*lhs != &rhs;
 }
 
-// U - ref<T>
-//------------
+// U - optional_ref<T>
+//---------------------
 
 template<typename T, typename U, typename = std::enable_if_t<are_related<T, U>::value>>
-value<bool> operator==(U const& lhs, ref<T> const& rhs)
+value<bool> operator==(U const& lhs, optional_ref<T> const& rhs)
 {
     return &lhs == &*rhs;
 }
 
 template<typename T, typename U, typename = std::enable_if_t<are_related<T, U>::value>>
-value<bool> operator!=(U const& lhs, ref<T> const& rhs)
+value<bool> operator!=(U const& lhs, optional_ref<T> const& rhs)
 {
     return &lhs != &*rhs;
 }
@@ -190,14 +200,14 @@ value<bool> operator!=(U const& lhs, ref<T> const& rhs)
 //----------
 
 template<typename T>
-std::ostream& operator<<(std::ostream& s, ref<T> const& v)
+std::ostream& operator<<(std::ostream& s, optional_ref<T> const& v)
 {
     s << &*v;
     return s;
 }
 
 template<typename T>
-std::istream& operator>>(std::istream& s, ref<T>& v)
+std::istream& operator>>(std::istream& s, optional_ref<T>& v)
 {
     s >> &*v;
     return s;
@@ -207,7 +217,7 @@ std::istream& operator>>(std::istream& s, ref<T>& v)
 //-----------
 
 template<typename T>
-ref<T> make_ref(T& value)
+optional_ref<T> make_optional_ref(T& value)
 {
     return value;
 }
@@ -216,7 +226,7 @@ namespace aliases
 {
 
 template<typename T>
-using neo_ref = ref<T>;
+using neo_optional_ref = optional_ref<T>;
 
 } // namespace aliases
 
@@ -224,4 +234,4 @@ using namespace aliases;
 
 } // namespace neo
 
-#endif // NEO_REF_HPP
+#endif // NEO_OPTIONAL_REF_HPP

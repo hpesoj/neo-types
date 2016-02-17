@@ -13,16 +13,16 @@
 namespace neo
 {
 
-template<typename T>
-struct is_bool
+template<typename T, typename U>
+struct is_same
 {
-    static constexpr bool value = std::is_same<std::remove_cv_t<T>, bool>::value;
+    static constexpr bool value = std::is_same<std::remove_cv_t<T>, std::remove_cv_t<U>>::value;
 };
 
 template<typename T>
 struct is_numeric
 {
-    static constexpr bool value = std::is_arithmetic<T>::value & !is_bool<T>::value;
+    static constexpr bool value = std::is_arithmetic<T>::value & !is_same<T, bool>::value;
 };
 
 template<typename T>

@@ -358,7 +358,7 @@ public:
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<is_bool<U>::value>>
+    template<typename U, typename = std::enable_if_t<is_same<U, bool>::value>>
     value(U value) :
         m_value(value)
     {
