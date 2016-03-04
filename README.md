@@ -75,6 +75,8 @@ Moving a fundamental object is the same as copying it. Moving a Neo object sets 
 
 > Rationale: Zeroing the data members of a moved-from object is more often than not the desired behaviour. Making this the default behaviour allows the use of default move constructors. Data members may be manually copied if extreme efficiency is required.
 
+> Note: This is probably the most contoversial feature of this library at the moment. It may be removed in the future if I decide that this is not reasonable default behaviour.
+
 ### No Implicit Narrowing Conversions
 
 Fundamental objects may implicitly convert from type `T` to type `U`, where all values representable by type `T` may be represented by type `U` (widening conversions). You must use `static_cast` to explicitly convert from type `T` to type `U` when some values representable by type `T` may not be represented by type `U` (narrowing conversions).
@@ -107,19 +109,20 @@ The fundamental type, `bool`, is an integral type, and as such may implicitly co
 
 ### No Void Pointer Arithmetic (GCC Extension)
 
-## neo::ref and neo::optional_ref
+## neo::ref and neo::ptr
 
-A `neo::ref<T>` is a mixture between a reference and a pointer. Like a reference, it must be initialized on construction (though it may be `undefined`) and its wrapped reference will be `const` whenever the `neo::ref<T>` itself is `const`. Like a pointer, it may be copied, but a `neo::ref<T> const` may only be copied as a `neo::ref<T const>`. This is because allowing copying as a `neo::ref<T>` would violate const-correctness, as a `neo::ref<T> const` represents a `T const&`.
+A `neo::ref<T>` is a mixture between a reference and a pointer. Like a reference, it must be initialized on construction (though it may be `undefined`), but like a pointer, it may be reassigned.
 
              neo_int   i;
-    neo::ref<neo_int> ri = i;
+    neo::ref<neo_int> ri = undefined;
+                      ri = i;
 
 Unlike references, `neo::ref<T const>` cannot bind to and extend the life of r-values.
 
              int const&  ri = 42; // legal
     neo::ref<int const> nri = 42; // illegal
 
-This means that `neo::ref` is not suited for use in function parameters. Instead, `neo::ref` is designed as a safer replacement for pointers, where they are used _like_ references (as opposed to arrays or owning pointers). Here is an example.
+This means that `neo::ref` is not suited for use with function parameters. Instead, `neo::ref` is designed as a safer replacement for pointers, where they are used _like_ references (as opposed to arrays or owning pointers). Here is an example.
 
     struct person
     {
@@ -148,34 +151,28 @@ We can check the identity of a person's pet.
 
     if (bob.pet == fido) { … }
 
-A const person not only cannot switch their pet, they cannot modify their pet in any way. This is unlike with either references or pointers, and ensures that our person is const-correct.
-
-    person const bob = { fluffy };
-    bob.pet = fido; // error: neo_ref<animal>::operator=(animal&) is non-const
-    bob.pet->walk() // error: animal::walk() is non-const
-
-But a person can never have no pet. However, forcing pet ownership seems a bit draconian, so we can use `neo::optional_ref` to allow optional pet ownership.
+But a person can never have no pet. However, perhaps forcing pet ownership seems a bit draconian, so we can instead use `neo::ptr` to allow optional pet ownership.
 
     struct person
     {
-        neo::optional_ref<animal> pet;
+        neo::ptr<animal> pet;
     };
 
 Now we are not forced to provide a pet.
 
     person bob; // legal
 
-Though we can still assign a pet.
+Though we can still assign a pet (as with regular pointers, we must take the address of the pet).
 
-    bob.pet = fluffy;
+    bob.pet = &fluffy;
 
-But we may want to check for pet ownership to avoid interacting with a non-existent pet.
+We may want to check for pet ownership to avoid interacting with a non-existent pet.
 
     if (bob.pet) bob.pet->walk();
 
-Pet ownership can be rescinded.
+And pet ownership can of course be rescinded.
 
-    bob.pet = neo::nullref;
+    bob.pet = nullptr;
 
 ## Interesting Use Cases
 
