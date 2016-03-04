@@ -3,6 +3,8 @@
 #ifndef NEO_TYPES_OPERATOR_TRAITS_HPP
 #define NEO_TYPES_OPERATOR_TRAITS_HPP
 
+#include <utility>
+
 namespace neo_types
 {
 namespace operator_traits

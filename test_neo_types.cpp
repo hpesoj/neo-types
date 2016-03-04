@@ -78,6 +78,7 @@ struct counter
     counter& operator=(counter const&)
     {
         std::cout << "copy assigned\n";
+        return *this;
     }
 
     counter(counter&&)
@@ -88,6 +89,7 @@ struct counter
     counter& operator=(counter&&)
     {
         std::cout << "move assigned\n";
+        return *this;
     }
 
     ~counter()
@@ -965,12 +967,8 @@ TEST_CASE("neo_ptr", "neo_ptr")
 
 TEST_CASE("neo_ref", "neo_ref")
 {
-    derived der;
-    neo_ref<derived const> derivedref = der;
-    //neo_ref<base> baseref = std::move(derivedref);
-
-    int myint = 0;
-    //neo_ref<int const> myintref{std::move(myint)};
+             int const&  ri = 42; // legal
+//    neo::ref<int const> nri = 42; // illegal
 
     neo_int i[] = { 1, 2, 3, 4, 5 };
 
@@ -988,30 +986,30 @@ TEST_CASE("neo_ref", "neo_ref")
 
 TEST_CASE("neo_ref<T> copy construction", "neo_ref")
 {
-    SECTION("is defined for non-const references")
+    SECTION("is defined for references")
     {
         CHECK((copy_construction_traits<neo_ref<int>, int>::value));
         CHECK((copy_construction_traits<neo_ref<int>, neo_ref<int>>::value));
+        CHECK((copy_construction_traits<neo_ref<int>, neo_ref<int> const>::value));
     }
 
-    SECTION("is not defined for const references")
+    SECTION("is not defined for references to const")
     {
         CHECK(!(copy_construction_traits<neo_ref<int>, int const>::value));
-        CHECK(!(copy_construction_traits<neo_ref<int>, neo_ref<int> const>::value));
         CHECK(!(copy_construction_traits<neo_ref<int>, neo_ref<int const>>::value));
         CHECK(!(copy_construction_traits<neo_ref<int>, neo_ref<int const> const>::value));
     }
 
-    SECTION("is defined for non-const subclass references")
+    SECTION("is defined for subclass references")
     {
         CHECK((copy_construction_traits<neo_ref<base>, derived>::value));
         CHECK((copy_construction_traits<neo_ref<base>, neo_ref<derived>>::value));
+        CHECK((copy_construction_traits<neo_ref<base>, neo_ref<derived> const>::value));
     }
 
-    SECTION("is not defined for const subclass references")
+    SECTION("is not defined for subclass references to const")
     {
         CHECK(!(copy_construction_traits<neo_ref<base>, derived const>::value));
-        CHECK(!(copy_construction_traits<neo_ref<base>, neo_ref<derived> const>::value));
         CHECK(!(copy_construction_traits<neo_ref<base>, neo_ref<derived const>>::value));
         CHECK(!(copy_construction_traits<neo_ref<base>, neo_ref<derived const> const>::value));
     }
@@ -1048,14 +1046,14 @@ TEST_CASE("neo_ref<T> move construction", "neo_ref")
         CHECK(!(move_construction_traits<neo_ref<int>, int const>::value));
     }
 
-    SECTION("is defined for non-const references")
+    SECTION("is defined for references")
     {
         CHECK((move_construction_traits<neo_ref<int>, neo_ref<int>>::value));
+        CHECK((move_construction_traits<neo_ref<int>, neo_ref<int> const>::value));
     }
 
-    SECTION("is not defined for const references")
+    SECTION("is not defined for references to const")
     {
-        CHECK(!(move_construction_traits<neo_ref<int>, neo_ref<int> const>::value));
         CHECK(!(move_construction_traits<neo_ref<int>, neo_ref<int const>>::value));
         CHECK(!(move_construction_traits<neo_ref<int>, neo_ref<int const> const>::value));
     }
@@ -1066,14 +1064,14 @@ TEST_CASE("neo_ref<T> move construction", "neo_ref")
         CHECK(!(move_construction_traits<neo_ref<base>, derived const>::value));
     }
 
-    SECTION("is defined for non-const subclass references")
+    SECTION("is defined for subclass references")
     {
         CHECK((move_construction_traits<neo_ref<base>, neo_ref<derived>>::value));
+        CHECK((move_construction_traits<neo_ref<base>, neo_ref<derived> const>::value));
     }
 
-    SECTION("is not defined for const subclass references")
+    SECTION("is not defined for subclass references to const")
     {
-        CHECK(!(move_construction_traits<neo_ref<base>, neo_ref<derived> const>::value));
         CHECK(!(move_construction_traits<neo_ref<base>, neo_ref<derived const>>::value));
         CHECK(!(move_construction_traits<neo_ref<base>, neo_ref<derived const> const>::value));
     }
@@ -1087,7 +1085,7 @@ TEST_CASE("neo_ref<T const> move construction", "neo_ref")
         CHECK(!(move_construction_traits<neo_ref<int const>, int const>::value));
     }
 
-    SECTION("is defined for all references")
+    SECTION("is defined for references")
     {
         CHECK((move_construction_traits<neo_ref<int const>, neo_ref<int>>::value));
         CHECK((move_construction_traits<neo_ref<int const>, neo_ref<int> const>::value));
@@ -1101,7 +1099,7 @@ TEST_CASE("neo_ref<T const> move construction", "neo_ref")
         CHECK(!(move_construction_traits<neo_ref<base const>, derived const>::value));
     }
 
-    SECTION("is defined for all subclass references")
+    SECTION("is defined for subclass references")
     {
         CHECK((move_construction_traits<neo_ref<base const>, neo_ref<derived>>::value));
         CHECK((move_construction_traits<neo_ref<base const>, neo_ref<derived> const>::value));
@@ -1112,30 +1110,30 @@ TEST_CASE("neo_ref<T const> move construction", "neo_ref")
 
 TEST_CASE("neo_ref<T> copy assignment", "neo_ref")
 {
-    SECTION("is defined for non-const references")
+    SECTION("is defined for references")
     {
         CHECK((copy_assignment_traits<neo_ref<int>, int>::value));
         CHECK((copy_assignment_traits<neo_ref<int>, neo_ref<int>>::value));
+        CHECK((copy_assignment_traits<neo_ref<int>, neo_ref<int> const>::value));
     }
 
-    SECTION("is not defined for const references")
+    SECTION("is not defined for references to const")
     {
         CHECK(!(copy_assignment_traits<neo_ref<int>, int const>::value));
-        CHECK(!(copy_assignment_traits<neo_ref<int>, neo_ref<int> const>::value));
         CHECK(!(copy_assignment_traits<neo_ref<int>, neo_ref<int const>>::value));
         CHECK(!(copy_assignment_traits<neo_ref<int>, neo_ref<int const> const>::value));
     }
 
-    SECTION("is defined for non-const subclass references")
+    SECTION("is defined for subclass references")
     {
         CHECK((copy_assignment_traits<neo_ref<base>, derived>::value));
         CHECK((copy_assignment_traits<neo_ref<base>, neo_ref<derived>>::value));
+        CHECK((copy_assignment_traits<neo_ref<base>, neo_ref<derived> const>::value));
     }
 
-    SECTION("is not defined for const subclass references")
+    SECTION("is not defined for subclass references to const")
     {
         CHECK(!(copy_assignment_traits<neo_ref<base>, derived const>::value));
-        CHECK(!(copy_assignment_traits<neo_ref<base>, neo_ref<derived> const>::value));
         CHECK(!(copy_assignment_traits<neo_ref<base>, neo_ref<derived const>>::value));
         CHECK(!(copy_assignment_traits<neo_ref<base>, neo_ref<derived const> const>::value));
     }
@@ -1172,14 +1170,14 @@ TEST_CASE("neo_ref<T> move assignment", "neo_ref")
         CHECK(!(move_assignment_traits<neo_ref<int>, int const>::value));
     }
 
-    SECTION("is defined for non-const references")
+    SECTION("is defined for references")
     {
         CHECK((move_assignment_traits<neo_ref<int>, neo_ref<int>>::value));
+        CHECK((move_assignment_traits<neo_ref<int>, neo_ref<int> const>::value));
     }
 
-    SECTION("is not defined for const references")
+    SECTION("is not defined for references to const")
     {
-        CHECK(!(move_assignment_traits<neo_ref<int>, neo_ref<int> const>::value));
         CHECK(!(move_assignment_traits<neo_ref<int>, neo_ref<int const>>::value));
         CHECK(!(move_assignment_traits<neo_ref<int>, neo_ref<int const> const>::value));
     }
@@ -1190,14 +1188,14 @@ TEST_CASE("neo_ref<T> move assignment", "neo_ref")
         CHECK(!(move_assignment_traits<neo_ref<base>, derived const>::value));
     }
 
-    SECTION("is defined for non-const subclass references")
+    SECTION("is defined for subclass references")
     {
         CHECK((move_assignment_traits<neo_ref<base>, neo_ref<derived>>::value));
+        CHECK((move_assignment_traits<neo_ref<base>, neo_ref<derived> const>::value));
     }
 
-    SECTION("is not defined for const subclass references")
+    SECTION("is not defined for subclass references to const")
     {
-        CHECK(!(move_assignment_traits<neo_ref<base>, neo_ref<derived> const>::value));
         CHECK(!(move_assignment_traits<neo_ref<base>, neo_ref<derived const>>::value));
         CHECK(!(move_assignment_traits<neo_ref<base>, neo_ref<derived const> const>::value));
     }
@@ -1232,442 +1230,4 @@ TEST_CASE("neo_ref<T const> move assignment", "neo_ref")
         CHECK((move_assignment_traits<neo_ref<base const>, neo_ref<derived const>>::value));
         CHECK((move_assignment_traits<neo_ref<base const>, neo_ref<derived const> const>::value));
     }
-}
-
-TEST_CASE("neo_optional_ref<T> copy construction", "neo_optional_ref")
-{
-    SECTION("is defined for non-const references")
-    {
-        CHECK((copy_construction_traits<neo_optional_ref<int>, int>::value));
-        CHECK((copy_construction_traits<neo_optional_ref<int>, neo_optional_ref<int>>::value));
-    }
-
-    SECTION("is not defined for const references")
-    {
-        CHECK(!(copy_construction_traits<neo_optional_ref<int>, int const>::value));
-        CHECK(!(copy_construction_traits<neo_optional_ref<int>, neo_optional_ref<int> const>::value));
-        CHECK(!(copy_construction_traits<neo_optional_ref<int>, neo_optional_ref<int const>>::value));
-        CHECK(!(copy_construction_traits<neo_optional_ref<int>, neo_optional_ref<int const> const>::value));
-    }
-
-    SECTION("is defined for non-const subclass references")
-    {
-        CHECK((copy_construction_traits<neo_optional_ref<base>, derived>::value));
-        CHECK((copy_construction_traits<neo_optional_ref<base>, neo_optional_ref<derived>>::value));
-    }
-
-    SECTION("is not defined for const subclass references")
-    {
-        CHECK(!(copy_construction_traits<neo_optional_ref<base>, derived const>::value));
-        CHECK(!(copy_construction_traits<neo_optional_ref<base>, neo_optional_ref<derived> const>::value));
-        CHECK(!(copy_construction_traits<neo_optional_ref<base>, neo_optional_ref<derived const>>::value));
-        CHECK(!(copy_construction_traits<neo_optional_ref<base>, neo_optional_ref<derived const> const>::value));
-    }
-
-    SECTION("is defined for non-const neo_ref's")
-    {
-        CHECK((copy_construction_traits<neo_optional_ref<int>, neo_ref<int>>::value));
-    }
-
-    SECTION("is not defined for const neo_ref's")
-    {
-        CHECK(!(copy_construction_traits<neo_optional_ref<int>, neo_ref<int> const>::value));
-        CHECK(!(copy_construction_traits<neo_optional_ref<int>, neo_ref<int const>>::value));
-        CHECK(!(copy_construction_traits<neo_optional_ref<int>, neo_ref<int const> const>::value));
-    }
-
-    SECTION("is defined for non-const subclass neo_ref's")
-    {
-        CHECK((copy_construction_traits<neo_optional_ref<base>, neo_ref<derived>>::value));
-    }
-
-    SECTION("is not defined for const subclass neo_ref's")
-    {
-        CHECK(!(copy_construction_traits<neo_optional_ref<base>, neo_ref<derived> const>::value));
-        CHECK(!(copy_construction_traits<neo_optional_ref<base>, neo_ref<derived const>>::value));
-        CHECK(!(copy_construction_traits<neo_optional_ref<base>, neo_ref<derived const> const>::value));
-    }
-}
-
-TEST_CASE("neo_optional_ref<T const> copy construction", "neo_optional_ref")
-{
-    SECTION("is defined for all references")
-    {
-        CHECK((copy_construction_traits<neo_optional_ref<int const>, int>::value));
-        CHECK((copy_construction_traits<neo_optional_ref<int const>, int const>::value));
-        CHECK((copy_construction_traits<neo_optional_ref<int const>, neo_optional_ref<int>>::value));
-        CHECK((copy_construction_traits<neo_optional_ref<int const>, neo_optional_ref<int> const>::value));
-        CHECK((copy_construction_traits<neo_optional_ref<int const>, neo_optional_ref<int const>>::value));
-        CHECK((copy_construction_traits<neo_optional_ref<int const>, neo_optional_ref<int const> const>::value));
-    }
-
-    SECTION("is defined for all subclass references")
-    {
-        CHECK((copy_construction_traits<neo_optional_ref<base const>, derived>::value));
-        CHECK((copy_construction_traits<neo_optional_ref<base const>, derived const>::value));
-        CHECK((copy_construction_traits<neo_optional_ref<base const>, neo_optional_ref<derived>>::value));
-        CHECK((copy_construction_traits<neo_optional_ref<base const>, neo_optional_ref<derived> const>::value));
-        CHECK((copy_construction_traits<neo_optional_ref<base const>, neo_optional_ref<derived const>>::value));
-        CHECK((copy_construction_traits<neo_optional_ref<base const>, neo_optional_ref<derived const> const>::value));
-    }
-
-    SECTION("is defined for all neo_ref's")
-    {
-        CHECK((copy_construction_traits<neo_optional_ref<int const>, neo_ref<int>>::value));
-        CHECK((copy_construction_traits<neo_optional_ref<int const>, neo_ref<int> const>::value));
-        CHECK((copy_construction_traits<neo_optional_ref<int const>, neo_ref<int const>>::value));
-        CHECK((copy_construction_traits<neo_optional_ref<int const>, neo_ref<int const> const>::value));
-    }
-
-    SECTION("is defined for all subclass neo_ref's")
-    {
-        CHECK((copy_construction_traits<neo_optional_ref<base const>, neo_ref<derived>>::value));
-        CHECK((copy_construction_traits<neo_optional_ref<base const>, neo_ref<derived> const>::value));
-        CHECK((copy_construction_traits<neo_optional_ref<base const>, neo_ref<derived const>>::value));
-        CHECK((copy_construction_traits<neo_optional_ref<base const>, neo_ref<derived const> const>::value));
-    }
-}
-
-TEST_CASE("neo_optional_ref<T> move construction", "neo_optional_ref")
-{
-    SECTION("is not defined for regular references")
-    {
-        CHECK(!(move_construction_traits<neo_optional_ref<int>, int>::value));
-        CHECK(!(move_construction_traits<neo_optional_ref<int>, int const>::value));
-    }
-
-    SECTION("is defined for non-const references")
-    {
-        CHECK((move_construction_traits<neo_optional_ref<int>, neo_optional_ref<int>>::value));
-    }
-
-    SECTION("is not defined for const references")
-    {
-        CHECK(!(move_construction_traits<neo_optional_ref<int>, neo_optional_ref<int> const>::value));
-        CHECK(!(move_construction_traits<neo_optional_ref<int>, neo_optional_ref<int const>>::value));
-        CHECK(!(move_construction_traits<neo_optional_ref<int>, neo_optional_ref<int const> const>::value));
-    }
-
-    SECTION("is not defined for regular subclass references")
-    {
-        CHECK(!(move_construction_traits<neo_optional_ref<base>, derived>::value));
-        CHECK(!(move_construction_traits<neo_optional_ref<base>, derived const>::value));
-    }
-
-    SECTION("is defined for non-const subclass references")
-    {
-        CHECK((move_construction_traits<neo_optional_ref<base>, neo_optional_ref<derived>>::value));
-    }
-
-    SECTION("is not defined for const subclass references")
-    {
-        CHECK(!(move_construction_traits<neo_optional_ref<base>, neo_optional_ref<derived> const>::value));
-        CHECK(!(move_construction_traits<neo_optional_ref<base>, neo_optional_ref<derived const>>::value));
-        CHECK(!(move_construction_traits<neo_optional_ref<base>, neo_optional_ref<derived const> const>::value));
-    }
-
-    SECTION("is defined for non-const neo_ref's")
-    {
-        CHECK((move_construction_traits<neo_optional_ref<int>, neo_ref<int>>::value));
-    }
-
-    SECTION("is not defined for const neo_ref's")
-    {
-        CHECK(!(move_construction_traits<neo_optional_ref<int>, neo_ref<int> const>::value));
-        CHECK(!(move_construction_traits<neo_optional_ref<int>, neo_ref<int const>>::value));
-        CHECK(!(move_construction_traits<neo_optional_ref<int>, neo_ref<int const> const>::value));
-    }
-
-    SECTION("is defined for non-const subclass neo_ref's")
-    {
-        CHECK((move_construction_traits<neo_optional_ref<base>, neo_ref<derived>>::value));
-    }
-
-    SECTION("is not defined for const subclass neo_ref's")
-    {
-        CHECK(!(move_construction_traits<neo_optional_ref<base>, neo_ref<derived> const>::value));
-        CHECK(!(move_construction_traits<neo_optional_ref<base>, neo_ref<derived const>>::value));
-        CHECK(!(move_construction_traits<neo_optional_ref<base>, neo_ref<derived const> const>::value));
-    }
-}
-
-TEST_CASE("neo_optional_ref<T const> move construction", "neo_optional_ref")
-{
-    SECTION("is not defined for regular references")
-    {
-        CHECK(!(move_construction_traits<neo_optional_ref<int const>, int>::value));
-        CHECK(!(move_construction_traits<neo_optional_ref<int const>, int const>::value));
-    }
-
-    SECTION("is defined for all references")
-    {
-        CHECK((move_construction_traits<neo_optional_ref<int const>, neo_optional_ref<int>>::value));
-        CHECK((move_construction_traits<neo_optional_ref<int const>, neo_optional_ref<int> const>::value));
-        CHECK((move_construction_traits<neo_optional_ref<int const>, neo_optional_ref<int const>>::value));
-        CHECK((move_construction_traits<neo_optional_ref<int const>, neo_optional_ref<int const> const>::value));
-    }
-
-    SECTION("is not defined for regular subclass references")
-    {
-        CHECK(!(move_construction_traits<neo_optional_ref<base const>, derived>::value));
-        CHECK(!(move_construction_traits<neo_optional_ref<base const>, derived const>::value));
-    }
-
-    SECTION("is defined for all subclass references")
-    {
-        CHECK((move_construction_traits<neo_optional_ref<base const>, neo_optional_ref<derived>>::value));
-        CHECK((move_construction_traits<neo_optional_ref<base const>, neo_optional_ref<derived> const>::value));
-        CHECK((move_construction_traits<neo_optional_ref<base const>, neo_optional_ref<derived const>>::value));
-        CHECK((move_construction_traits<neo_optional_ref<base const>, neo_optional_ref<derived const> const>::value));
-    }
-
-    SECTION("is defined for all neo_ref's")
-    {
-        CHECK((move_construction_traits<neo_optional_ref<int const>, neo_ref<int>>::value));
-        CHECK((move_construction_traits<neo_optional_ref<int const>, neo_ref<int> const>::value));
-        CHECK((move_construction_traits<neo_optional_ref<int const>, neo_ref<int const>>::value));
-        CHECK((move_construction_traits<neo_optional_ref<int const>, neo_ref<int const> const>::value));
-    }
-
-    SECTION("is defined for all subclass neo_ref's")
-    {
-        CHECK((move_construction_traits<neo_optional_ref<base const>, neo_ref<derived>>::value));
-        CHECK((move_construction_traits<neo_optional_ref<base const>, neo_ref<derived> const>::value));
-        CHECK((move_construction_traits<neo_optional_ref<base const>, neo_ref<derived const>>::value));
-        CHECK((move_construction_traits<neo_optional_ref<base const>, neo_ref<derived const> const>::value));
-    }
-}
-
-TEST_CASE("neo_optional_ref<T> copy assignment", "neo_optional_ref")
-{
-    SECTION("is defined for non-const references")
-    {
-        CHECK((copy_assignment_traits<neo_optional_ref<int>, int>::value));
-        CHECK((copy_assignment_traits<neo_optional_ref<int>, neo_optional_ref<int>>::value));
-    }
-
-    SECTION("is not defined for const references")
-    {
-        CHECK(!(copy_assignment_traits<neo_optional_ref<int>, int const>::value));
-        CHECK(!(copy_assignment_traits<neo_optional_ref<int>, neo_optional_ref<int> const>::value));
-        CHECK(!(copy_assignment_traits<neo_optional_ref<int>, neo_optional_ref<int const>>::value));
-        CHECK(!(copy_assignment_traits<neo_optional_ref<int>, neo_optional_ref<int const> const>::value));
-    }
-
-    SECTION("is defined for non-const subclass references")
-    {
-        CHECK((copy_assignment_traits<neo_optional_ref<base>, derived>::value));
-        CHECK((copy_assignment_traits<neo_optional_ref<base>, neo_optional_ref<derived>>::value));
-    }
-
-    SECTION("is not defined for const subclass references")
-    {
-        CHECK(!(copy_assignment_traits<neo_optional_ref<base>, derived const>::value));
-        CHECK(!(copy_assignment_traits<neo_optional_ref<base>, neo_optional_ref<derived> const>::value));
-        CHECK(!(copy_assignment_traits<neo_optional_ref<base>, neo_optional_ref<derived const>>::value));
-        CHECK(!(copy_assignment_traits<neo_optional_ref<base>, neo_optional_ref<derived const> const>::value));
-    }
-
-    SECTION("is defined for non-const neo_ref's")
-    {
-        CHECK((copy_assignment_traits<neo_optional_ref<int>, neo_ref<int>>::value));
-    }
-
-    SECTION("is not defined for const neo_ref's")
-    {
-        CHECK(!(copy_assignment_traits<neo_optional_ref<int>, neo_ref<int> const>::value));
-        CHECK(!(copy_assignment_traits<neo_optional_ref<int>, neo_ref<int const>>::value));
-        CHECK(!(copy_assignment_traits<neo_optional_ref<int>, neo_ref<int const> const>::value));
-    }
-
-    SECTION("is defined for non-const subclass neo_ref's")
-    {
-        CHECK((copy_assignment_traits<neo_optional_ref<base>, neo_ref<derived>>::value));
-    }
-
-    SECTION("is not defined for const subclass neo_ref's")
-    {
-        CHECK(!(copy_assignment_traits<neo_optional_ref<base>, neo_ref<derived> const>::value));
-        CHECK(!(copy_assignment_traits<neo_optional_ref<base>, neo_ref<derived const>>::value));
-        CHECK(!(copy_assignment_traits<neo_optional_ref<base>, neo_ref<derived const> const>::value));
-    }
-}
-
-TEST_CASE("neo_optional_ref<T const> copy assignment", "neo_optional_ref")
-{
-    SECTION("is defined for all references")
-    {
-        CHECK((copy_assignment_traits<neo_optional_ref<int const>, int>::value));
-        CHECK((copy_assignment_traits<neo_optional_ref<int const>, int const>::value));
-        CHECK((copy_assignment_traits<neo_optional_ref<int const>, neo_optional_ref<int>>::value));
-        CHECK((copy_assignment_traits<neo_optional_ref<int const>, neo_optional_ref<int> const>::value));
-        CHECK((copy_assignment_traits<neo_optional_ref<int const>, neo_optional_ref<int const>>::value));
-        CHECK((copy_assignment_traits<neo_optional_ref<int const>, neo_optional_ref<int const> const>::value));
-    }
-
-    SECTION("is defined for all subclass references")
-    {
-        CHECK((copy_assignment_traits<neo_optional_ref<base const>, derived>::value));
-        CHECK((copy_assignment_traits<neo_optional_ref<base const>, derived const>::value));
-        CHECK((copy_assignment_traits<neo_optional_ref<base const>, neo_optional_ref<derived>>::value));
-        CHECK((copy_assignment_traits<neo_optional_ref<base const>, neo_optional_ref<derived> const>::value));
-        CHECK((copy_assignment_traits<neo_optional_ref<base const>, neo_optional_ref<derived const>>::value));
-        CHECK((copy_assignment_traits<neo_optional_ref<base const>, neo_optional_ref<derived const> const>::value));
-    }
-
-    SECTION("is defined for all neo_ref's")
-    {
-        CHECK((copy_assignment_traits<neo_optional_ref<int const>, neo_ref<int>>::value));
-        CHECK((copy_assignment_traits<neo_optional_ref<int const>, neo_ref<int> const>::value));
-        CHECK((copy_assignment_traits<neo_optional_ref<int const>, neo_ref<int const>>::value));
-        CHECK((copy_assignment_traits<neo_optional_ref<int const>, neo_ref<int const> const>::value));
-    }
-
-    SECTION("is defined for all subclass neo_ref's")
-    {
-        CHECK((copy_assignment_traits<neo_optional_ref<base const>, neo_ref<derived>>::value));
-        CHECK((copy_assignment_traits<neo_optional_ref<base const>, neo_ref<derived> const>::value));
-        CHECK((copy_assignment_traits<neo_optional_ref<base const>, neo_ref<derived const>>::value));
-        CHECK((copy_assignment_traits<neo_optional_ref<base const>, neo_ref<derived const> const>::value));
-    }
-}
-
-TEST_CASE("neo_optional_ref<T> move assignment", "neo_optional_ref")
-{
-    SECTION("is not defined for regular references")
-    {
-        CHECK(!(move_assignment_traits<neo_optional_ref<int>, int>::value));
-        CHECK(!(move_assignment_traits<neo_optional_ref<int>, int const>::value));
-    }
-
-    SECTION("is defined for non-const references")
-    {
-        CHECK((move_assignment_traits<neo_optional_ref<int>, neo_optional_ref<int>>::value));
-    }
-
-    SECTION("is not defined for const references")
-    {
-        CHECK(!(move_assignment_traits<neo_optional_ref<int>, neo_optional_ref<int> const>::value));
-        CHECK(!(move_assignment_traits<neo_optional_ref<int>, neo_optional_ref<int const>>::value));
-        CHECK(!(move_assignment_traits<neo_optional_ref<int>, neo_optional_ref<int const> const>::value));
-    }
-
-    SECTION("is not defined for regular subclass references")
-    {
-        CHECK(!(move_assignment_traits<neo_optional_ref<base>, derived>::value));
-        CHECK(!(move_assignment_traits<neo_optional_ref<base>, derived const>::value));
-    }
-
-    SECTION("is defined for non-const subclass references")
-    {
-        CHECK((move_assignment_traits<neo_optional_ref<base>, neo_optional_ref<derived>>::value));
-    }
-
-    SECTION("is not defined for const subclass references")
-    {
-        CHECK(!(move_assignment_traits<neo_optional_ref<base>, neo_optional_ref<derived> const>::value));
-        CHECK(!(move_assignment_traits<neo_optional_ref<base>, neo_optional_ref<derived const>>::value));
-        CHECK(!(move_assignment_traits<neo_optional_ref<base>, neo_optional_ref<derived const> const>::value));
-    }
-
-    SECTION("is defined for non-const neo_ref's")
-    {
-        CHECK((move_assignment_traits<neo_optional_ref<int>, neo_ref<int>>::value));
-    }
-
-    SECTION("is not defined for const neo_ref's")
-    {
-        CHECK(!(move_assignment_traits<neo_optional_ref<int>, neo_ref<int> const>::value));
-        CHECK(!(move_assignment_traits<neo_optional_ref<int>, neo_ref<int const>>::value));
-        CHECK(!(move_assignment_traits<neo_optional_ref<int>, neo_ref<int const> const>::value));
-    }
-
-    SECTION("is defined for non-const subclass neo_ref's")
-    {
-        CHECK((move_assignment_traits<neo_optional_ref<base>, neo_ref<derived>>::value));
-    }
-
-    SECTION("is not defined for const subclass neo_ref's")
-    {
-        CHECK(!(move_assignment_traits<neo_optional_ref<base>, neo_ref<derived> const>::value));
-        CHECK(!(move_assignment_traits<neo_optional_ref<base>, neo_ref<derived const>>::value));
-        CHECK(!(move_assignment_traits<neo_optional_ref<base>, neo_ref<derived const> const>::value));
-    }
-}
-
-TEST_CASE("neo_optional_ref<T const> move assignment", "neo_optional_ref")
-{
-    SECTION("is not defined for regular references")
-    {
-        CHECK(!(move_assignment_traits<neo_optional_ref<int const>, int>::value));
-        CHECK(!(move_assignment_traits<neo_optional_ref<int const>, int const>::value));
-    }
-
-    SECTION("is defined for all references")
-    {
-        CHECK((move_assignment_traits<neo_optional_ref<int const>, neo_optional_ref<int>>::value));
-        CHECK((move_assignment_traits<neo_optional_ref<int const>, neo_optional_ref<int> const>::value));
-        CHECK((move_assignment_traits<neo_optional_ref<int const>, neo_optional_ref<int const>>::value));
-        CHECK((move_assignment_traits<neo_optional_ref<int const>, neo_optional_ref<int const> const>::value));
-    }
-
-    SECTION("is not defined for regular subclass references")
-    {
-        CHECK(!(move_assignment_traits<neo_optional_ref<base const>, derived>::value));
-        CHECK(!(move_assignment_traits<neo_optional_ref<base const>, derived const>::value));
-    }
-
-    SECTION("is defined for all subclass references")
-    {
-        CHECK((move_assignment_traits<neo_optional_ref<base const>, neo_optional_ref<derived>>::value));
-        CHECK((move_assignment_traits<neo_optional_ref<base const>, neo_optional_ref<derived> const>::value));
-        CHECK((move_assignment_traits<neo_optional_ref<base const>, neo_optional_ref<derived const>>::value));
-        CHECK((move_assignment_traits<neo_optional_ref<base const>, neo_optional_ref<derived const> const>::value));
-    }
-
-    SECTION("is defined for all neo_ref's")
-    {
-        CHECK((move_assignment_traits<neo_optional_ref<int const>, neo_ref<int>>::value));
-        CHECK((move_assignment_traits<neo_optional_ref<int const>, neo_ref<int> const>::value));
-        CHECK((move_assignment_traits<neo_optional_ref<int const>, neo_ref<int const>>::value));
-        CHECK((move_assignment_traits<neo_optional_ref<int const>, neo_ref<int const> const>::value));
-    }
-
-    SECTION("is defined for all subclass neo_ref's")
-    {
-        CHECK((move_assignment_traits<neo_optional_ref<base const>, neo_ref<derived>>::value));
-        CHECK((move_assignment_traits<neo_optional_ref<base const>, neo_ref<derived> const>::value));
-        CHECK((move_assignment_traits<neo_optional_ref<base const>, neo_ref<derived const>>::value));
-        CHECK((move_assignment_traits<neo_optional_ref<base const>, neo_ref<derived const> const>::value));
-    }
-}
-
-TEST_CASE("neo_optional_ref", "neo_optional_ref")
-{
-    derived der;
-    neo_optional_ref<derived> derivedref = der;
-    neo_optional_ref<base> baseref = std::move(derivedref);
-    CHECK(!derivedref);
-
-    neo_int i[] = { 1, 2, 3, 4, 5 };
-
-    neo_optional_ref<neo_int> r;
-
-    CHECK(!r);
-
-    r = i[0];
-
-    CHECK(r);
-
-    CHECK(*r == 1);
-    *r = 3;
-    CHECK(i[0] == 3);
-
-    r = i[1];
-
-    CHECK(*r == 2);
-
-    r = neo::nullref;
-
-    CHECK(!r);
 }

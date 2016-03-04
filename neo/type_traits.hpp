@@ -13,10 +13,22 @@
 namespace neo
 {
 
+template<bool B, typename T = void>
+using enable_if_t = typename std::enable_if<B, T>::type;
+
+template<typename T>
+using remove_cv_t = typename std::remove_cv<T>::type;
+
 template<typename T, typename U>
 struct is_same
 {
-    static constexpr bool value = std::is_same<std::remove_cv_t<T>, std::remove_cv_t<U>>::value;
+    static constexpr bool value = std::is_same<remove_cv_t<T>, remove_cv_t<U>>::value;
+};
+
+template<typename T, typename U>
+struct is_base_of
+{
+    static constexpr bool value = std::is_base_of<remove_cv_t<T>, remove_cv_t<U>>::value;
 };
 
 template<typename T>
@@ -38,8 +50,8 @@ struct are_similar
 };
 
 template<typename T1, typename T2>
-struct are_similar<T1, T2, std::enable_if_t<
-    std::is_same<std::remove_cv_t<T1>, std::remove_cv_t<T2>>::value || (
+struct are_similar<T1, T2, enable_if_t<
+    std::is_same<remove_cv_t<T1>, remove_cv_t<T2>>::value || (
         is_numeric<T1>::value == is_numeric<T2>::value &&
         std::is_integral<T1>::value == std::is_integral<T2>::value &&
         std::is_signed<T1>::value == std::is_signed<T2>::value &&

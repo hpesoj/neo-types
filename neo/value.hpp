@@ -55,27 +55,27 @@ public:
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
+    template<typename U, typename = enable_if_t<is_widening<U, T>::value>>
     value(value<U> const& other) :
         m_value(other)
     {
     }
 
-    template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
+    template<typename U, typename = enable_if_t<is_widening<U, T>::value>>
     value& operator=(value<U> const& other)
     {
         m_value = other;
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
+    template<typename U, typename = enable_if_t<is_widening<U, T>::value>>
     value(value<U>&& other) :
         m_value(other)
     {
         other = U();
     }
 
-    template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
+    template<typename U, typename = enable_if_t<is_widening<U, T>::value>>
     value& operator=(value<U>&& other)
     {
         m_value = other;
@@ -83,38 +83,38 @@ public:
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
+    template<typename U, typename = enable_if_t<is_widening<U, T>::value>>
     value(U value) :
         m_value(value)
     {
     }
 
-    template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
+    template<typename U, typename = enable_if_t<is_widening<U, T>::value>>
     value& operator=(U value)
     {
         m_value = value;
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<std::is_same<T, U>::value>>
+    template<typename U, typename = enable_if_t<std::is_same<T, U>::value>>
     operator U&()
     {
         return m_value;
     }
 
-    template<typename U, typename = std::enable_if_t<is_widening<T, U>::value>>
+    template<typename U, typename = enable_if_t<is_widening<T, U>::value>>
     operator U() const
     {
         return m_value;
     }
 
-    template<typename U, typename = std::enable_if_t<is_narrowing<T, U>::value>, typename = void>
+    template<typename U, typename = enable_if_t<is_narrowing<T, U>::value>, typename = void>
     explicit operator U() const
     {
         return static_cast<U>(m_value);
     }
 
-    template<typename U, typename = std::enable_if_t<is_narrowing<T, U>::value>>
+    template<typename U, typename = enable_if_t<is_narrowing<T, U>::value>>
     explicit operator value<U>() const
     {
         return static_cast<U>(m_value);
@@ -130,97 +130,97 @@ public:
         return m_value;
     }
 
-    template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
+    template<typename U, typename = enable_if_t<is_widening<U, T>::value>>
     value& operator+=(value<U> const& rhs)
     {
         m_value += rhs.get();
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
+    template<typename U, typename = enable_if_t<is_widening<U, T>::value>>
     value& operator+=(U const& rhs)
     {
         m_value += rhs;
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
+    template<typename U, typename = enable_if_t<is_widening<U, T>::value>>
     value& operator-=(value<U> const& rhs)
     {
         m_value -= rhs.get();
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
+    template<typename U, typename = enable_if_t<is_widening<U, T>::value>>
     value& operator-=(U const& rhs)
     {
         m_value -= rhs;
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
+    template<typename U, typename = enable_if_t<is_widening<U, T>::value>>
     value& operator*=(value<U> const& rhs)
     {
         m_value *= rhs.get();
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
+    template<typename U, typename = enable_if_t<is_widening<U, T>::value>>
     value& operator*=(U const& rhs)
     {
         m_value *= rhs;
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
+    template<typename U, typename = enable_if_t<is_widening<U, T>::value>>
     value& operator/=(value<U> const& rhs)
     {
         m_value /= rhs.get();
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
+    template<typename U, typename = enable_if_t<is_widening<U, T>::value>>
     value& operator/=(U const& rhs)
     {
         m_value /= rhs;
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
+    template<typename U, typename = enable_if_t<is_widening<U, T>::value>>
     value& operator%=(value<U> const& rhs)
     {
         m_value %= rhs.get();
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<is_widening<U, T>::value>>
+    template<typename U, typename = enable_if_t<is_widening<U, T>::value>>
     value& operator%=(U const& rhs)
     {
         m_value %= rhs;
         return *this;
     }
 
-    template<typename = std::enable_if_t<std::is_integral<T>::value>>
+    template<typename = enable_if_t<std::is_integral<T>::value>>
     value& operator++()
     {
         ++m_value;
         return *this;
     }
 
-    template<typename = std::enable_if_t<std::is_integral<T>::value>>
+    template<typename = enable_if_t<std::is_integral<T>::value>>
     value operator++(int)
     {
         return m_value++;
     }
 
-    template<typename = std::enable_if_t<std::is_integral<T>::value>>
+    template<typename = enable_if_t<std::is_integral<T>::value>>
     value& operator--()
     {
         --m_value;
         return *this;
     }
 
-    template<typename = std::enable_if_t<std::is_integral<T>::value>>
+    template<typename = enable_if_t<std::is_integral<T>::value>>
     value operator--(int)
     {
         return m_value--;
@@ -236,77 +236,77 @@ public:
         return -m_value;
     }
 
-    template<typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && is_widening<U, T>::value>>
+    template<typename U, typename = enable_if_t<is_unsigned_integral<T>::value && is_widening<U, T>::value>>
     value& operator&=(value<U> const& rhs)
     {
         m_value &= rhs.get();
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && is_widening<U, T>::value>>
+    template<typename U, typename = enable_if_t<is_unsigned_integral<T>::value && is_widening<U, T>::value>>
     value& operator&=(U const& rhs)
     {
         m_value &= rhs;
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && is_widening<U, T>::value>>
+    template<typename U, typename = enable_if_t<is_unsigned_integral<T>::value && is_widening<U, T>::value>>
     value& operator|=(value<U> const& rhs)
     {
         m_value |= rhs.get();
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && is_widening<U, T>::value>>
+    template<typename U, typename = enable_if_t<is_unsigned_integral<T>::value && is_widening<U, T>::value>>
     value& operator|=(U const& rhs)
     {
         m_value |= rhs;
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && is_widening<U, T>::value>>
+    template<typename U, typename = enable_if_t<is_unsigned_integral<T>::value && is_widening<U, T>::value>>
     value& operator^=(value<U> const& rhs)
     {
         m_value ^= rhs.get();
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && is_widening<U, T>::value>>
+    template<typename U, typename = enable_if_t<is_unsigned_integral<T>::value && is_widening<U, T>::value>>
     value& operator^=(U const& rhs)
     {
         m_value ^= rhs;
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
+    template<typename U, typename = enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
     value& operator<<=(value<U> const& rhs)
     {
         m_value <<= rhs.get();
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
+    template<typename U, typename = enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
     value& operator<<=(U const& rhs)
     {
         m_value <<= rhs;
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
+    template<typename U, typename = enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
     value& operator>>=(value<U> const& rhs)
     {
         m_value >>= rhs.get();
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
+    template<typename U, typename = enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
     value& operator>>=(U const& rhs)
     {
         m_value >>= rhs;
         return *this;
     }
 
-    template<typename = std::enable_if_t<is_unsigned_integral<T>::value>>
+    template<typename = enable_if_t<is_unsigned_integral<T>::value>>
     value operator~() const
     {
         return ~m_value;
@@ -358,7 +358,7 @@ public:
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<is_same<U, bool>::value>>
+    template<typename U, typename = enable_if_t<is_same<U, bool>::value>>
     value(U value) :
         m_value(value)
     {
@@ -385,97 +385,97 @@ public:
     }
 };
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar<T, U>::value>>
 value<bool> operator==(value<T> const& lhs, value<U> const& rhs)
 {
     return lhs.get() == rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar<T, U>::value>>
 value<bool> operator!=(value<T> const& lhs, value<U> const& rhs)
 {
     return lhs.get() != rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_numeric<T, U>::value>>
 value<bool> operator<(value<T> const& lhs, value<U> const& rhs)
 {
     return lhs.get() < rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_numeric<T, U>::value>>
 value<bool> operator<=(value<T> const& lhs, value<U> const& rhs)
 {
     return lhs.get() <= rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_numeric<T, U>::value>>
 value<bool> operator>(value<T> const& lhs, value<U> const& rhs)
 {
     return lhs.get() > rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_numeric<T, U>::value>>
 value<bool> operator>=(value<T> const& lhs, value<U> const& rhs)
 {
     return lhs.get() >= rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_numeric<T, U>::value>>
 value<wider_t<T, U>> operator+(value<T> const& lhs, value<U> const& rhs)
 {
     return lhs.get() + rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_numeric<T, U>::value>>
 value<wider_t<T, U>> operator-(value<T> const& lhs, value<U> const& rhs)
 {
     return lhs.get() - rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_numeric<T, U>::value>>
 value<wider_t<T, U>> operator*(value<T> const& lhs, value<U> const& rhs)
 {
     return lhs.get() * rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_numeric<T, U>::value>>
 value<wider_t<T, U>> operator/(value<T> const& lhs, value<U> const& rhs)
 {
     return lhs.get() / rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_numeric<T, U>::value>>
 value<wider_t<T, U>> operator%(value<T> const& lhs, value<U> const& rhs)
 {
     return lhs.get() % rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_unsigned_integral<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_unsigned_integral<T, U>::value>>
 value<wider_t<T, U>> operator&(value<T> const& lhs, value<U> const& rhs)
 {
     return lhs.get() & rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_unsigned_integral<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_unsigned_integral<T, U>::value>>
 value<wider_t<T, U>> operator|(value<T> const& lhs, value<U> const& rhs)
 {
     return lhs.get() | rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_unsigned_integral<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_unsigned_integral<T, U>::value>>
 value<wider_t<T, U>> operator^(value<T> const& lhs, value<U> const& rhs)
 {
     return lhs.get() ^ rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
+template<typename T, typename U, typename = enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
 value<T> operator<<(value<T> const& lhs, value<U> const& rhs)
 {
     return lhs.get() << rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
+template<typename T, typename U, typename = enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
 value<T> operator>>(value<T> const& lhs, value<U> const& rhs)
 {
     return lhs.get() >> rhs.get();
@@ -484,97 +484,97 @@ value<T> operator>>(value<T> const& lhs, value<U> const& rhs)
 // value<T> - U
 //------------
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar<T, U>::value>>
 value<bool> operator==(value<T> const& lhs, U const& rhs)
 {
     return lhs.get() == rhs;
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar<T, U>::value>>
 value<bool> operator!=(value<T> const& lhs, U const& rhs)
 {
     return lhs.get() != rhs;
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_numeric<T, U>::value>>
 value<bool> operator<(value<T> const& lhs, U const& rhs)
 {
     return lhs.get() < rhs;
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_numeric<T, U>::value>>
 value<bool> operator<=(value<T> const& lhs, U const& rhs)
 {
     return lhs.get() <= rhs;
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_numeric<T, U>::value>>
 value<bool> operator>(value<T> const& lhs, U const& rhs)
 {
     return lhs.get() > rhs;
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_numeric<T, U>::value>>
 value<bool> operator>=(value<T> const& lhs, U const& rhs)
 {
     return lhs.get() >= rhs;
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_numeric<T, U>::value>>
 value<wider_t<T, U>> operator+(value<T> const& lhs, U const& rhs)
 {
     return lhs.get() + rhs;
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_numeric<T, U>::value>>
 value<wider_t<T, U>> operator-(value<T> const& lhs, U const& rhs)
 {
     return lhs.get() - rhs;
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_numeric<T, U>::value>>
 value<wider_t<T, U>> operator*(value<T> const& lhs, U const& rhs)
 {
     return lhs.get() * rhs;
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_numeric<T, U>::value>>
 value<wider_t<T, U>> operator/(value<T> const& lhs, U const& rhs)
 {
     return lhs.get() / rhs;
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_numeric<T, U>::value>>
 value<wider_t<T, U>> operator%(value<T> const& lhs, U const& rhs)
 {
     return lhs.get() % rhs;
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_unsigned_integral<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_unsigned_integral<T, U>::value>>
 value<wider_t<T, U>> operator&(value<T> const& lhs, U const& rhs)
 {
     return lhs.get() & rhs;
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_unsigned_integral<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_unsigned_integral<T, U>::value>>
 value<wider_t<T, U>> operator|(value<T> const& lhs, U const& rhs)
 {
     return lhs.get() | rhs;
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_unsigned_integral<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_unsigned_integral<T, U>::value>>
 value<wider_t<T, U>> operator^(value<T> const& lhs, U const& rhs)
 {
     return lhs.get() ^ rhs;
 }
 
-template<typename T, typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
+template<typename T, typename U, typename = enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
 value<T> operator<<(value<T> const& lhs, U const& rhs)
 {
     return lhs.get() << rhs;
 }
 
-template<typename T, typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
+template<typename T, typename U, typename = enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
 value<T> operator>>(value<T> const& lhs, U const& rhs)
 {
     return lhs.get() >> rhs;
@@ -583,97 +583,97 @@ value<T> operator>>(value<T> const& lhs, U const& rhs)
 // U - value<T>
 //------------
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar<T, U>::value>>
 value<bool> operator==(U const& lhs, value<T> const& rhs)
 {
     return lhs == rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar<T, U>::value>>
 value<bool> operator!=(U const& lhs, value<T> const& rhs)
 {
     return lhs != rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_numeric<T, U>::value>>
 value<bool> operator<(U const& lhs, value<T> const& rhs)
 {
     return lhs < rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_numeric<T, U>::value>>
 value<bool> operator<=(U const& lhs, value<T> const& rhs)
 {
     return lhs <= rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_numeric<T, U>::value>>
 value<bool> operator>(U const& lhs, value<T> const& rhs)
 {
     return lhs > rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_numeric<T, U>::value>>
 value<bool> operator>=(U const& lhs, value<T> const& rhs)
 {
     return lhs >= rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_numeric<T, U>::value>>
 value<wider_t<T, U>> operator+(U const& lhs, value<T> const& rhs)
 {
     return lhs + rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_numeric<T, U>::value>>
 value<wider_t<T, U>> operator-(U const& lhs, value<T> const& rhs)
 {
     return lhs - rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_numeric<T, U>::value>>
 value<wider_t<T, U>> operator*(U const& lhs, value<T> const& rhs)
 {
     return lhs * rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_numeric<T, U>::value>>
 value<wider_t<T, U>> operator/(U const& lhs, value<T> const& rhs)
 {
     return lhs / rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_numeric<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_numeric<T, U>::value>>
 value<wider_t<T, U>> operator%(U const& lhs, value<T> const& rhs)
 {
     return lhs % rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_unsigned_integral<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_unsigned_integral<T, U>::value>>
 value<wider_t<T, U>> operator&(U const& lhs, value<T> const& rhs)
 {
     return lhs & rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_unsigned_integral<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_unsigned_integral<T, U>::value>>
 value<wider_t<T, U>> operator|(U const& lhs, value<T> const& rhs)
 {
     return lhs | rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_similar_unsigned_integral<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_similar_unsigned_integral<T, U>::value>>
 value<wider_t<T, U>> operator^(U const& lhs, value<T> const& rhs)
 {
     return lhs ^ rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
+template<typename T, typename U, typename = enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
 value<T> operator<<(T const& lhs, value<U> const& rhs)
 {
     return lhs << rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
+template<typename T, typename U, typename = enable_if_t<is_unsigned_integral<T>::value && std::is_integral<U>::value>>
 value<T> operator>>(T const& lhs, value<U> const& rhs)
 {
     return lhs >> rhs.get();
@@ -682,16 +682,16 @@ value<T> operator>>(T const& lhs, value<U> const& rhs)
 // Deleted value<bool> boolean operations
 //--------------------------------------
 
-template<typename T, typename = std::enable_if_t<is_numeric<T>::value>>
+template<typename T, typename = enable_if_t<is_numeric<T>::value>>
 bool operator&&(value<bool> const& lhs, T const& rhs) = delete;
 
-template<typename T, typename = std::enable_if_t<is_numeric<T>::value>>
+template<typename T, typename = enable_if_t<is_numeric<T>::value>>
 bool operator||(value<bool> const& lhs, T const& rhs) = delete;
 
-template<typename T, typename = std::enable_if_t<is_numeric<T>::value>>
+template<typename T, typename = enable_if_t<is_numeric<T>::value>>
 bool operator&&(T const& lhs, value<bool> const& rhs) = delete;
 
-template<typename T, typename = std::enable_if_t<is_numeric<T>::value>>
+template<typename T, typename = enable_if_t<is_numeric<T>::value>>
 bool operator||(T const& lhs, value<bool> const& rhs) = delete;
 
 // IOStream

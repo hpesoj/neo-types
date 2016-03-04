@@ -56,27 +56,27 @@ public:
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<std::is_base_of<T, U>::value>>
+    template<typename U, typename = enable_if_t<std::is_convertible<U*, T*>::value>>
     ptr(ptr<U> const& other) :
         m_value(other)
     {
     }
 
-    template<typename U, typename = std::enable_if_t<std::is_base_of<T, U>::value>>
+    template<typename U, typename = enable_if_t<std::is_convertible<U*, T*>::value>>
     ptr& operator=(ptr<U> const& other)
     {
         m_value = other;
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<std::is_base_of<T, U>::value>>
+    template<typename U, typename = enable_if_t<std::is_convertible<U*, T*>::value>>
     ptr(ptr<U>&& other) :
         m_value(other)
     {
         other = nullptr;
     }
 
-    template<typename U, typename = std::enable_if_t<std::is_base_of<T, U>::value>>
+    template<typename U, typename = enable_if_t<std::is_convertible<U*, T*>::value>>
     ptr& operator=(ptr<U>&& other)
     {
         m_value = other;
@@ -95,32 +95,32 @@ public:
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<std::is_same<T, U>::value || std::is_base_of<T, U>::value>>
+    template<typename U, typename = enable_if_t<std::is_convertible<U*, T*>::value>>
     ptr(U* value) :
         m_value(value)
     {
     }
 
-    template<typename U, typename = std::enable_if_t<std::is_same<T, U>::value || std::is_base_of<T, U>::value>>
+    template<typename U, typename = enable_if_t<std::is_convertible<U*, T*>::value>>
     ptr& operator=(U* value)
     {
         m_value = value;
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<std::is_same<T, U>::value || std::is_base_of<U, T>::value || std::is_void<U>::value>>
+    template<typename U, typename = enable_if_t<std::is_convertible<T*, U*>::value>>
     operator U*() const
     {
         return m_value;
     }
 
-    template<typename U, typename = std::enable_if_t<!std::is_same<T, U>::value && std::is_base_of<T, U>::value>, typename = void>
+    template<typename U, typename = enable_if_t<!std::is_same<T, U>::value && std::is_base_of<T, U>::value>, typename = void>
     explicit operator U*() const
     {
         return m_value;
     }
 
-    template<typename U, typename = std::enable_if_t<std::is_base_of<U, T>::value || std::is_void<U>::value>>
+    template<typename U, typename = enable_if_t<std::is_base_of<U, T>::value || std::is_void<U>::value>>
     explicit operator ptr<U>() const
     {
         return static_cast<U*>(m_value);
@@ -161,7 +161,7 @@ public:
         return m_value[index.get()];
     }
 
-    template<typename U, typename = std::enable_if_t<std::is_same<U, std::size_t>::value>>
+    template<typename U, typename = enable_if_t<std::is_same<U, std::size_t>::value>>
     T& operator[](U const& index) const
     {
         return m_value[index];
@@ -195,7 +195,7 @@ public:
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<std::is_same<U, std::ptrdiff_t>::value>>
+    template<typename U, typename = enable_if_t<std::is_same<U, std::ptrdiff_t>::value>>
     ptr& operator+=(U const& rhs)
     {
         m_value += rhs;
@@ -208,7 +208,7 @@ public:
         return *this;
     }
 
-    template<typename U, typename = std::enable_if_t<std::is_same<U, std::ptrdiff_t>::value>>
+    template<typename U, typename = enable_if_t<std::is_same<U, std::ptrdiff_t>::value>>
     ptr& operator-=(U const& rhs)
     {
         m_value -= rhs;
@@ -446,7 +446,7 @@ public:
         return m_value;
     }
 
-    template<typename U, typename = std::enable_if_t<std::is_same<U, void>::value>>
+    template<typename U, typename = enable_if_t<std::is_same<U, void>::value>>
     operator U*() const
     {
         return m_value;
@@ -488,37 +488,37 @@ public:
 // ptr<T> - ptr<T>
 //-----------------
 
-template<typename T, typename U, typename = std::enable_if_t<are_related<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_related<T, U>::value>>
 value<bool> operator==(ptr<T> const& lhs, ptr<U> const& rhs)
 {
     return lhs.get() == rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_related<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_related<T, U>::value>>
 value<bool> operator!=(ptr<T> const& lhs, ptr<U> const& rhs)
 {
     return lhs.get() != rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_related<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_related<T, U>::value>>
 value<bool> operator<(ptr<T> const& lhs, ptr<U> const& rhs)
 {
     return lhs.get() < rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_related<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_related<T, U>::value>>
 value<bool> operator<=(ptr<T> const& lhs, ptr<U> const& rhs)
 {
     return lhs.get() <= rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_related<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_related<T, U>::value>>
 value<bool> operator>(ptr<T> const& lhs, ptr<U> const& rhs)
 {
     return lhs.get() > rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_related<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_related<T, U>::value>>
 value<bool> operator>=(ptr<T> const& lhs, ptr<U> const& rhs)
 {
     return lhs.get() >= rhs.get();
@@ -527,37 +527,37 @@ value<bool> operator>=(ptr<T> const& lhs, ptr<U> const& rhs)
 // ptr<T> - U
 //------------
 
-template<typename T, typename U, typename = std::enable_if_t<are_related<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_related<T, U>::value>>
 value<bool> operator==(ptr<T> const& lhs, U const& rhs)
 {
     return lhs.get() == rhs;
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_related<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_related<T, U>::value>>
 value<bool> operator!=(ptr<T> const& lhs, U const& rhs)
 {
     return lhs.get() != rhs;
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_related<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_related<T, U>::value>>
 value<bool> operator<(ptr<T> const& lhs, U const& rhs)
 {
     return lhs.get() < rhs;
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_related<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_related<T, U>::value>>
 value<bool> operator<=(ptr<T> const& lhs, U const& rhs)
 {
     return lhs.get() <= rhs;
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_related<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_related<T, U>::value>>
 value<bool> operator>(ptr<T> const& lhs, U const& rhs)
 {
     return lhs.get() > rhs;
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_related<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_related<T, U>::value>>
 value<bool> operator>=(ptr<T> const& lhs, U const& rhs)
 {
     return lhs.get() >= rhs;
@@ -566,37 +566,37 @@ value<bool> operator>=(ptr<T> const& lhs, U const& rhs)
 // U - ptr<T>
 //------------
 
-template<typename T, typename U, typename = std::enable_if_t<are_related<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_related<T, U>::value>>
 value<bool> operator==(U const& lhs, ptr<T> const& rhs)
 {
     return lhs == rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_related<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_related<T, U>::value>>
 value<bool> operator!=(U const& lhs, ptr<T> const& rhs)
 {
     return lhs != rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_related<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_related<T, U>::value>>
 value<bool> operator<(U const& lhs, ptr<T> const& rhs)
 {
     return lhs < rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_related<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_related<T, U>::value>>
 value<bool> operator<=(U const& lhs, ptr<T> const& rhs)
 {
     return lhs <= rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_related<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_related<T, U>::value>>
 value<bool> operator>(U const& lhs, ptr<T> const& rhs)
 {
     return lhs > rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<are_related<T, U>::value>>
+template<typename T, typename U, typename = enable_if_t<are_related<T, U>::value>>
 value<bool> operator>=(U const& lhs, ptr<T> const& rhs)
 {
     return lhs >= rhs.get();
@@ -689,7 +689,7 @@ ptr<T> operator+(ptr<T> const& lhs, value<std::ptrdiff_t> const& rhs)
     return lhs.get() + rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<std::is_same<U, std::ptrdiff_t>::value>>
+template<typename T, typename U, typename = enable_if_t<std::is_same<U, std::ptrdiff_t>::value>>
 ptr<T> operator+(ptr<T> const& lhs, U const& rhs)
 {
     return lhs.get() + rhs;
@@ -701,7 +701,7 @@ ptr<T> operator+(value<std::ptrdiff_t> const& lhs, ptr<T> const& rhs)
     return lhs.get() + rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<std::is_same<U, std::ptrdiff_t>::value>>
+template<typename T, typename U, typename = enable_if_t<std::is_same<U, std::ptrdiff_t>::value>>
 ptr<T> operator+(U const& lhs, ptr<T> const& rhs)
 {
     return lhs + rhs.get();
@@ -713,7 +713,7 @@ ptr<T> operator-(ptr<T> const& lhs, value<std::ptrdiff_t> const& rhs)
     return lhs.get() - rhs.get();
 }
 
-template<typename T, typename U, typename = std::enable_if_t<std::is_same<U, std::ptrdiff_t>::value>>
+template<typename T, typename U, typename = enable_if_t<std::is_same<U, std::ptrdiff_t>::value>>
 ptr<T> operator-(ptr<T> const& lhs, U const& rhs)
 {
     return lhs.get() - rhs;
