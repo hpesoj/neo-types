@@ -36,7 +36,6 @@ A `neo::ptr` may point to any type, including other Neo types.
 
     neo::ref<int> ri = i;
 
-
 ## Features
 
 ### Zero Initialization
@@ -64,6 +63,8 @@ The value of Neo objects can be explicitly left undefined. Undefined objects are
     neo_double d = undefined;
 
 > Rationale: Initialization to zero, while a sensible default, can be costly when many objects must be initialized. Giving the option to forego initialization allows us to _not pay for what we don't use_. In addition, Neo objects may be left uninitialized in contexts where fundamental objects would always be initialized to zero.
+
+> Note: Copying undefined objects is undefined behaviour. Be extra careful when using `undefined`. This feature is intended for cases where extreme optimization is required. Generally, default construction is what you should use.
 
 ### Move Behaviour
 
@@ -105,7 +106,28 @@ The fundamental type, `bool`, is an integral type, and as such may implicitly co
 
 ### No Bitwise Operations On Signed Integers
 
+Unsigned Neo integers support the bitwise operations `&`, `|` and `^`, while signed Neo integers do not.
+
+    auto i  = ~5_ni;  // invalid
+    auto ui = ~5_nui; // valid
+
+> Rationale: Bitwise operations treat integers as though they are a sequence of bits. While all integers, signed and unsigned, have binary representations, signed integers necessarily use some kind of encoding to be able to represent negative numbers. This encoding is implementation-dependent, so bitwise operations on signed integers is also implementation-dependent. Implementation-dependent behaviour is seem as unsafe, and is disallowed by the Neo library. In addition, bitwise operations on signed integers is a potentially confusing concept, so even though most modern C++ programs will use _two's complement_, it is still preferable to disallow such operations by default.
+
 ### No Unexpected Integer Promotion
+
+What would you expect the return type of this function to be?
+
+    decltype(auto) ascii_to_num(char c)
+    {
+        return value = c - '0';
+    }
+
+That's right, `int`. This surprising behaviour is in the interest of performance, but not in the interest of common sense or consistency. Neo integers do not promote unexpectedly. The following function returns a value of type `neo_char`.
+
+    decltype(auto) ascii_to_num(neo_char c)
+    {
+        return value = c - '0';
+    }
 
 ### No Void Pointer Arithmetic (GCC Extension)
 
@@ -218,4 +240,8 @@ This works fine, but there may be situations where it would be easier to resize 
     v.reserve(count);
     emplace_back_n(v, count, neo::undefined);
 
+> Note: We have to be careful to `reserve` space in the vector, and construct the values in-place using `emplace_back`, as not calling `reserve` with sufficient space, using `push_back`, or calling the `std::vector` constructor would cause the `undefined` Neo values to be copied, and copying undefined values is undefined behaviour.
+
 ## Known Issues
+
+# Function Overloading
