@@ -860,6 +860,11 @@ using neo_size = value<std::size_t>;
 using neo_ptrdiff = value<std::ptrdiff_t>;
 using neo_max_align = value<std::max_align_t>;
 
+using neo_char = value<char>;
+using neo_wchar = value<wchar_t>;
+using neo_char16 = value<char16_t>;
+using neo_char32 = value<char32_t>;
+
 } // namespace aliases
 
 using namespace aliases;

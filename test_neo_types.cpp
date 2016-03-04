@@ -6,7 +6,6 @@
 #include <iostream>
 #include <type_traits>
 
-using namespace neo;
 using namespace neo::aliases;
 using namespace neo::literals;
 using namespace neo_types::operator_traits;
@@ -179,7 +178,7 @@ TEST_CASE("neo_int can be explicitly uninitialized", "neo_int")
     neo_int a = 10;
     +a;
     a.~neo_int();
-    new (&a) neo_int(undefined);
+    new (&a) neo_int(neo::undefined);
 
     CHECK(a == 10);
 }
