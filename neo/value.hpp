@@ -144,29 +144,11 @@ public:
     {
     }
 
-    value(value const& other) :
-        m_value(other.m_value)
-    {
-    }
+    value(value const& other) = default;
+    value& operator=(value const& other) = default;
 
-    value& operator=(value const& other)
-    {
-        m_value = other.m_value;
-        return *this;
-    }
-
-    value(value&& other) :
-        m_value(other.m_value)
-    {
-        other.m_value = T();
-    }
-
-    value& operator=(value&& other)
-    {
-        m_value = other.m_value;
-        other.m_value = T();
-        return *this;
-    }
+    value(value&& other) = default;
+    value& operator=(value&& other) = default;
 
     template<typename U, typename = detail::enable_if_t<detail::is_safely_convertible<U, T>::value>>
     value(value<U> const& other) :
@@ -185,14 +167,12 @@ public:
     value(value<U>&& other) :
         m_value(other)
     {
-        other = U();
     }
 
     template<typename U, typename = detail::enable_if_t<detail::is_safely_convertible<U, T>::value>>
     value& operator=(value<U>&& other)
     {
         m_value = other;
-        other = U();
         return *this;
     }
 
@@ -442,29 +422,11 @@ public:
     {
     }
 
-    value(value const& other) :
-        m_value(other.m_value)
-    {
-    }
+    value(value const& other) = default;
+    value& operator=(value const& other) = default;
 
-    value& operator=(value const& other)
-    {
-        m_value = other.m_value;
-        return *this;
-    }
-
-    value(value&& other) :
-        m_value(other.m_value)
-    {
-        other.m_value = bool();
-    }
-
-    value& operator=(value&& other)
-    {
-        m_value = other.m_value;
-        other.m_value = bool();
-        return *this;
-    }
+    value(value&& other) = default;
+    value& operator=(value&& other) = default;
 
     template<typename U, typename = detail::enable_if_t<detail::is_same<U, bool>::value>>
     value(U value) :

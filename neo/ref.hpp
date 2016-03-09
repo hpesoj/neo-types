@@ -20,9 +20,6 @@ namespace neo
 template<typename T>
 class ref
 {
-    template<typename U>
-    friend class ref;
-
 public:
     using element_type = T;
 
@@ -35,29 +32,11 @@ public:
     {
     }
 
-    ref(ref const& other) :
-        m_value(other.m_value)
-    {
-    }
+    ref(ref const& other) = default;
+    ref& operator=(ref const& other) = default;
 
-    ref& operator=(ref const& other)
-    {
-        m_value = other.m_value;
-        return *this;
-    }
-
-    ref(ref&& other) :
-        m_value(other.m_value)
-    {
-        other.m_value = nullptr;
-    }
-
-    ref& operator=(ref&& other)
-    {
-        m_value = other.m_value;
-        other.m_value = nullptr;
-        return *this;
-    }
+    ref(ref&& other) = default;
+    ref& operator=(ref&& other) = default;
 
     template<typename U, typename = detail::enable_if_t<std::is_convertible<U*, T*>::value>>
     ref(ref<U> const& other) :

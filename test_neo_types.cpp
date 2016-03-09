@@ -155,6 +155,34 @@ TEST_CASE("neo<T> is the same size as T", "neo<T>")
     CHECK(sizeof(neo_ptr<int>) == sizeof(int*));
 }
 
+TEST_CASE("neo<T> is trivially copyable", "neo<T>")
+{
+    CHECK(std::is_trivially_copyable<neo_void>::value);
+
+    CHECK(std::is_trivially_copyable<neo_bool>::value);
+
+    CHECK(std::is_trivially_copyable<neo_byte>::value);
+    CHECK(std::is_trivially_copyable<neo_short>::value);
+    CHECK(std::is_trivially_copyable<neo_int>::value);
+    CHECK(std::is_trivially_copyable<neo_long>::value);
+    CHECK(std::is_trivially_copyable<neo_llong>::value);
+
+    CHECK(std::is_trivially_copyable<neo_ubyte>::value);
+    CHECK(std::is_trivially_copyable<neo_ushort>::value);
+    CHECK(std::is_trivially_copyable<neo_uint>::value);
+    CHECK(std::is_trivially_copyable<neo_ulong>::value);
+    CHECK(std::is_trivially_copyable<neo_ullong>::value);
+
+    CHECK(std::is_trivially_copyable<neo_float>::value);
+    CHECK(std::is_trivially_copyable<neo_double>::value);
+    CHECK(std::is_trivially_copyable<neo_ldouble>::value);
+
+    CHECK(std::is_trivially_copyable<neo_ptr<int>>::value);
+    CHECK(std::is_trivially_copyable<neo_ptr<int const>>::value);
+    CHECK(std::is_trivially_copyable<neo_ref<int>>::value);
+    CHECK(std::is_trivially_copyable<neo_ref<int const>>::value);
+}
+
 TEST_CASE("neo<T> has user defined literals", "neo<T>")
 {
     auto i = 0_ni;
@@ -210,9 +238,9 @@ TEST_CASE("neo_int can be move constructed", "neo_int")
     neo_int a = 10;
     neo_int b = std::move(a);
 
-    CHECK(a == 0);
+    CHECK(a == 10);
     CHECK(b == 10);
-    CHECK(a != b);
+    CHECK(a == b);
 }
 
 TEST_CASE("neo_int can be move assigned", "neo_int")
@@ -222,9 +250,9 @@ TEST_CASE("neo_int can be move assigned", "neo_int")
 
     b = std::move(a);
 
-    CHECK(a == 0);
+    CHECK(a == 10);
     CHECK(b == 10);
-    CHECK(a != b);
+    CHECK(a == b);
 }
 
 TEST_CASE("neo_int implicit construction", "neo_int")

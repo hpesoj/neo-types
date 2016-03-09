@@ -45,29 +45,11 @@ public:
     {
     }
 
-    ptr(ptr const& other) :
-        m_value(other)
-    {
-    }
+    ptr(ptr const& other) = default;
+    ptr& operator=(ptr const& other) = default;
 
-    ptr& operator=(ptr const& other)
-    {
-        m_value = other;
-        return *this;
-    }
-
-    ptr(ptr&& other) :
-        m_value(other.m_value)
-    {
-        other = nullptr;
-    }
-
-    ptr& operator=(ptr&& other)
-    {
-        m_value = other;
-        other = nullptr;
-        return *this;
-    }
+    ptr(ptr&& other) = default;
+    ptr& operator=(ptr&& other) = default;
 
     template<typename U, typename = detail::enable_if_t<std::is_convertible<U*, T*>::value>>
     ptr(ptr<U> const& other) :
@@ -86,14 +68,12 @@ public:
     ptr(ptr<U>&& other) :
         m_value(other)
     {
-        other = nullptr;
     }
 
     template<typename U, typename = detail::enable_if_t<std::is_convertible<U*, T*>::value>>
     ptr& operator=(ptr<U>&& other)
     {
         m_value = other;
-        other = nullptr;
         return *this;
     }
 
