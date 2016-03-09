@@ -46,6 +46,19 @@ public:
         return *this;
     }
 
+    ref(ref&& other) :
+        m_value(other.m_value)
+    {
+        other.m_value = nullptr;
+    }
+
+    ref& operator=(ref&& other)
+    {
+        m_value = other.m_value;
+        other.m_value = nullptr;
+        return *this;
+    }
+
     template<typename U, typename = detail::enable_if_t<std::is_convertible<U*, T*>::value>>
     ref(ref<U> const& other) :
         m_value(other.m_value)
