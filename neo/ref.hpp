@@ -23,8 +23,11 @@ class ref
     template<typename U>
     friend class ref;
 
+public:
+    using element_type = T;
+
 private:
-    ptr<T> m_value;
+    ptr<element_type> m_value;
 
 public:
     ref(undefined_t) :
@@ -69,19 +72,19 @@ public:
         return *this;
     }
 
-    ref(T& value) :
+    ref(element_type& value) :
         m_value(&value)
     {
     }
 
-    ref& operator=(T& value)
+    ref& operator=(element_type& value)
     {
         m_value = &value;
         return *this;
     }
 
-    ref(T&& value) = delete;
-    ref& operator=(T&& value) = delete;
+    ref(element_type&& value) = delete;
+    ref& operator=(element_type&& value) = delete;
 
     template<typename U, typename = detail::enable_if_t<std::is_convertible<T*, U*>::value>>
     operator U&() const
@@ -98,32 +101,27 @@ public:
         return static_cast<U&>(*m_value);
     }
 
-    T const& operator*() const
-    {
-        return *m_value;
-    }
-
-    T const* operator->() const
+    ptr<element_type> const& operator&() const
     {
         return m_value;
     }
 
-    T& operator*()
+    element_type& operator*() const
     {
         return *m_value;
     }
 
-    T* operator->()
+    element_type* operator->() const
     {
         return m_value;
     }
 
-    T const& get() const
+    element_type const& get() const
     {
         return *m_value;
     }
 
-    T& get()
+    element_type& get()
     {
         return *m_value;
     }
