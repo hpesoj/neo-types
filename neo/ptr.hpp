@@ -127,7 +127,10 @@ public:
         return m_value;
     }
 
-    template<typename U, typename = detail::enable_if_t<!std::is_same<T, U>::value && std::is_base_of<T, U>::value>, typename = void>
+    template<typename U, typename = detail::enable_if_t<
+            !std::is_convertible<T*, U*>::value &&
+            std::is_convertible<U*, T*>::value
+        >, typename = void>
     explicit operator U*() const
     {
         return m_value;

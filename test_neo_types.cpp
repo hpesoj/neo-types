@@ -980,6 +980,10 @@ TEST_CASE("neo_ref", "neo_ref")
     p = i[1];
 
     CHECK(*p == 2);
+
+    int myint = 0;
+    neo_ref<int const> r = myint;
+    neo_ptr<int const> pr = &r.get();
 }
 
 TEST_CASE("neo_ref<T> copy construction", "neo_ref")

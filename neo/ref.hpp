@@ -32,20 +32,6 @@ public:
     {
     }
 
-    ref(T& value) :
-        m_value(&value)
-    {
-    }
-
-    ref& operator=(T& value)
-    {
-        m_value = &value;
-        return *this;
-    }
-
-    ref(T&& value) = delete;
-    ref& operator=(T&& value) = delete;
-
     ref(ref const& other) :
         m_value(other.m_value)
     {
@@ -81,6 +67,35 @@ public:
     {
         m_value = other.m_value;
         return *this;
+    }
+
+    ref(T& value) :
+        m_value(&value)
+    {
+    }
+
+    ref& operator=(T& value)
+    {
+        m_value = &value;
+        return *this;
+    }
+
+    ref(T&& value) = delete;
+    ref& operator=(T&& value) = delete;
+
+    template<typename U, typename = detail::enable_if_t<std::is_convertible<T*, U*>::value>>
+    operator U&() const
+    {
+        return *m_value;
+    }
+
+    template<typename U, typename = detail::enable_if_t<
+            !std::is_convertible<T*, U*>::value &&
+            std::is_convertible<U*, T*>::value
+        >, typename = void>
+    explicit operator U&() const
+    {
+        return static_cast<U&>(*m_value);
     }
 
     T const& operator*() const
