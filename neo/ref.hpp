@@ -83,16 +83,6 @@ public:
         return *this;
     }
 
-    T const& get() const
-    {
-        return *m_value;
-    }
-
-    T& get()
-    {
-        return *m_value;
-    }
-
     T const& operator*() const
     {
         return *m_value;
@@ -112,6 +102,16 @@ public:
     {
         return m_value;
     }
+
+    T const& get() const
+    {
+        return *m_value;
+    }
+
+    T& get()
+    {
+        return *m_value;
+    }
 };
 
 // ref<T> - ref<T>
@@ -120,13 +120,38 @@ public:
 template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
 value<bool> operator==(ref<T> const& lhs, ref<U> const& rhs)
 {
-    return &*lhs == &*rhs;
+    return &lhs.get() == &rhs.get();
 }
 
 template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
 value<bool> operator!=(ref<T> const& lhs, ref<U> const& rhs)
 {
-    return &*lhs != &*rhs;
+    return &lhs.get() != &rhs.get();
+}
+
+template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
+value<bool> operator<(ref<T> const& lhs, ref<U> const& rhs)
+{
+    using common_type = typename std::common_type<T*, U*>::type;
+    return std::less<common_type>(&lhs.get(), &rhs.get());
+}
+
+template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
+value<bool> operator<=(ref<T> const& lhs, ref<U> const& rhs)
+{
+    return !(rhs < lhs);
+}
+
+template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
+value<bool> operator>(ref<T> const& lhs, ref<U> const& rhs)
+{
+    return rhs < lhs;
+}
+
+template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
+value<bool> operator>=(ref<T> const& lhs, ref<U> const& rhs)
+{
+    return !(lhs < rhs);
 }
 
 // ref<T> - U
@@ -135,13 +160,38 @@ value<bool> operator!=(ref<T> const& lhs, ref<U> const& rhs)
 template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
 value<bool> operator==(ref<T> const& lhs, U const& rhs)
 {
-    return &*lhs == &rhs;
+    return &lhs.get() == &rhs;
 }
 
 template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
 value<bool> operator!=(ref<T> const& lhs, U const& rhs)
 {
-    return &*lhs != &rhs;
+    return &lhs.get() != &rhs;
+}
+
+template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
+value<bool> operator<(ref<T> const& lhs, U const& rhs)
+{
+    using common_type = typename std::common_type<T*, U*>::type;
+    return std::less<common_type>(&lhs.get(), &rhs);
+}
+
+template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
+value<bool> operator<=(ref<T> const& lhs, U const& rhs)
+{
+    return !(rhs < lhs);
+}
+
+template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
+value<bool> operator>(ref<T> const& lhs, U const& rhs)
+{
+    return rhs < lhs;
+}
+
+template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
+value<bool> operator>=(ref<T> const& lhs, U const& rhs)
+{
+    return !(lhs < rhs);
 }
 
 // U - ref<T>
@@ -150,13 +200,38 @@ value<bool> operator!=(ref<T> const& lhs, U const& rhs)
 template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
 value<bool> operator==(U const& lhs, ref<T> const& rhs)
 {
-    return &lhs == &*rhs;
+    return &lhs == &rhs.get();
 }
 
 template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
 value<bool> operator!=(U const& lhs, ref<T> const& rhs)
 {
-    return &lhs != &*rhs;
+    return &lhs != &rhs.get();
+}
+
+template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
+value<bool> operator<(U const& lhs, ref<T> const& rhs)
+{
+    using common_type = typename std::common_type<T*, U*>::type;
+    return std::less<common_type>(&lhs.get(), &rhs);
+}
+
+template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
+value<bool> operator<=(U const& lhs, ref<T> const& rhs)
+{
+    return !(rhs > lhs);
+}
+
+template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
+value<bool> operator>(U const& lhs, ref<T> const& rhs)
+{
+    return rhs < lhs;
+}
+
+template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
+value<bool> operator>=(U const& lhs, ref<T> const& rhs)
+{
+    return !(lhs < rhs);
 }
 
 // IOStream

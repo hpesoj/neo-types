@@ -13,6 +13,7 @@
 
 #include <cstddef>
 #include <iosfwd>
+#include <functional>
 
 namespace neo
 {
@@ -28,8 +29,11 @@ struct are_related
 template<typename T>
 class ptr
 {
+public:
+    using element_type = T;
+
 private:
-    T* m_value;
+    element_type* m_value;
 
 public:
     ptr() :
@@ -145,83 +149,24 @@ public:
         return m_value != nullptr;
     }
 
-    T* const& get() const
+    element_type* const& get() const
     {
         return m_value;
     }
 
-    T*& get()
+    element_type*& get()
     {
         return m_value;
     }
 
-    T& operator*() const
+    element_type& operator*() const
     {
         return *m_value;
     }
 
-    T* operator->() const
+    element_type* operator->() const
     {
         return m_value;
-    }
-
-    T& operator[](value<std::size_t> index) const
-    {
-        return m_value[index.get()];
-    }
-
-    template<typename U, typename = detail::enable_if_t<std::is_same<U, std::size_t>::value>>
-    T& operator[](U const& index) const
-    {
-        return m_value[index];
-    }
-
-    ptr& operator++()
-    {
-        ++m_value;
-        return *this;
-    }
-
-    ptr operator++(int)
-    {
-        return m_value++;
-    }
-
-    ptr& operator--()
-    {
-        --m_value;
-        return *this;
-    }
-
-    ptr operator--(int)
-    {
-        return m_value--;
-    }
-
-    ptr& operator+=(ptr<std::ptrdiff_t> const& rhs)
-    {
-        m_value += rhs.get();
-        return *this;
-    }
-
-    template<typename U, typename = detail::enable_if_t<std::is_same<U, std::ptrdiff_t>::value>>
-    ptr& operator+=(U const& rhs)
-    {
-        m_value += rhs;
-        return *this;
-    }
-
-    ptr& operator-=(ptr<std::ptrdiff_t> const& rhs)
-    {
-        m_value -= rhs.get();
-        return *this;
-    }
-
-    template<typename U, typename = detail::enable_if_t<std::is_same<U, std::ptrdiff_t>::value>>
-    ptr& operator-=(U const& rhs)
-    {
-        m_value -= rhs;
-        return *this;
     }
 };
 
@@ -494,7 +439,7 @@ public:
     }
 };
 
-// ptr<T> - ptr<T>
+// ptr<T> - ptr<U>
 //-----------------
 
 template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
@@ -512,25 +457,26 @@ value<bool> operator!=(ptr<T> const& lhs, ptr<U> const& rhs)
 template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
 value<bool> operator<(ptr<T> const& lhs, ptr<U> const& rhs)
 {
-    return lhs.get() < rhs.get();
+    using common_type = typename std::common_type<T*, U*>::type;
+    return std::less<common_type>(lhs.get(), rhs.get());
 }
 
 template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
 value<bool> operator<=(ptr<T> const& lhs, ptr<U> const& rhs)
 {
-    return lhs.get() <= rhs.get();
+    return !(rhs < lhs);
 }
 
 template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
 value<bool> operator>(ptr<T> const& lhs, ptr<U> const& rhs)
 {
-    return lhs.get() > rhs.get();
+    return rhs < lhs;
 }
 
 template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
 value<bool> operator>=(ptr<T> const& lhs, ptr<U> const& rhs)
 {
-    return lhs.get() >= rhs.get();
+    return !(lhs < rhs);
 }
 
 // ptr<T> - U
@@ -551,25 +497,26 @@ value<bool> operator!=(ptr<T> const& lhs, U const& rhs)
 template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
 value<bool> operator<(ptr<T> const& lhs, U const& rhs)
 {
-    return lhs.get() < rhs;
+    using common_type = typename std::common_type<T*, U*>::type;
+    return std::less<common_type>(lhs.get(), rhs);
 }
 
 template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
 value<bool> operator<=(ptr<T> const& lhs, U const& rhs)
 {
-    return lhs.get() <= rhs;
+    return !(rhs < lhs);
 }
 
 template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
 value<bool> operator>(ptr<T> const& lhs, U const& rhs)
 {
-    return lhs.get() > rhs;
+    return rhs < lhs;
 }
 
 template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
 value<bool> operator>=(ptr<T> const& lhs, U const& rhs)
 {
-    return lhs.get() >= rhs;
+    return !(lhs < rhs);
 }
 
 // U - ptr<T>
@@ -590,25 +537,26 @@ value<bool> operator!=(U const& lhs, ptr<T> const& rhs)
 template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
 value<bool> operator<(U const& lhs, ptr<T> const& rhs)
 {
-    return lhs < rhs.get();
+    using common_type = typename std::common_type<T*, U*>::type;
+    return std::less<common_type>(lhs.get(), rhs);
 }
 
 template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
 value<bool> operator<=(U const& lhs, ptr<T> const& rhs)
 {
-    return lhs <= rhs.get();
+    return !(rhs > lhs);
 }
 
 template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
 value<bool> operator>(U const& lhs, ptr<T> const& rhs)
 {
-    return lhs > rhs.get();
+    return rhs < lhs;
 }
 
 template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
 value<bool> operator>=(U const& lhs, ptr<T> const& rhs)
 {
-    return lhs >= rhs.get();
+    return !(lhs < rhs);
 }
 
 // ptr<T> - std::nullptr_t
@@ -629,25 +577,25 @@ value<bool> operator!=(ptr<T> const& lhs, std::nullptr_t)
 template<typename T>
 value<bool> operator<(ptr<T> const& lhs, std::nullptr_t)
 {
-    return lhs.get() < nullptr;
+    return std::less<T*>(lhs.get(), nullptr);
 }
 
 template<typename T>
 value<bool> operator<=(ptr<T> const& lhs, std::nullptr_t)
 {
-    return lhs.get() <= nullptr;
+    return !(nullptr < lhs);
 }
 
 template<typename T>
 value<bool> operator>(ptr<T> const& lhs, std::nullptr_t)
 {
-    return lhs.get() > nullptr;
+    return nullptr < lhs;
 }
 
 template<typename T>
 value<bool> operator>=(ptr<T> const& lhs, std::nullptr_t)
 {
-    return lhs.get() >= nullptr;
+    return !(lhs < nullptr);
 }
 
 // std::nullptr_t - ptr<T>
@@ -668,82 +616,25 @@ value<bool> operator!=(std::nullptr_t, ptr<T> const& rhs)
 template<typename T>
 value<bool> operator<(std::nullptr_t, ptr<T> const& rhs)
 {
-    return nullptr < rhs.get();
+    return std::less<T*>(nullptr, rhs.get());
 }
 
 template<typename T>
 value<bool> operator<=(std::nullptr_t, ptr<T> const& rhs)
 {
-    return nullptr <= rhs.get();
+    return !(rhs < nullptr);
 }
 
 template<typename T>
 value<bool> operator>(std::nullptr_t, ptr<T> const& rhs)
 {
-    return nullptr > rhs.get();
+    return rhs < nullptr;
 }
 
 template<typename T>
 value<bool> operator>=(std::nullptr_t, ptr<T> const& rhs)
 {
-    return nullptr >= rhs.get();
-}
-
-// Pointer arithmetic
-//--------------------
-
-template<typename T>
-ptr<T> operator+(ptr<T> const& lhs, value<std::ptrdiff_t> const& rhs)
-{
-    return lhs.get() + rhs.get();
-}
-
-template<typename T, typename U, typename = detail::enable_if_t<std::is_same<U, std::ptrdiff_t>::value>>
-ptr<T> operator+(ptr<T> const& lhs, U const& rhs)
-{
-    return lhs.get() + rhs;
-}
-
-template<typename T>
-ptr<T> operator+(value<std::ptrdiff_t> const& lhs, ptr<T> const& rhs)
-{
-    return lhs.get() + rhs.get();
-}
-
-template<typename T, typename U, typename = detail::enable_if_t<std::is_same<U, std::ptrdiff_t>::value>>
-ptr<T> operator+(U const& lhs, ptr<T> const& rhs)
-{
-    return lhs + rhs.get();
-}
-
-template<typename T>
-ptr<T> operator-(ptr<T> const& lhs, value<std::ptrdiff_t> const& rhs)
-{
-    return lhs.get() - rhs.get();
-}
-
-template<typename T, typename U, typename = detail::enable_if_t<std::is_same<U, std::ptrdiff_t>::value>>
-ptr<T> operator-(ptr<T> const& lhs, U const& rhs)
-{
-    return lhs.get() - rhs;
-}
-
-template<typename T>
-value<std::ptrdiff_t> operator-(ptr<T> const& lhs, ptr<T> const& rhs)
-{
-    return lhs.get() - lhs.get();
-}
-
-template<typename T>
-value<std::ptrdiff_t> operator-(ptr<T> const& lhs, T* rhs)
-{
-    return lhs.get() - rhs;
-}
-
-template<typename T>
-value<std::ptrdiff_t> operator-(T* lhs, ptr<T> const& rhs)
-{
-    return lhs - lhs.get();
+    return !(nullptr < rhs);
 }
 
 // IOStream
