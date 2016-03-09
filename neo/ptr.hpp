@@ -323,12 +323,6 @@ ptr<T> make_ptr(T* object)
     return object;
 }
 
-template<typename T>
-ptr<T> addr(T& object)
-{
-    return &object;
-}
-
 namespace aliases
 {
 

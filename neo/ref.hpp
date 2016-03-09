@@ -265,12 +265,6 @@ ref<T> make_ref(T& value)
     return value;
 }
 
-template<typename T>
-ptr<T> addr(ref<T>& object)
-{
-    return object.get();
-}
-
 namespace aliases
 {
 
