@@ -920,9 +920,6 @@ TEST_CASE("neo_ptr cannot be deleted", "neo_ptr")
     neo_ptr<int> p;
     p = new int(42);
 
-    neo_ptr<void> v = p;
-    p = static_cast<neo_ptr<int>>(v);
-
     //CHECK(p[0u] == 42);
     //CHECK(*(p + 0) == 42);
 
