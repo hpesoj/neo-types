@@ -282,30 +282,6 @@ value<bool> operator!=(ptr<T> const& lhs, std::nullptr_t)
     return lhs.get() != nullptr;
 }
 
-template<typename T>
-value<bool> operator<(ptr<T> const& lhs, std::nullptr_t)
-{
-    return std::less<T*>(lhs.get(), nullptr);
-}
-
-template<typename T>
-value<bool> operator<=(ptr<T> const& lhs, std::nullptr_t)
-{
-    return !(nullptr < lhs);
-}
-
-template<typename T>
-value<bool> operator>(ptr<T> const& lhs, std::nullptr_t)
-{
-    return nullptr < lhs;
-}
-
-template<typename T>
-value<bool> operator>=(ptr<T> const& lhs, std::nullptr_t)
-{
-    return !(lhs < nullptr);
-}
-
 // std::nullptr_t - ptr<T>
 //--------------------------
 
@@ -319,30 +295,6 @@ template<typename T>
 value<bool> operator!=(std::nullptr_t, ptr<T> const& rhs)
 {
     return nullptr != rhs.get();
-}
-
-template<typename T>
-value<bool> operator<(std::nullptr_t, ptr<T> const& rhs)
-{
-    return std::less<T*>(nullptr, rhs.get());
-}
-
-template<typename T>
-value<bool> operator<=(std::nullptr_t, ptr<T> const& rhs)
-{
-    return !(rhs < nullptr);
-}
-
-template<typename T>
-value<bool> operator>(std::nullptr_t, ptr<T> const& rhs)
-{
-    return rhs < nullptr;
-}
-
-template<typename T>
-value<bool> operator>=(std::nullptr_t, ptr<T> const& rhs)
-{
-    return !(nullptr < rhs);
 }
 
 // IOStream
