@@ -6,13 +6,13 @@
 #ifndef NEO_REF_HPP
 #define NEO_REF_HPP
 
-#include <neo/ptr.hpp>
 #include <neo/undefined.hpp>
 #include <neo/value.hpp>
 
 #include <neo/detail/type_traits.hpp>
 
 #include <iosfwd>
+#include <functional>
 
 namespace neo
 {
@@ -22,46 +22,14 @@ class ref
 {
 public:
     using element_type = T;
+    using pointer = element_type*;
 
 private:
-    ptr<element_type> m_value;
+    pointer m_value;
 
 public:
-    ref(undefined_t) :
-        m_value(undefined)
+    ref(undefined_t)
     {
-    }
-
-    ref(ref const& other) = default;
-    ref& operator=(ref const& other) = default;
-
-    ref(ref&& other) = default;
-    ref& operator=(ref&& other) = default;
-
-    template<typename U, typename = detail::enable_if_t<std::is_convertible<U*, T*>::value>>
-    ref(ref<U> const& other) :
-        m_value(other.m_value)
-    {
-    }
-
-    template<typename U, typename = detail::enable_if_t<std::is_convertible<U*, T*>::value>>
-    ref& operator=(ref<U> const& other)
-    {
-        m_value = other.m_value;
-        return *this;
-    }
-
-    template<typename U, typename = detail::enable_if_t<std::is_convertible<U*, T*>::value>>
-    ref(ref<U>&& other) :
-        m_value(other.m_value)
-    {
-    }
-
-    template<typename U, typename = detail::enable_if_t<std::is_convertible<U*, T*>::value>>
-    ref& operator=(ref<U>&& other)
-    {
-        m_value = other.m_value;
-        return *this;
     }
 
     ref(element_type& value) :
@@ -75,25 +43,28 @@ public:
         return *this;
     }
 
-    ref(element_type&& value) = delete;
-    ref& operator=(element_type&& value) = delete;
+    ref(element_type&&) = delete;
+    ref& operator=(element_type&&) = delete;
 
-    template<typename U, typename = detail::enable_if_t<std::is_convertible<T*, U*>::value>>
-    operator U&() const
+    template<typename U, typename = detail::enable_if_t<std::is_convertible<U*, pointer>::value>>
+    ref(ref<U> const& other) :
+        m_value(other.get())
+    {
+    }
+
+    template<typename U, typename = detail::enable_if_t<std::is_convertible<U*, pointer>::value>>
+    ref& operator=(ref<U> const& other)
+    {
+        m_value = other.get();
+        return *this;
+    }
+
+    operator element_type&() const
     {
         return *m_value;
     }
 
-    template<typename U, typename = detail::enable_if_t<
-            !std::is_convertible<T*, U*>::value &&
-            std::is_convertible<U*, T*>::value
-        >, typename = void>
-    explicit operator U&() const
-    {
-        return static_cast<U&>(*m_value);
-    }
-
-    ptr<element_type> const& operator&() const
+    pointer operator&() const
     {
         return m_value;
     }
@@ -103,166 +74,77 @@ public:
         return *m_value;
     }
 
-    element_type* operator->() const
+    pointer operator->() const
     {
         return m_value;
     }
 
-    element_type const& get() const
+    pointer const& get() const
     {
-        return *m_value;
+        return m_value;
     }
 
-    element_type& get()
+    pointer& get()
     {
-        return *m_value;
+        return m_value;
     }
 };
 
-// ref<T> - ref<T>
-//-----------------
-
-template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
+template<typename T, typename U, typename = detail::enable_if_t<detail::are_related<T, U>::value>>
 value<bool> operator==(ref<T> const& lhs, ref<U> const& rhs)
 {
     return &lhs.get() == &rhs.get();
 }
 
-template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
+template<typename T, typename U, typename = detail::enable_if_t<detail::are_related<T, U>::value>>
 value<bool> operator!=(ref<T> const& lhs, ref<U> const& rhs)
 {
     return &lhs.get() != &rhs.get();
 }
 
-template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
+template<typename T, typename U, typename = detail::enable_if_t<detail::are_related<T, U>::value>>
 value<bool> operator<(ref<T> const& lhs, ref<U> const& rhs)
 {
-    using common_type = typename std::common_type<T*, U*>::type;
+    using common_type = typename std::common_type<typename ref<T>::pointer, U*>::type;
     return std::less<common_type>(&lhs.get(), &rhs.get());
 }
 
-template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
+template<typename T, typename U, typename = detail::enable_if_t<detail::are_related<T, U>::value>>
 value<bool> operator<=(ref<T> const& lhs, ref<U> const& rhs)
 {
     return !(rhs < lhs);
 }
 
-template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
+template<typename T, typename U, typename = detail::enable_if_t<detail::are_related<T, U>::value>>
 value<bool> operator>(ref<T> const& lhs, ref<U> const& rhs)
 {
     return rhs < lhs;
 }
 
-template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
+template<typename T, typename U, typename = detail::enable_if_t<detail::are_related<T, U>::value>>
 value<bool> operator>=(ref<T> const& lhs, ref<U> const& rhs)
 {
     return !(lhs < rhs);
 }
 
-// ref<T> - U
-//------------
-
-template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
-value<bool> operator==(ref<T> const& lhs, U const& rhs)
-{
-    return &lhs.get() == &rhs;
-}
-
-template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
-value<bool> operator!=(ref<T> const& lhs, U const& rhs)
-{
-    return &lhs.get() != &rhs;
-}
-
-template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
-value<bool> operator<(ref<T> const& lhs, U const& rhs)
-{
-    using common_type = typename std::common_type<T*, U*>::type;
-    return std::less<common_type>(&lhs.get(), &rhs);
-}
-
-template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
-value<bool> operator<=(ref<T> const& lhs, U const& rhs)
-{
-    return !(rhs < lhs);
-}
-
-template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
-value<bool> operator>(ref<T> const& lhs, U const& rhs)
-{
-    return rhs < lhs;
-}
-
-template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
-value<bool> operator>=(ref<T> const& lhs, U const& rhs)
-{
-    return !(lhs < rhs);
-}
-
-// U - ref<T>
-//------------
-
-template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
-value<bool> operator==(U const& lhs, ref<T> const& rhs)
-{
-    return &lhs == &rhs.get();
-}
-
-template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
-value<bool> operator!=(U const& lhs, ref<T> const& rhs)
-{
-    return &lhs != &rhs.get();
-}
-
-template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
-value<bool> operator<(U const& lhs, ref<T> const& rhs)
-{
-    using common_type = typename std::common_type<T*, U*>::type;
-    return std::less<common_type>(&lhs.get(), &rhs);
-}
-
-template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
-value<bool> operator<=(U const& lhs, ref<T> const& rhs)
-{
-    return !(rhs > lhs);
-}
-
-template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
-value<bool> operator>(U const& lhs, ref<T> const& rhs)
-{
-    return rhs < lhs;
-}
-
-template<typename T, typename U, typename = detail::enable_if_t<are_related<T, U>::value>>
-value<bool> operator>=(U const& lhs, ref<T> const& rhs)
-{
-    return !(lhs < rhs);
-}
-
-// IOStream
-//----------
-
 template<typename T>
 std::ostream& operator<<(std::ostream& s, ref<T> const& v)
 {
-    s << &*v;
+    s << v.get();
     return s;
 }
 
 template<typename T>
 std::istream& operator>>(std::istream& s, ref<T>& v)
 {
-    s >> &*v;
+    s >> v.get();
     return s;
 }
 
-// Utilities
-//-----------
-
 template<typename T>
-ref<T> make_ref(T& value)
+ref<T> make_ref(T& object)
 {
-    return value;
+    return object;
 }
 
 namespace aliases

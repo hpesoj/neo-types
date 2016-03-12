@@ -998,20 +998,27 @@ TEST_CASE("neo_ref", "neo_ref")
 
     neo_int i[] = { 1, 2, 3, 4, 5 };
 
-    auto ar = make_ref(i[0]);
-    neo_ref<neo_int> p = i[0];
+    auto ar = neo::make_ref(i[0]);
+    neo_ref<neo_int> p = neo::make_ref(i[0]);
 
     CHECK(*p == 1);
     *p = 3;
     CHECK(i[0] == 3);
 
-    p = i[1];
+    p = make_ref(i[1]);
 
     CHECK(*p == 2);
 
     int myint = 0;
-    neo_ref<int const> r = myint;
+    neo_ref<int const> r = neo::make_ref(myint);
     neo_ptr<int const> pr = &r;
+    neo_ref<int const> pp = *r;
+
+    neo_ptr<derived> asdasd;
+    neo_ptr<base> asdasdasd = asdasd;
+    base* lkjfas = asdasd;
+
+    pr == nullptr;
 }
 
 TEST_CASE("neo_ref<T> copy construction", "neo_ref")
