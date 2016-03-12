@@ -48,13 +48,17 @@ public:
         return *this;
     }
 
-    template<typename U, typename = detail::enable_if_t<std::is_convertible<U*, T*>::value>>
+    template<typename U, typename = detail::enable_if_t<
+        std::is_convertible<U*, T*>::value>
+    >
     ptr(ptr<U> const& other) :
         m_value(other.get())
     {
     }
 
-    template<typename U, typename = detail::enable_if_t<std::is_convertible<U*, T*>::value>>
+    template<typename U, typename = detail::enable_if_t<
+        std::is_convertible<U*, T*>::value>
+    >
     ptr& operator=(ptr<U> const& other)
     {
         m_value = other.get();
@@ -102,37 +106,49 @@ public:
     }
 };
 
-template<typename T1, typename T2, typename = detail::common_type_t<T1*, T2*>>
+template<typename T1, typename T2, typename =
+    detail::common_type_t<T1*, T2*>
+>
 value<bool> operator==(ptr<T1> const& lhs, ptr<T2> const& rhs)
 {
     return lhs.get() == rhs.get();
 }
 
-template<typename T1, typename T2, typename = detail::common_type_t<T1*, T2*>>
+template<typename T1, typename T2, typename =
+    detail::common_type_t<T1*, T2*>
+>
 value<bool> operator!=(ptr<T1> const& lhs, ptr<T2> const& rhs)
 {
     return lhs.get() != rhs.get();
 }
 
-template<typename T1, typename T2, typename = detail::common_type_t<T1*, T2*>>
+template<typename T1, typename T2, typename =
+    detail::common_type_t<T1*, T2*>
+>
 value<bool> operator<(ptr<T1> const& lhs, ptr<T2> const& rhs)
 {
     return std::less<detail::common_type_t<T1*, T2*>>(lhs.get(), rhs.get());
 }
 
-template<typename T1, typename T2, typename = detail::common_type_t<T1*, T2*>>
+template<typename T1, typename T2, typename =
+    detail::common_type_t<T1*, T2*>
+>
 value<bool> operator<=(ptr<T1> const& lhs, ptr<T2> const& rhs)
 {
     return !(rhs < lhs);
 }
 
-template<typename T1, typename T2, typename = detail::common_type_t<T1*, T2*>>
+template<typename T1, typename T2, typename =
+    detail::common_type_t<T1*, T2*>
+>
 value<bool> operator>(ptr<T1> const& lhs, ptr<T2> const& rhs)
 {
     return rhs < lhs;
 }
 
-template<typename T1, typename T2, typename = detail::common_type_t<T1*, T2*>>
+template<typename T1, typename T2, typename =
+    detail::common_type_t<T1*, T2*>
+>
 value<bool> operator>=(ptr<T1> const& lhs, ptr<T2> const& rhs)
 {
     return !(lhs < rhs);
