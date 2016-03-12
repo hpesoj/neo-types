@@ -1017,8 +1017,6 @@ TEST_CASE("neo_ref", "neo_ref")
     neo_ptr<derived> asdasd;
     neo_ptr<base> asdasdasd = asdasd;
     base* lkjfas = asdasd;
-
-    pr == nullptr;
 }
 
 TEST_CASE("neo_ref<T> copy construction", "neo_ref")

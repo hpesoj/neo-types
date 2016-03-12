@@ -48,13 +48,13 @@ public:
         return *this;
     }
 
-    template<typename U, typename = detail::enable_if_t<std::is_convertible<U*, pointer>::value>>
+    template<typename U, typename = detail::enable_if_t<std::is_convertible<U*, T*>::value>>
     ptr(ptr<U> const& other) :
         m_value(other.get())
     {
     }
 
-    template<typename U, typename = detail::enable_if_t<std::is_convertible<U*, pointer>::value>>
+    template<typename U, typename = detail::enable_if_t<std::is_convertible<U*, T*>::value>>
     ptr& operator=(ptr<U> const& other)
     {
         m_value = other.get();
@@ -102,39 +102,38 @@ public:
     }
 };
 
-template<typename T, typename U, typename = detail::enable_if_t<detail::are_related<T, U>::value>>
-value<bool> operator==(ptr<T> const& lhs, ptr<U> const& rhs)
+template<typename T1, typename T2, typename = detail::common_type_t<T1*, T2*>>
+value<bool> operator==(ptr<T1> const& lhs, ptr<T2> const& rhs)
 {
     return lhs.get() == rhs.get();
 }
 
-template<typename T, typename U, typename = detail::enable_if_t<detail::are_related<T, U>::value>>
-value<bool> operator!=(ptr<T> const& lhs, ptr<U> const& rhs)
+template<typename T1, typename T2, typename = detail::common_type_t<T1*, T2*>>
+value<bool> operator!=(ptr<T1> const& lhs, ptr<T2> const& rhs)
 {
     return lhs.get() != rhs.get();
 }
 
-template<typename T, typename U, typename = detail::enable_if_t<detail::are_related<T, U>::value>>
-value<bool> operator<(ptr<T> const& lhs, ptr<U> const& rhs)
+template<typename T1, typename T2, typename = detail::common_type_t<T1*, T2*>>
+value<bool> operator<(ptr<T1> const& lhs, ptr<T2> const& rhs)
 {
-    using common_type = typename std::common_type<typename ptr<T>::pointer, U*>::type;
-    return std::less<common_type>(lhs.get(), rhs.get());
+    return std::less<detail::common_type_t<T1*, T2*>>(lhs.get(), rhs.get());
 }
 
-template<typename T, typename U, typename = detail::enable_if_t<detail::are_related<T, U>::value>>
-value<bool> operator<=(ptr<T> const& lhs, ptr<U> const& rhs)
+template<typename T1, typename T2, typename = detail::common_type_t<T1*, T2*>>
+value<bool> operator<=(ptr<T1> const& lhs, ptr<T2> const& rhs)
 {
     return !(rhs < lhs);
 }
 
-template<typename T, typename U, typename = detail::enable_if_t<detail::are_related<T, U>::value>>
-value<bool> operator>(ptr<T> const& lhs, ptr<U> const& rhs)
+template<typename T1, typename T2, typename = detail::common_type_t<T1*, T2*>>
+value<bool> operator>(ptr<T1> const& lhs, ptr<T2> const& rhs)
 {
     return rhs < lhs;
 }
 
-template<typename T, typename U, typename = detail::enable_if_t<detail::are_related<T, U>::value>>
-value<bool> operator>=(ptr<T> const& lhs, ptr<U> const& rhs)
+template<typename T1, typename T2, typename = detail::common_type_t<T1*, T2*>>
+value<bool> operator>=(ptr<T1> const& lhs, ptr<T2> const& rhs)
 {
     return !(lhs < rhs);
 }
