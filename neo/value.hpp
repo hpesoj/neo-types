@@ -584,7 +584,7 @@ template<typename T1, typename T2, typename = detail::enable_if_t<
 >
 value<detail::wider_t<T1, T2>> operator+(value<T1> const& lhs, value<T2> const& rhs)
 {
-    return lhs.get() + rhs.get();
+    return detail::wider_t<T1, T2>(lhs.get() + rhs.get());
 }
 
 template<typename T1, typename T2, typename = detail::enable_if_t<
@@ -592,7 +592,7 @@ template<typename T1, typename T2, typename = detail::enable_if_t<
 >
 value<detail::wider_t<T1, T2>> operator-(value<T1> const& lhs, value<T2> const& rhs)
 {
-    return lhs.get() - rhs.get();
+    return detail::wider_t<T1, T2>(lhs.get() - rhs.get());
 }
 
 template<typename T1, typename T2, typename = detail::enable_if_t<
@@ -600,7 +600,7 @@ template<typename T1, typename T2, typename = detail::enable_if_t<
 >
 value<detail::wider_t<T1, T2>> operator*(value<T1> const& lhs, value<T2> const& rhs)
 {
-    return lhs.get() * rhs.get();
+    return detail::wider_t<T1, T2>(lhs.get() * rhs.get());
 }
 
 template<typename T1, typename T2, typename = detail::enable_if_t<
@@ -608,7 +608,7 @@ template<typename T1, typename T2, typename = detail::enable_if_t<
 >
 value<detail::wider_t<T1, T2>> operator/(value<T1> const& lhs, value<T2> const& rhs)
 {
-    return lhs.get() / rhs.get();
+    return detail::wider_t<T1, T2>(lhs.get() / rhs.get());
 }
 
 template<typename T1, typename T2, typename = detail::enable_if_t<
@@ -616,7 +616,7 @@ template<typename T1, typename T2, typename = detail::enable_if_t<
 >
 value<detail::wider_t<T1, T2>> operator%(value<T1> const& lhs, value<T2> const& rhs)
 {
-    return lhs.get() % rhs.get();
+    return detail::wider_t<T1, T2>(lhs.get() % rhs.get());
 }
 
 template<typename T1, typename T2, typename = detail::enable_if_t<
@@ -624,7 +624,7 @@ template<typename T1, typename T2, typename = detail::enable_if_t<
 >
 value<detail::wider_t<T1, T2>> operator&(value<T1> const& lhs, value<T2> const& rhs)
 {
-    return lhs.get() & rhs.get();
+    return detail::wider_t<T1, T2>(lhs.get() & rhs.get());
 }
 
 template<typename T1, typename T2, typename = detail::enable_if_t<
@@ -632,7 +632,7 @@ template<typename T1, typename T2, typename = detail::enable_if_t<
 >
 value<detail::wider_t<T1, T2>> operator|(value<T1> const& lhs, value<T2> const& rhs)
 {
-    return lhs.get() | rhs.get();
+    return detail::wider_t<T1, T2>(lhs.get() | rhs.get());
 }
 
 template<typename T1, typename T2, typename = detail::enable_if_t<
@@ -640,7 +640,7 @@ template<typename T1, typename T2, typename = detail::enable_if_t<
 >
 value<detail::wider_t<T1, T2>> operator^(value<T1> const& lhs, value<T2> const& rhs)
 {
-    return lhs.get() ^ rhs.get();
+    return detail::wider_t<T1, T2>(lhs.get() ^ rhs.get());
 }
 
 template<typename T1, typename T2, typename = detail::enable_if_t<
@@ -649,7 +649,7 @@ template<typename T1, typename T2, typename = detail::enable_if_t<
 >
 value<T1> operator<<(value<T1> const& lhs, value<T2> const& rhs)
 {
-    return lhs.get() << rhs.get();
+    return detail::wider_t<T1, T2>(lhs.get() << rhs.get());
 }
 
 template<typename T1, typename T2, typename = detail::enable_if_t<
