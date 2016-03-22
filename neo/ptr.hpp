@@ -28,21 +28,21 @@ private:
     pointer m_value;
 
 public:
-    constexpr ptr() :
+    constexpr ptr() noexcept :
         m_value()
     {
     }
 
-    ptr(undefined_t)
+    ptr(undefined_t) noexcept
     {
     }
 
-    constexpr ptr(pointer value) :
+    constexpr ptr(pointer value) noexcept :
         m_value(value)
     {
     }
 
-    ptr& operator=(pointer value)
+    ptr& operator=(pointer value) noexcept
     {
         m_value = value;
         return *this;
@@ -51,7 +51,7 @@ public:
     template<typename U, typename = detail::enable_if_t<
         std::is_convertible<U*, T*>::value>
     >
-    constexpr ptr(ptr<U> const& other) :
+    constexpr ptr(ptr<U> const& other) noexcept :
         m_value(other.get())
     {
     }
@@ -59,48 +59,48 @@ public:
     template<typename U, typename = detail::enable_if_t<
         std::is_convertible<U*, T*>::value>
     >
-    ptr& operator=(ptr<U> const& other)
+    ptr& operator=(ptr<U> const& other) noexcept
     {
         m_value = other.get();
         return *this;
     }
 
-    constexpr operator pointer() const
+    constexpr operator pointer() const noexcept
     {
         return m_value;
     }
 
-    constexpr explicit operator bool() const
+    constexpr explicit operator bool() const noexcept
     {
         return m_value != nullptr;
     }
 
-    constexpr explicit operator ptr<bool>() const
+    constexpr explicit operator ptr<bool>() const noexcept
     {
         return m_value != nullptr;
     }
 
-    constexpr pointer* operator&() const
+    constexpr pointer* operator&() const noexcept
     {
         return &m_value;
     }
 
-    constexpr element_type& operator*() const
+    constexpr element_type& operator*() const noexcept
     {
         return *m_value;
     }
 
-    constexpr pointer operator->() const
+    constexpr pointer operator->() const noexcept
     {
         return m_value;
     }
 
-    constexpr pointer const& get() const
+    constexpr pointer const& get() const noexcept
     {
         return m_value;
     }
 
-    pointer& get()
+    pointer& get() noexcept
     {
         return m_value;
     }
@@ -109,7 +109,7 @@ public:
 template<typename T1, typename T2, typename =
     detail::common_type_t<T1*, T2*>
 >
-constexpr value<bool> operator==(ptr<T1> const& lhs, ptr<T2> const& rhs)
+constexpr value<bool> operator==(ptr<T1> const& lhs, ptr<T2> const& rhs) noexcept
 {
     return lhs.get() == rhs.get();
 }
@@ -117,7 +117,7 @@ constexpr value<bool> operator==(ptr<T1> const& lhs, ptr<T2> const& rhs)
 template<typename T1, typename T2, typename =
     detail::common_type_t<T1*, T2*>
 >
-constexpr value<bool> operator!=(ptr<T1> const& lhs, ptr<T2> const& rhs)
+constexpr value<bool> operator!=(ptr<T1> const& lhs, ptr<T2> const& rhs) noexcept
 {
     return lhs.get() != rhs.get();
 }
@@ -125,7 +125,7 @@ constexpr value<bool> operator!=(ptr<T1> const& lhs, ptr<T2> const& rhs)
 template<typename T1, typename T2, typename =
     detail::common_type_t<T1*, T2*>
 >
-constexpr value<bool> operator<(ptr<T1> const& lhs, ptr<T2> const& rhs)
+constexpr value<bool> operator<(ptr<T1> const& lhs, ptr<T2> const& rhs) noexcept
 {
     return std::less<detail::common_type_t<T1*, T2*>>(lhs.get(), rhs.get());
 }
@@ -133,7 +133,7 @@ constexpr value<bool> operator<(ptr<T1> const& lhs, ptr<T2> const& rhs)
 template<typename T1, typename T2, typename =
     detail::common_type_t<T1*, T2*>
 >
-constexpr value<bool> operator<=(ptr<T1> const& lhs, ptr<T2> const& rhs)
+constexpr value<bool> operator<=(ptr<T1> const& lhs, ptr<T2> const& rhs) noexcept
 {
     return !(rhs < lhs);
 }
@@ -141,7 +141,7 @@ constexpr value<bool> operator<=(ptr<T1> const& lhs, ptr<T2> const& rhs)
 template<typename T1, typename T2, typename =
     detail::common_type_t<T1*, T2*>
 >
-constexpr value<bool> operator>(ptr<T1> const& lhs, ptr<T2> const& rhs)
+constexpr value<bool> operator>(ptr<T1> const& lhs, ptr<T2> const& rhs) noexcept
 {
     return rhs < lhs;
 }
@@ -149,7 +149,7 @@ constexpr value<bool> operator>(ptr<T1> const& lhs, ptr<T2> const& rhs)
 template<typename T1, typename T2, typename =
     detail::common_type_t<T1*, T2*>
 >
-constexpr value<bool> operator>=(ptr<T1> const& lhs, ptr<T2> const& rhs)
+constexpr value<bool> operator>=(ptr<T1> const& lhs, ptr<T2> const& rhs) noexcept
 {
     return !(lhs < rhs);
 }
@@ -169,7 +169,7 @@ std::istream& operator>>(std::istream& s, ptr<T>& v)
 }
 
 template<typename T>
-constexpr ptr<T> make_ptr(T* object)
+constexpr ptr<T> make_ptr(T* object) noexcept
 {
     return object;
 }

@@ -28,16 +28,16 @@ private:
     pointer m_value;
 
 public:
-    constexpr ref(undefined_t)
+    constexpr ref(undefined_t) noexcept
     {
     }
 
-    constexpr ref(element_type& value) :
+    constexpr ref(element_type& value) noexcept :
         m_value(&value)
     {
     }
 
-    ref& operator=(element_type& value)
+    ref& operator=(element_type& value) noexcept
     {
         m_value = &value;
         return *this;
@@ -49,7 +49,7 @@ public:
     template<typename U, typename = detail::enable_if_t<
         std::is_convertible<U*, T*>::value>
     >
-    constexpr ref(ref<U> const& other) :
+    constexpr ref(ref<U> const& other) noexcept :
         m_value(other.get())
     {
     }
@@ -57,38 +57,38 @@ public:
     template<typename U, typename = detail::enable_if_t<
         std::is_convertible<U*, T*>::value>
     >
-    ref& operator=(ref<U> const& other)
+    ref& operator=(ref<U> const& other) noexcept
     {
         m_value = other.get();
         return *this;
     }
 
-    constexpr operator element_type&() const
+    constexpr operator element_type&() const noexcept
     {
         return *m_value;
     }
 
-    constexpr pointer operator&() const
+    constexpr pointer operator&() const noexcept
     {
         return m_value;
     }
 
-    constexpr element_type& operator*() const
+    constexpr element_type& operator*() const noexcept
     {
         return *m_value;
     }
 
-    constexpr pointer operator->() const
+    constexpr pointer operator->() const noexcept
     {
         return m_value;
     }
 
-    constexpr pointer const& get() const
+    constexpr pointer const& get() const noexcept
     {
         return m_value;
     }
 
-    pointer& get()
+    pointer& get() noexcept
     {
         return m_value;
     }
@@ -97,7 +97,7 @@ public:
 template<typename T1, typename T2, typename =
     detail::common_type_t<T1*, T2*>
 >
-constexpr value<bool> operator==(ref<T1> const& lhs, ref<T2> const& rhs)
+constexpr value<bool> operator==(ref<T1> const& lhs, ref<T2> const& rhs) noexcept
 {
     return &lhs.get() == &rhs.get();
 }
@@ -105,7 +105,7 @@ constexpr value<bool> operator==(ref<T1> const& lhs, ref<T2> const& rhs)
 template<typename T1, typename T2, typename =
     detail::common_type_t<T1*, T2*>
 >
-constexpr value<bool> operator!=(ref<T1> const& lhs, ref<T2> const& rhs)
+constexpr value<bool> operator!=(ref<T1> const& lhs, ref<T2> const& rhs) noexcept
 {
     return &lhs.get() != &rhs.get();
 }
@@ -113,7 +113,7 @@ constexpr value<bool> operator!=(ref<T1> const& lhs, ref<T2> const& rhs)
 template<typename T1, typename T2, typename =
     detail::common_type_t<T1*, T2*>
 >
-constexpr value<bool> operator<(ref<T1> const& lhs, ref<T2> const& rhs)
+constexpr value<bool> operator<(ref<T1> const& lhs, ref<T2> const& rhs) noexcept
 {
     return std::less<detail::common_type_t<T1*, T2*>>(&lhs.get(), &rhs.get());
 }
@@ -121,7 +121,7 @@ constexpr value<bool> operator<(ref<T1> const& lhs, ref<T2> const& rhs)
 template<typename T1, typename T2, typename =
     detail::common_type_t<T1*, T2*>
 >
-constexpr value<bool> operator<=(ref<T1> const& lhs, ref<T2> const& rhs)
+constexpr value<bool> operator<=(ref<T1> const& lhs, ref<T2> const& rhs) noexcept
 {
     return !(rhs < lhs);
 }
@@ -129,7 +129,7 @@ constexpr value<bool> operator<=(ref<T1> const& lhs, ref<T2> const& rhs)
 template<typename T1, typename T2, typename =
     detail::common_type_t<T1*, T2*>
 >
-constexpr value<bool> operator>(ref<T1> const& lhs, ref<T2> const& rhs)
+constexpr value<bool> operator>(ref<T1> const& lhs, ref<T2> const& rhs) noexcept
 {
     return rhs < lhs;
 }
@@ -137,7 +137,7 @@ constexpr value<bool> operator>(ref<T1> const& lhs, ref<T2> const& rhs)
 template<typename T1, typename T2, typename =
     detail::common_type_t<T1*, T2*>
 >
-constexpr value<bool> operator>=(ref<T1> const& lhs, ref<T2> const& rhs)
+constexpr value<bool> operator>=(ref<T1> const& lhs, ref<T2> const& rhs) noexcept
 {
     return !(lhs < rhs);
 }
@@ -157,7 +157,7 @@ std::istream& operator>>(std::istream& s, ref<T>& v)
 }
 
 template<typename T>
-constexpr ref<T> make_ref(T& object)
+constexpr ref<T> make_ref(T& object) noexcept
 {
     return object;
 }
