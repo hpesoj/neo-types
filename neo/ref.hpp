@@ -28,11 +28,11 @@ private:
     pointer m_value;
 
 public:
-    ref(undefined_t)
+    constexpr ref(undefined_t)
     {
     }
 
-    ref(element_type& value) :
+    constexpr ref(element_type& value) :
         m_value(&value)
     {
     }
@@ -49,7 +49,7 @@ public:
     template<typename U, typename = detail::enable_if_t<
         std::is_convertible<U*, T*>::value>
     >
-    ref(ref<U> const& other) :
+    constexpr ref(ref<U> const& other) :
         m_value(other.get())
     {
     }
@@ -63,27 +63,27 @@ public:
         return *this;
     }
 
-    operator element_type&() const
+    constexpr operator element_type&() const
     {
         return *m_value;
     }
 
-    pointer operator&() const
+    constexpr pointer operator&() const
     {
         return m_value;
     }
 
-    element_type& operator*() const
+    constexpr element_type& operator*() const
     {
         return *m_value;
     }
 
-    pointer operator->() const
+    constexpr pointer operator->() const
     {
         return m_value;
     }
 
-    pointer const& get() const
+    constexpr pointer const& get() const
     {
         return m_value;
     }
@@ -97,7 +97,7 @@ public:
 template<typename T1, typename T2, typename =
     detail::common_type_t<T1*, T2*>
 >
-value<bool> operator==(ref<T1> const& lhs, ref<T2> const& rhs)
+constexpr value<bool> operator==(ref<T1> const& lhs, ref<T2> const& rhs)
 {
     return &lhs.get() == &rhs.get();
 }
@@ -105,7 +105,7 @@ value<bool> operator==(ref<T1> const& lhs, ref<T2> const& rhs)
 template<typename T1, typename T2, typename =
     detail::common_type_t<T1*, T2*>
 >
-value<bool> operator!=(ref<T1> const& lhs, ref<T2> const& rhs)
+constexpr value<bool> operator!=(ref<T1> const& lhs, ref<T2> const& rhs)
 {
     return &lhs.get() != &rhs.get();
 }
@@ -113,7 +113,7 @@ value<bool> operator!=(ref<T1> const& lhs, ref<T2> const& rhs)
 template<typename T1, typename T2, typename =
     detail::common_type_t<T1*, T2*>
 >
-value<bool> operator<(ref<T1> const& lhs, ref<T2> const& rhs)
+constexpr value<bool> operator<(ref<T1> const& lhs, ref<T2> const& rhs)
 {
     return std::less<detail::common_type_t<T1*, T2*>>(&lhs.get(), &rhs.get());
 }
@@ -121,7 +121,7 @@ value<bool> operator<(ref<T1> const& lhs, ref<T2> const& rhs)
 template<typename T1, typename T2, typename =
     detail::common_type_t<T1*, T2*>
 >
-value<bool> operator<=(ref<T1> const& lhs, ref<T2> const& rhs)
+constexpr value<bool> operator<=(ref<T1> const& lhs, ref<T2> const& rhs)
 {
     return !(rhs < lhs);
 }
@@ -129,7 +129,7 @@ value<bool> operator<=(ref<T1> const& lhs, ref<T2> const& rhs)
 template<typename T1, typename T2, typename =
     detail::common_type_t<T1*, T2*>
 >
-value<bool> operator>(ref<T1> const& lhs, ref<T2> const& rhs)
+constexpr value<bool> operator>(ref<T1> const& lhs, ref<T2> const& rhs)
 {
     return rhs < lhs;
 }
@@ -137,7 +137,7 @@ value<bool> operator>(ref<T1> const& lhs, ref<T2> const& rhs)
 template<typename T1, typename T2, typename =
     detail::common_type_t<T1*, T2*>
 >
-value<bool> operator>=(ref<T1> const& lhs, ref<T2> const& rhs)
+constexpr value<bool> operator>=(ref<T1> const& lhs, ref<T2> const& rhs)
 {
     return !(lhs < rhs);
 }
@@ -157,7 +157,7 @@ std::istream& operator>>(std::istream& s, ref<T>& v)
 }
 
 template<typename T>
-ref<T> make_ref(T& object)
+constexpr ref<T> make_ref(T& object)
 {
     return object;
 }

@@ -140,7 +140,7 @@ private:
     T m_value;
 
 public:
-    value() :
+    constexpr value() :
         m_value()
     {
     }
@@ -152,7 +152,7 @@ public:
     template<typename U, typename = detail::enable_if_t<
         detail::is_safely_convertible<U, T>::value>
     >
-    value(value<U> const& other) :
+    constexpr value(value<U> const& other) :
         m_value(other.get())
     {
     }
@@ -169,7 +169,7 @@ public:
     template<typename U, typename = detail::enable_if_t<
         detail::is_safely_convertible<U, T>::value>
     >
-    value(U const& value) :
+    constexpr value(U const& value) :
         m_value(value)
     {
     }
@@ -186,7 +186,7 @@ public:
     template<typename U, typename = detail::enable_if_t<
         detail::is_same<T, U>::value>
     >
-    operator U const&() const
+    constexpr operator U const&() const
     {
         return m_value;
     }
@@ -202,7 +202,7 @@ public:
     template<typename U, typename = detail::enable_if_t<
         detail::is_safely_convertible<T, U>::value>
     >
-    operator U() const
+    constexpr operator U() const
     {
         return m_value;
     }
@@ -211,7 +211,7 @@ public:
         detail::is_unsafely_convertible<T, U>::value>,
         typename = void
     >
-    explicit operator U() const
+    constexpr explicit operator U() const
     {
         return static_cast<U>(m_value);
     }
@@ -219,12 +219,12 @@ public:
     template<typename U, typename = detail::enable_if_t<
         detail::is_unsafely_convertible<T, U>::value>
     >
-    explicit operator value<U>() const
+    constexpr explicit operator value<U>() const
     {
         return static_cast<U>(m_value);
     }
 
-    T const& get() const
+    constexpr T const& get() const
     {
         return m_value;
     }
@@ -358,12 +358,12 @@ public:
         return m_value--;
     }
 
-    value<T> operator+() const
+    constexpr value<T> operator+() const
     {
         return m_value;
     }
 
-    value<T> operator-() const
+    constexpr value<T> operator-() const
     {
         return -m_value;
     }
@@ -470,7 +470,7 @@ public:
 
     template<typename = detail::enable_if_t<
         detail::is_unsigned_integral<T>::value>>
-    value operator~() const
+    constexpr value operator~() const
     {
         return ~m_value;
     }
@@ -483,7 +483,7 @@ private:
     bool m_value;
 
 public:
-    value() :
+    constexpr value() :
         m_value()
     {
     }
@@ -495,12 +495,12 @@ public:
     template<typename U, typename = detail::enable_if_t<
         detail::is_same<U, bool>::value>
     >
-    value(U const& value) :
+    constexpr value(U const& value) :
         m_value(value)
     {
     }
 
-    operator bool const&() const
+    constexpr operator bool const&() const
     {
         return m_value;
     }
@@ -510,12 +510,12 @@ public:
         return m_value;
     }
 
-    value<bool> operator!() const
+    constexpr value<bool> operator!() const
     {
         return !m_value;
     }
 
-    bool const& get() const
+    constexpr bool const& get() const
     {
         return m_value;
     }
@@ -534,7 +534,7 @@ class value<void>
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar<T1, T2>::value>
 >
-value<bool> operator==(value<T1> const& lhs, value<T2> const& rhs)
+constexpr value<bool> operator==(value<T1> const& lhs, value<T2> const& rhs)
 {
     return lhs.get() == rhs.get();
 }
@@ -542,7 +542,7 @@ value<bool> operator==(value<T1> const& lhs, value<T2> const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar<T1, T2>::value>
 >
-value<bool> operator!=(value<T1> const& lhs, value<T2> const& rhs)
+constexpr value<bool> operator!=(value<T1> const& lhs, value<T2> const& rhs)
 {
     return lhs.get() != rhs.get();
 }
@@ -550,7 +550,7 @@ value<bool> operator!=(value<T1> const& lhs, value<T2> const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar_numeric<T1, T2>::value>
 >
-value<bool> operator<(value<T1> const& lhs, value<T2> const& rhs)
+constexpr value<bool> operator<(value<T1> const& lhs, value<T2> const& rhs)
 {
     return lhs.get() < rhs.get();
 }
@@ -558,7 +558,7 @@ value<bool> operator<(value<T1> const& lhs, value<T2> const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar_numeric<T1, T2>::value>
 >
-value<bool> operator<=(value<T1> const& lhs, value<T2> const& rhs)
+constexpr value<bool> operator<=(value<T1> const& lhs, value<T2> const& rhs)
 {
     return lhs.get() <= rhs.get();
 }
@@ -566,7 +566,7 @@ value<bool> operator<=(value<T1> const& lhs, value<T2> const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar_numeric<T1, T2>::value>
 >
-value<bool> operator>(value<T1> const& lhs, value<T2> const& rhs)
+constexpr value<bool> operator>(value<T1> const& lhs, value<T2> const& rhs)
 {
     return lhs.get() > rhs.get();
 }
@@ -574,7 +574,7 @@ value<bool> operator>(value<T1> const& lhs, value<T2> const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar_numeric<T1, T2>::value>
 >
-value<bool> operator>=(value<T1> const& lhs, value<T2> const& rhs)
+constexpr value<bool> operator>=(value<T1> const& lhs, value<T2> const& rhs)
 {
     return lhs.get() >= rhs.get();
 }
@@ -582,7 +582,7 @@ value<bool> operator>=(value<T1> const& lhs, value<T2> const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar_numeric<T1, T2>::value>
 >
-value<detail::wider_t<T1, T2>> operator+(value<T1> const& lhs, value<T2> const& rhs)
+constexpr value<detail::wider_t<T1, T2>> operator+(value<T1> const& lhs, value<T2> const& rhs)
 {
     return detail::wider_t<T1, T2>(lhs.get() + rhs.get());
 }
@@ -590,7 +590,7 @@ value<detail::wider_t<T1, T2>> operator+(value<T1> const& lhs, value<T2> const& 
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar_numeric<T1, T2>::value>
 >
-value<detail::wider_t<T1, T2>> operator-(value<T1> const& lhs, value<T2> const& rhs)
+constexpr value<detail::wider_t<T1, T2>> operator-(value<T1> const& lhs, value<T2> const& rhs)
 {
     return detail::wider_t<T1, T2>(lhs.get() - rhs.get());
 }
@@ -598,7 +598,7 @@ value<detail::wider_t<T1, T2>> operator-(value<T1> const& lhs, value<T2> const& 
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar_numeric<T1, T2>::value>
 >
-value<detail::wider_t<T1, T2>> operator*(value<T1> const& lhs, value<T2> const& rhs)
+constexpr value<detail::wider_t<T1, T2>> operator*(value<T1> const& lhs, value<T2> const& rhs)
 {
     return detail::wider_t<T1, T2>(lhs.get() * rhs.get());
 }
@@ -606,7 +606,7 @@ value<detail::wider_t<T1, T2>> operator*(value<T1> const& lhs, value<T2> const& 
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar_numeric<T1, T2>::value>
 >
-value<detail::wider_t<T1, T2>> operator/(value<T1> const& lhs, value<T2> const& rhs)
+constexpr value<detail::wider_t<T1, T2>> operator/(value<T1> const& lhs, value<T2> const& rhs)
 {
     return detail::wider_t<T1, T2>(lhs.get() / rhs.get());
 }
@@ -614,7 +614,7 @@ value<detail::wider_t<T1, T2>> operator/(value<T1> const& lhs, value<T2> const& 
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar_numeric<T1, T2>::value>
 >
-value<detail::wider_t<T1, T2>> operator%(value<T1> const& lhs, value<T2> const& rhs)
+constexpr value<detail::wider_t<T1, T2>> operator%(value<T1> const& lhs, value<T2> const& rhs)
 {
     return detail::wider_t<T1, T2>(lhs.get() % rhs.get());
 }
@@ -622,7 +622,7 @@ value<detail::wider_t<T1, T2>> operator%(value<T1> const& lhs, value<T2> const& 
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_unsigned_integral<T1, T2>::value>
 >
-value<detail::wider_t<T1, T2>> operator&(value<T1> const& lhs, value<T2> const& rhs)
+constexpr value<detail::wider_t<T1, T2>> operator&(value<T1> const& lhs, value<T2> const& rhs)
 {
     return detail::wider_t<T1, T2>(lhs.get() & rhs.get());
 }
@@ -630,7 +630,7 @@ value<detail::wider_t<T1, T2>> operator&(value<T1> const& lhs, value<T2> const& 
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_unsigned_integral<T1, T2>::value>
 >
-value<detail::wider_t<T1, T2>> operator|(value<T1> const& lhs, value<T2> const& rhs)
+constexpr value<detail::wider_t<T1, T2>> operator|(value<T1> const& lhs, value<T2> const& rhs)
 {
     return detail::wider_t<T1, T2>(lhs.get() | rhs.get());
 }
@@ -638,7 +638,7 @@ value<detail::wider_t<T1, T2>> operator|(value<T1> const& lhs, value<T2> const& 
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_unsigned_integral<T1, T2>::value>
 >
-value<detail::wider_t<T1, T2>> operator^(value<T1> const& lhs, value<T2> const& rhs)
+constexpr value<detail::wider_t<T1, T2>> operator^(value<T1> const& lhs, value<T2> const& rhs)
 {
     return detail::wider_t<T1, T2>(lhs.get() ^ rhs.get());
 }
@@ -647,7 +647,7 @@ template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::is_unsigned_integral<T1>::value &&
     std::is_integral<T2>::value>
 >
-value<T1> operator<<(value<T1> const& lhs, value<T2> const& rhs)
+constexpr value<T1> operator<<(value<T1> const& lhs, value<T2> const& rhs)
 {
     return detail::wider_t<T1, T2>(lhs.get() << rhs.get());
 }
@@ -656,7 +656,7 @@ template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::is_unsigned_integral<T1>::value &&
     std::is_integral<T2>::value>
 >
-value<T1> operator>>(value<T1> const& lhs, value<T2> const& rhs)
+constexpr value<T1> operator>>(value<T1> const& lhs, value<T2> const& rhs)
 {
     return lhs.get() >> rhs.get();
 }
@@ -667,7 +667,7 @@ value<T1> operator>>(value<T1> const& lhs, value<T2> const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar<T1, T2>::value>
 >
-value<bool> operator==(value<T1> const& lhs, T2 const& rhs)
+constexpr value<bool> operator==(value<T1> const& lhs, T2 const& rhs)
 {
     return lhs.get() == rhs;
 }
@@ -675,7 +675,7 @@ value<bool> operator==(value<T1> const& lhs, T2 const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar<T1, T2>::value>
 >
-value<bool> operator!=(value<T1> const& lhs, T2 const& rhs)
+constexpr value<bool> operator!=(value<T1> const& lhs, T2 const& rhs)
 {
     return lhs.get() != rhs;
 }
@@ -683,7 +683,7 @@ value<bool> operator!=(value<T1> const& lhs, T2 const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar_numeric<T1, T2>::value>
 >
-value<bool> operator<(value<T1> const& lhs, T2 const& rhs)
+constexpr value<bool> operator<(value<T1> const& lhs, T2 const& rhs)
 {
     return lhs.get() < rhs;
 }
@@ -691,7 +691,7 @@ value<bool> operator<(value<T1> const& lhs, T2 const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar_numeric<T1, T2>::value>
 >
-value<bool> operator<=(value<T1> const& lhs, T2 const& rhs)
+constexpr value<bool> operator<=(value<T1> const& lhs, T2 const& rhs)
 {
     return lhs.get() <= rhs;
 }
@@ -699,7 +699,7 @@ value<bool> operator<=(value<T1> const& lhs, T2 const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar_numeric<T1, T2>::value>
 >
-value<bool> operator>(value<T1> const& lhs, T2 const& rhs)
+constexpr value<bool> operator>(value<T1> const& lhs, T2 const& rhs)
 {
     return lhs.get() > rhs;
 }
@@ -707,7 +707,7 @@ value<bool> operator>(value<T1> const& lhs, T2 const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar_numeric<T1, T2>::value>
 >
-value<bool> operator>=(value<T1> const& lhs, T2 const& rhs)
+constexpr value<bool> operator>=(value<T1> const& lhs, T2 const& rhs)
 {
     return lhs.get() >= rhs;
 }
@@ -715,7 +715,7 @@ value<bool> operator>=(value<T1> const& lhs, T2 const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar_numeric<T1, T2>::value>
 >
-value<detail::wider_t<T1, T2>> operator+(value<T1> const& lhs, T2 const& rhs)
+constexpr value<detail::wider_t<T1, T2>> operator+(value<T1> const& lhs, T2 const& rhs)
 {
     return lhs.get() + rhs;
 }
@@ -723,7 +723,7 @@ value<detail::wider_t<T1, T2>> operator+(value<T1> const& lhs, T2 const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar_numeric<T1, T2>::value>
 >
-value<detail::wider_t<T1, T2>> operator-(value<T1> const& lhs, T2 const& rhs)
+constexpr value<detail::wider_t<T1, T2>> operator-(value<T1> const& lhs, T2 const& rhs)
 {
     return lhs.get() - rhs;
 }
@@ -731,7 +731,7 @@ value<detail::wider_t<T1, T2>> operator-(value<T1> const& lhs, T2 const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar_numeric<T1, T2>::value>
 >
-value<detail::wider_t<T1, T2>> operator*(value<T1> const& lhs, T2 const& rhs)
+constexpr value<detail::wider_t<T1, T2>> operator*(value<T1> const& lhs, T2 const& rhs)
 {
     return lhs.get() * rhs;
 }
@@ -739,7 +739,7 @@ value<detail::wider_t<T1, T2>> operator*(value<T1> const& lhs, T2 const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar_numeric<T1, T2>::value>
 >
-value<detail::wider_t<T1, T2>> operator/(value<T1> const& lhs, T2 const& rhs)
+constexpr value<detail::wider_t<T1, T2>> operator/(value<T1> const& lhs, T2 const& rhs)
 {
     return lhs.get() / rhs;
 }
@@ -747,7 +747,7 @@ value<detail::wider_t<T1, T2>> operator/(value<T1> const& lhs, T2 const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar_numeric<T1, T2>::value>
 >
-value<detail::wider_t<T1, T2>> operator%(value<T1> const& lhs, T2 const& rhs)
+constexpr value<detail::wider_t<T1, T2>> operator%(value<T1> const& lhs, T2 const& rhs)
 {
     return lhs.get() % rhs;
 }
@@ -755,7 +755,7 @@ value<detail::wider_t<T1, T2>> operator%(value<T1> const& lhs, T2 const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_unsigned_integral<T1, T2>::value>
 >
-value<detail::wider_t<T1, T2>> operator&(value<T1> const& lhs, T2 const& rhs)
+constexpr value<detail::wider_t<T1, T2>> operator&(value<T1> const& lhs, T2 const& rhs)
 {
     return lhs.get() & rhs;
 }
@@ -763,7 +763,7 @@ value<detail::wider_t<T1, T2>> operator&(value<T1> const& lhs, T2 const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_unsigned_integral<T1, T2>::value>
 >
-value<detail::wider_t<T1, T2>> operator|(value<T1> const& lhs, T2 const& rhs)
+constexpr value<detail::wider_t<T1, T2>> operator|(value<T1> const& lhs, T2 const& rhs)
 {
     return lhs.get() | rhs;
 }
@@ -771,7 +771,7 @@ value<detail::wider_t<T1, T2>> operator|(value<T1> const& lhs, T2 const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_unsigned_integral<T1, T2>::value>
 >
-value<detail::wider_t<T1, T2>> operator^(value<T1> const& lhs, T2 const& rhs)
+constexpr value<detail::wider_t<T1, T2>> operator^(value<T1> const& lhs, T2 const& rhs)
 {
     return lhs.get() ^ rhs;
 }
@@ -780,7 +780,7 @@ template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::is_unsigned_integral<T1>::value &&
     std::is_integral<T2>::value>
 >
-value<T1> operator<<(value<T1> const& lhs, T2 const& rhs)
+constexpr value<T1> operator<<(value<T1> const& lhs, T2 const& rhs)
 {
     return lhs.get() << rhs;
 }
@@ -789,7 +789,7 @@ template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::is_unsigned_integral<T1>::value &&
     std::is_integral<T2>::value>
 >
-value<T1> operator>>(value<T1> const& lhs, T2 const& rhs)
+constexpr value<T1> operator>>(value<T1> const& lhs, T2 const& rhs)
 {
     return lhs.get() >> rhs;
 }
@@ -800,7 +800,7 @@ value<T1> operator>>(value<T1> const& lhs, T2 const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar<T1, T2>::value>
 >
-value<bool> operator==(T1 const& lhs, value<T2> const& rhs)
+constexpr value<bool> operator==(T1 const& lhs, value<T2> const& rhs)
 {
     return lhs == rhs.get();
 }
@@ -808,7 +808,7 @@ value<bool> operator==(T1 const& lhs, value<T2> const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar<T1, T2>::value>
 >
-value<bool> operator!=(T1 const& lhs, value<T2> const& rhs)
+constexpr value<bool> operator!=(T1 const& lhs, value<T2> const& rhs)
 {
     return lhs != rhs.get();
 }
@@ -816,7 +816,7 @@ value<bool> operator!=(T1 const& lhs, value<T2> const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar_numeric<T1, T2>::value>
 >
-value<bool> operator<(T1 const& lhs, value<T2> const& rhs)
+constexpr value<bool> operator<(T1 const& lhs, value<T2> const& rhs)
 {
     return lhs < rhs.get();
 }
@@ -824,7 +824,7 @@ value<bool> operator<(T1 const& lhs, value<T2> const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar_numeric<T1, T2>::value>
 >
-value<bool> operator<=(T1 const& lhs, value<T2> const& rhs)
+constexpr value<bool> operator<=(T1 const& lhs, value<T2> const& rhs)
 {
     return lhs <= rhs.get();
 }
@@ -832,7 +832,7 @@ value<bool> operator<=(T1 const& lhs, value<T2> const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar_numeric<T1, T2>::value>
 >
-value<bool> operator>(T1 const& lhs, value<T2> const& rhs)
+constexpr value<bool> operator>(T1 const& lhs, value<T2> const& rhs)
 {
     return lhs > rhs.get();
 }
@@ -840,7 +840,7 @@ value<bool> operator>(T1 const& lhs, value<T2> const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar_numeric<T1, T2>::value>
 >
-value<bool> operator>=(T1 const& lhs, value<T2> const& rhs)
+constexpr value<bool> operator>=(T1 const& lhs, value<T2> const& rhs)
 {
     return lhs >= rhs.get();
 }
@@ -848,7 +848,7 @@ value<bool> operator>=(T1 const& lhs, value<T2> const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar_numeric<T1, T2>::value>
 >
-value<detail::wider_t<T1, T2>> operator+(T1 const& lhs, value<T2> const& rhs)
+constexpr value<detail::wider_t<T1, T2>> operator+(T1 const& lhs, value<T2> const& rhs)
 {
     return lhs + rhs.get();
 }
@@ -856,7 +856,7 @@ value<detail::wider_t<T1, T2>> operator+(T1 const& lhs, value<T2> const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar_numeric<T1, T2>::value>
 >
-value<detail::wider_t<T1, T2>> operator-(T1 const& lhs, value<T2> const& rhs)
+constexpr value<detail::wider_t<T1, T2>> operator-(T1 const& lhs, value<T2> const& rhs)
 {
     return lhs - rhs.get();
 }
@@ -864,7 +864,7 @@ value<detail::wider_t<T1, T2>> operator-(T1 const& lhs, value<T2> const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar_numeric<T1, T2>::value>
 >
-value<detail::wider_t<T1, T2>> operator*(T1 const& lhs, value<T2> const& rhs)
+constexpr value<detail::wider_t<T1, T2>> operator*(T1 const& lhs, value<T2> const& rhs)
 {
     return lhs * rhs.get();
 }
@@ -872,7 +872,7 @@ value<detail::wider_t<T1, T2>> operator*(T1 const& lhs, value<T2> const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar_numeric<T1, T2>::value>
 >
-value<detail::wider_t<T1, T2>> operator/(T1 const& lhs, value<T2> const& rhs)
+constexpr value<detail::wider_t<T1, T2>> operator/(T1 const& lhs, value<T2> const& rhs)
 {
     return lhs / rhs.get();
 }
@@ -880,7 +880,7 @@ value<detail::wider_t<T1, T2>> operator/(T1 const& lhs, value<T2> const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_similar_numeric<T1, T2>::value>
 >
-value<detail::wider_t<T1, T2>> operator%(T1 const& lhs, value<T2> const& rhs)
+constexpr value<detail::wider_t<T1, T2>> operator%(T1 const& lhs, value<T2> const& rhs)
 {
     return lhs % rhs.get();
 }
@@ -888,7 +888,7 @@ value<detail::wider_t<T1, T2>> operator%(T1 const& lhs, value<T2> const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_unsigned_integral<T1, T2>::value>
 >
-value<detail::wider_t<T1, T2>> operator&(T1 const& lhs, value<T2> const& rhs)
+constexpr value<detail::wider_t<T1, T2>> operator&(T1 const& lhs, value<T2> const& rhs)
 {
     return lhs & rhs.get();
 }
@@ -896,7 +896,7 @@ value<detail::wider_t<T1, T2>> operator&(T1 const& lhs, value<T2> const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_unsigned_integral<T1, T2>::value>
 >
-value<detail::wider_t<T1, T2>> operator|(T1 const& lhs, value<T2> const& rhs)
+constexpr value<detail::wider_t<T1, T2>> operator|(T1 const& lhs, value<T2> const& rhs)
 {
     return lhs | rhs.get();
 }
@@ -904,7 +904,7 @@ value<detail::wider_t<T1, T2>> operator|(T1 const& lhs, value<T2> const& rhs)
 template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::are_unsigned_integral<T1, T2>::value>
 >
-value<detail::wider_t<T1, T2>> operator^(T1 const& lhs, value<T2> const& rhs)
+constexpr value<detail::wider_t<T1, T2>> operator^(T1 const& lhs, value<T2> const& rhs)
 {
     return lhs ^ rhs.get();
 }
@@ -913,7 +913,7 @@ template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::is_unsigned_integral<T1>::value &&
     std::is_integral<T2>::value>
 >
-value<T1> operator<<(T1 const& lhs, value<T2> const& rhs)
+constexpr value<T1> operator<<(T1 const& lhs, value<T2> const& rhs)
 {
     return lhs << rhs.get();
 }
@@ -922,7 +922,7 @@ template<typename T1, typename T2, typename = detail::enable_if_t<
     detail::is_unsigned_integral<T1>::value &&
     std::is_integral<T2>::value>
 >
-value<T1> operator>>(T1 const& lhs, value<T2> const& rhs)
+constexpr value<T1> operator>>(T1 const& lhs, value<T2> const& rhs)
 {
     return lhs >> rhs.get();
 }
@@ -933,22 +933,22 @@ value<T1> operator>>(T1 const& lhs, value<T2> const& rhs)
 template<typename T, typename = detail::enable_if_t<
     detail::is_numeric<T>::value>
 >
-bool operator&&(value<bool> const& lhs, T const& rhs) = delete;
+constexpr bool operator&&(value<bool> const& lhs, T const& rhs) = delete;
 
 template<typename T, typename = detail::enable_if_t<
     detail::is_numeric<T>::value>
 >
-bool operator||(value<bool> const& lhs, T const& rhs) = delete;
+constexpr bool operator||(value<bool> const& lhs, T const& rhs) = delete;
 
 template<typename T, typename = detail::enable_if_t<
     detail::is_numeric<T>::value>
 >
-bool operator&&(T const& lhs, value<bool> const& rhs) = delete;
+constexpr bool operator&&(T const& lhs, value<bool> const& rhs) = delete;
 
 template<typename T, typename = detail::enable_if_t<
     detail::is_numeric<T>::value>
 >
-bool operator||(T const& lhs, value<bool> const& rhs) = delete;
+constexpr bool operator||(T const& lhs, value<bool> const& rhs) = delete;
 
 // IOStream
 //----------
@@ -971,7 +971,7 @@ std::istream& operator>>(std::istream& s, value<T>& v)
 //-----------
 
 template<typename T>
-value<T> make_value(T const& value)
+constexpr value<T> make_value(T const& value)
 {
     return value;
 }
@@ -1103,17 +1103,17 @@ constexpr value<unsigned long long> operator"" _null()
     return detail::build_integral_literal<unsigned long long, Digits...>();
 }
 
-inline value<float> operator"" _nf(long double value)
+constexpr inline value<float> operator"" _nf(long double value)
 {
     return static_cast<float>(value);
 }
 
-inline value<double> operator"" _nd(long double value)
+constexpr inline value<double> operator"" _nd(long double value)
 {
     return static_cast<double>(value);
 }
 
-inline value<long double> operator"" _nld(long double value)
+constexpr inline value<long double> operator"" _nld(long double value)
 {
     return value;
 }
@@ -1136,22 +1136,22 @@ constexpr value<std::max_align_t> operator"" _nma()
     return detail::build_integral_literal<std::max_align_t, Digits...>();
 }
 
-inline value<char> operator"" _n(char value)
+constexpr inline value<char> operator"" _n(char value)
 {
     return value;
 }
 
-inline value<wchar_t> operator"" _n(wchar_t value)
+constexpr inline value<wchar_t> operator"" _n(wchar_t value)
 {
     return value;
 }
 
-inline value<char16_t> operator"" _n(char16_t value)
+constexpr inline value<char16_t> operator"" _n(char16_t value)
 {
     return value;
 }
 
-inline value<char32_t> operator"" _n(char32_t value)
+constexpr inline value<char32_t> operator"" _n(char32_t value)
 {
     return value;
 }
