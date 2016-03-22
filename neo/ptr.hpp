@@ -174,16 +174,6 @@ ptr<T> make_ptr(T* object)
     return object;
 }
 
-namespace aliases
-{
-
-template<typename T>
-using neo_ptr = ptr<T>;
-
-} // namespace aliases
-
-using namespace aliases;
-
 } // namespace neo
 
 #endif // NEO_PTR_HPP

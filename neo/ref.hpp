@@ -162,16 +162,6 @@ ref<T> make_ref(T& object)
     return object;
 }
 
-namespace aliases
-{
-
-template<typename T>
-using neo_ref = ref<T>;
-
-} // namespace aliases
-
-using namespace aliases;
-
 } // namespace neo
 
 #endif // NEO_REF_HPP

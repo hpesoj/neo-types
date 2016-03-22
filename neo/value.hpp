@@ -976,41 +976,34 @@ value<T> make_value(T const& value)
     return value;
 }
 
-namespace aliases
-{
+using void_ = value<void>;
 
-using neo_void = value<void>;
+using bool_ = value<bool>;
 
-using neo_bool = value<bool>;
+using byte = value<char>;
+using short_ = value<short>;
+using int_ = value<int>;
+using long_ = value<long>;
+using llong = value<long long>;
 
-using neo_byte = value<char>;
-using neo_short = value<short>;
-using neo_int = value<int>;
-using neo_long = value<long>;
-using neo_llong = value<long long>;
+using ubyte = value<unsigned char>;
+using ushort = value<unsigned short>;
+using uint = value<unsigned int>;
+using ulong = value<unsigned long>;
+using ullong = value<unsigned long long>;
 
-using neo_ubyte = value<unsigned char>;
-using neo_ushort = value<unsigned short>;
-using neo_uint = value<unsigned int>;
-using neo_ulong = value<unsigned long>;
-using neo_ullong = value<unsigned long long>;
+using float_ = value<float>;
+using double_ = value<double>;
+using ldouble = value<long double>;
 
-using neo_float = value<float>;
-using neo_double = value<double>;
-using neo_ldouble = value<long double>;
+using size = value<std::size_t>;
+using ptrdiff = value<std::ptrdiff_t>;
+using max_align = value<std::max_align_t>;
 
-using neo_size = value<std::size_t>;
-using neo_ptrdiff = value<std::ptrdiff_t>;
-using neo_max_align = value<std::max_align_t>;
-
-using neo_char = value<char>;
-using neo_wchar = value<wchar_t>;
-using neo_char16 = value<char16_t>;
-using neo_char32 = value<char32_t>;
-
-} // namespace aliases
-
-using namespace aliases;
+using char_ = value<char>;
+using wchar = value<wchar_t>;
+using char16 = value<char16_t>;
+using char32 = value<char32_t>;
 
 namespace literals
 {
@@ -1047,8 +1040,8 @@ constexpr value<T> build_integral_literal()
 
 } // namespace detail
 
-static const value<bool> neo_true = true;
-static const value<bool> neo_false = false;
+static const value<bool> true_ = true;
+static const value<bool> false_ = false;
 
 template<char... Digits>
 constexpr value<char> operator"" _nb()
