@@ -64,8 +64,9 @@ The value of Neo objects can be explicitly left undefined. Undefined objects are
 
 Fundamental objects may implicitly convert from type `T` to type `U`, where all values representable by type `T` may be represented by type `U` (widening conversions). You must use `static_cast` to explicitly convert from type `T` to type `U` when some values representable by type `T` may not be represented by type `U` (narrowing conversions).
 
-    int value = 1;
-    neo::short_ = value + 10; // error: short cannot represent all int values
+    neo::short_ add_a_dozen(int value) {
+        return value + 12; // error: short cannot represent all int values
+    }
 
 > Rationale: Implicit narrowing conversions may result in unexpected loss and/or corruption of information. If the programmer must explicitly perform narrowing conversions, they are forced to consider the potential dangers and, hopefully, ensure the correctness of their code.
 
@@ -73,7 +74,7 @@ Fundamental objects may implicitly convert from type `T` to type `U`, where all 
 
 Signed and unsigned Neo types do not implicitly convert to each other, and cannot be mixed in the same arithmetic expression.
 
-    neo::int_ foo(neo::int_ offset, neo::size count) {
+    neo::int_ get_index(neo::int_ offset, neo::size count) {
         return offset + count; // error: mixing of signed and unsigned types
     }
 
@@ -93,7 +94,7 @@ The fundamental type, `bool`, is an integral type, and as such may implicitly co
 
 Unsigned Neo integers support the bitwise operations `&`, `|` and `^`, while signed Neo integers do not.
 
-    neo::int_ foo(neo::int_ value, neo::int_ mask) {
+    neo::int_ mask_it(neo::int_ value, neo::int_ mask) {
         return foo | mask; // error: signed bitwise operation
     }
 
@@ -101,25 +102,23 @@ Unsigned Neo integers support the bitwise operations `&`, `|` and `^`, while sig
 
 ### No Unexpected Integer Promotion
 
-What would you expect the return type of `foo` to be?
+What would you expect the return type here to be?
 
-    auto foo(char a, char b) {
+    auto sub(char a, char b) {
         return a - b;
     }
 
 That's right! It's an `int`. But what about now?
 
-    auto foo(unsigned char a, unsigned char b)
-    {
+    auto combine(unsigned char a, unsigned char b) {
         return a | b;
     }
 
 Right again! It's still `int`. Wait. What...?
 
-This surprising behaviour is in the interest of performance, but not in the interest of common sense. Neo integers do not promote unexpectedly. The type of the result of an arithmetic operation is always the type of the wider of the two operands. Here the return type of `foo` is `neo::uchar`.
+This surprising behaviour is in the interest of performance, but not in the interest of common sense. Neo integers do not promote unexpectedly. The type of the result of an arithmetic operation is always the type of the wider of the two operands. Here, the return type is `neo::uchar`.
 
-    auto foo(neo::uchar a, neo::uchar b)
-    {
+    auto foo(neo::uchar a, neo::uchar b) {
         return = a | b;
     }
 
@@ -138,8 +137,7 @@ Unlike references, `neo::ref<T const>` cannot bind to and extend the life of r-v
 
 This means that `neo::ref` is not suited for use with function parameters. Instead, `neo::ref` is designed as a safer replacement for pointers, where they are used _like_ references (as opposed to arrays or owning pointers). Here is an example.
 
-    struct person
-    {
+    struct person {
         neo::ref<animal> pet;
     };
 
@@ -167,8 +165,7 @@ We can check the identity of a person's pet.
 
 But a person can never have no pet. However, perhaps forcing pet ownership seems a bit draconian, so we can instead use `neo::ptr` to allow optional pet ownership.
 
-    struct person
-    {
+    struct person {
         neo::ptr<animal> pet;
     };
 
@@ -209,7 +206,7 @@ And pet ownership can of course be rescinded.
 
 `std::vector` is designed to be easy to use safely; as such, `std::vector`s cannot be created or resized without providing values to fill it with. You can ensure that your `std::vector` has allocated enough memory to fit a specific number of values by calling `std::vector::reserve`.
 
-    constexpr int count = 10;
+    constexpr std::size_t count = 10;
 
     std::vector<int> v;
     v.reserve(count);
@@ -229,7 +226,7 @@ This works fine, but there may be situations where it would be easier to resize 
     v.reserve(count);
     emplace_back_n(v, count, neo::undefined);
 
-> Note: We have to be careful to `reserve` space in the vector, and construct the values in-place using `emplace_back`, as not calling `reserve` with sufficient space, using `push_back`, or calling the `std::vector` constructor would cause the `undefined` Neo values to be copied, and copying undefined values is undefined behaviour.
+> Note: We have to be careful to `reserve` space in the vector, and construct the values in-place using `emplace_back`, as not calling `reserve` with sufficient space, using `push_back`, or calling the `std::vector` constructor would cause the `neo::undefined` Neo values to be copied, and copying undefined values is undefined behaviour.
 
 ## Known Issues
 
