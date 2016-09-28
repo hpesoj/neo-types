@@ -95,12 +95,7 @@ public:
         return m_value;
     }
 
-    constexpr pointer const& get() const noexcept
-    {
-        return m_value;
-    }
-
-    pointer& get() noexcept
+    constexpr pointer get() const noexcept
     {
         return m_value;
     }

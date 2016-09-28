@@ -184,22 +184,6 @@ public:
     }
 
     template<typename U, typename = detail::enable_if_t<
-        detail::is_same<T, U>::value>
-    >
-    constexpr operator U const&() const noexcept
-    {
-        return m_value;
-    }
-
-    template<typename U, typename = detail::enable_if_t<
-        detail::is_same<T, U>::value>
-    >
-    operator U&() noexcept
-    {
-        return m_value;
-    }
-
-    template<typename U, typename = detail::enable_if_t<
         detail::is_safely_convertible<T, U>::value>
     >
     constexpr operator U() const noexcept
@@ -224,12 +208,7 @@ public:
         return static_cast<U>(m_value);
     }
 
-    constexpr T const& get() const noexcept
-    {
-        return m_value;
-    }
-
-    T& get() noexcept
+    constexpr T get() const noexcept
     {
         return m_value;
     }
@@ -500,12 +479,7 @@ public:
     {
     }
 
-    constexpr operator bool const&() const noexcept
-    {
-        return m_value;
-    }
-
-    operator bool&() noexcept
+    constexpr operator bool() const noexcept
     {
         return m_value;
     }
@@ -515,12 +489,7 @@ public:
         return !m_value;
     }
 
-    constexpr bool const& get() const noexcept
-    {
-        return m_value;
-    }
-
-    bool& get() noexcept
+    constexpr bool get() const noexcept
     {
         return m_value;
     }

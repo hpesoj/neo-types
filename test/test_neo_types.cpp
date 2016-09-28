@@ -20,16 +20,6 @@ using ullong = unsigned long long;
 
 using ldouble = long double;
 
-void zero(llong& v)
-{
-    v = 0;
-}
-
-void zero(int& v)
-{
-    v = 0;
-}
-
 bool is_zero(int v)
 {
     return v == 0;
@@ -128,7 +118,7 @@ TEST_CASE("neo<T> is the same size as T", "neo<T>")
     //is_zero_2(int());
 
     neo::int_ i = 42;
-    zero(i);
+    i = 0;
     CHECK(is_zero(i.get()));
 
     CHECK(sizeof(neo::void_) == 1u);
