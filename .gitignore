@@ -1,2 +1,7 @@
-*.VC.db
-*.VC.opendb
+# Visual Studio generated files
+*.db
+*.idb
+*.lastbuildstate
+*.obj
+*.opendb
+*.tlog
