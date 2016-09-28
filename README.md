@@ -11,7 +11,7 @@ NeoTypes is a header-only library containing wrappers for the C++ fundamental ty
     neo::value<float> f;
     neo::value<bool> b;
 
-Type aliases exist for convenience. Trailing underscores are used where aliases would otherwise be C++ keywords.
+Type aliases exist for convenience. Trailing uFnderscores are used where aliases would otherwise be C++ keywords.
 
     neo::int_ i;
     neo::uint i;
@@ -191,7 +191,7 @@ And pet ownership can of course be rescinded.
 
 `std::vector<bool>` is not a true STL container, because it does not contain `bool`s, and its `operator[]` does not return a `bool&`, but a _proxy reference object_. `std::vector<neo::bool_>` on the other hand is not specialized, and so _is_ a true STL container.
 
-    template<class T>
+    template <class T>
     void foo(std::vector<T>& v) {
         for (auto& t : v);
     }
@@ -213,7 +213,7 @@ And pet ownership can of course be rescinded.
 
 This works fine, but there may be situations where it would be easier to resize the `std::vector` first, and define its content later. With the Neo types, this is possible.
 
-    template<typename Container, typename... Args>
+    template <typename Container, typename... Args>
     void emplace_back_n(Container& c, neo::size n, Args const&... args) {
         for (neo::size i = 0u; i < n; ++i) {
             c.emplace_back(args...);
