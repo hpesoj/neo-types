@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="test">
+      <UniqueIdentifier>{f7718cba-5504-4b3e-8baa-1fb24ae7c091}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="neo">
+      <UniqueIdentifier>{f286e666-addf-4b6b-9181-6a1ded09e5af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="neo\detail">
+      <UniqueIdentifier>{3eb0ecdf-e59f-4206-9720-7b176976b41a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\test\catch.hpp">
+      <Filter>test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\operator_traits.hpp">
+      <Filter>test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\api\neo\neo.hpp">
+      <Filter>neo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\api\neo\ptr.hpp">
+      <Filter>neo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\api\neo\ref.hpp">
+      <Filter>neo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\api\neo\stdint.hpp">
+      <Filter>neo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\api\neo\undefined.hpp">
+      <Filter>neo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\api\neo\value.hpp">
+      <Filter>neo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\api\neo\detail\type_traits.hpp">
+      <Filter>neo\detail</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\test\test_main.cpp">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\test_neo_types.cpp">
+      <Filter>test</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
