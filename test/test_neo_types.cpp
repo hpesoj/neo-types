@@ -299,13 +299,13 @@ TEST_CASE("neo::int_ implicit conversion", "neo::int_")
 {
     SECTION("is not defined for boolean types")
     {
-        CHECK((!implicit_conversion_traits<neo::int_, bool>::value));
+        CHECK((!std::is_convertible<neo::int_, bool>::value));
     }
 
     SECTION("is not defined for narrower signed integer types")
     {
-        CHECK((!implicit_conversion_traits<neo::int_, byte>::value));
-        CHECK((!implicit_conversion_traits<neo::int_, short>::value));
+        CHECK((!std::is_convertible<neo::int_, byte>::value));
+        CHECK((!std::is_convertible<neo::int_, short>::value));
     }
 
     SECTION("is defined for wider signed integer types")
@@ -316,16 +316,16 @@ TEST_CASE("neo::int_ implicit conversion", "neo::int_")
 
     SECTION("is not defined for unsigned integer types")
     {
-        CHECK((!implicit_conversion_traits<neo::int_, ubyte>::value));
-        CHECK((!implicit_conversion_traits<neo::int_, ushort>::value));
-        CHECK((!implicit_conversion_traits<neo::int_, uint>::value));
-        CHECK((!implicit_conversion_traits<neo::int_, ullong>::value));
+        CHECK((!std::is_convertible<neo::int_, ubyte>::value));
+        CHECK((!std::is_convertible<neo::int_, ushort>::value));
+        CHECK((!std::is_convertible<neo::int_, uint>::value));
+        CHECK((!std::is_convertible<neo::int_, ullong>::value));
     }
 
     SECTION("is not defined for floating point types")
     {
-        CHECK((!implicit_conversion_traits<neo::int_, float>::value));
-        CHECK((!implicit_conversion_traits<neo::int_, double>::value));
+        CHECK((!std::is_convertible<neo::int_, float>::value));
+        CHECK((!std::is_convertible<neo::int_, double>::value));
     }
 }
 
@@ -1023,30 +1023,30 @@ TEST_CASE("neo::ref<T> copy construction", "neo::ref")
 {
     SECTION("is defined for references")
     {
-        CHECK((copy_construction_traits<neo::ref<int>, int>::value));
-        CHECK((copy_construction_traits<neo::ref<int>, neo::ref<int>>::value));
-        CHECK((copy_construction_traits<neo::ref<int>, neo::ref<int> const>::value));
+        CHECK((std::is_constructible<neo::ref<int>, int&>::value));
+        CHECK((std::is_constructible<neo::ref<int>, neo::ref<int>>::value));
+        CHECK((std::is_constructible<neo::ref<int>, neo::ref<int> const>::value));
     }
 
     SECTION("is not defined for references to const")
     {
-        CHECK(!(copy_construction_traits<neo::ref<int>, int const>::value));
-        CHECK(!(copy_construction_traits<neo::ref<int>, neo::ref<int const>>::value));
-        CHECK(!(copy_construction_traits<neo::ref<int>, neo::ref<int const> const>::value));
+        CHECK(!(std::is_constructible<neo::ref<int>, int const&>::value));
+        CHECK(!(std::is_constructible<neo::ref<int>, neo::ref<int const>>::value));
+        CHECK(!(std::is_constructible<neo::ref<int>, neo::ref<int const> const>::value));
     }
 
     SECTION("is defined for subclass references")
     {
-        CHECK((copy_construction_traits<neo::ref<base>, derived>::value));
-        CHECK((copy_construction_traits<neo::ref<base>, neo::ref<derived>>::value));
-        CHECK((copy_construction_traits<neo::ref<base>, neo::ref<derived> const>::value));
+        CHECK((std::is_constructible<neo::ref<base>, derived&>::value));
+        CHECK((std::is_constructible<neo::ref<base>, neo::ref<derived>>::value));
+        CHECK((std::is_constructible<neo::ref<base>, neo::ref<derived> const>::value));
     }
 
     SECTION("is not defined for subclass references to const")
     {
-        CHECK(!(copy_construction_traits<neo::ref<base>, derived const>::value));
-        CHECK(!(copy_construction_traits<neo::ref<base>, neo::ref<derived const>>::value));
-        CHECK(!(copy_construction_traits<neo::ref<base>, neo::ref<derived const> const>::value));
+        CHECK(!(std::is_constructible<neo::ref<base>, derived const&>::value));
+        CHECK(!(std::is_constructible<neo::ref<base>, neo::ref<derived const>>::value));
+        CHECK(!(std::is_constructible<neo::ref<base>, neo::ref<derived const> const>::value));
     }
 }
 
@@ -1054,22 +1054,22 @@ TEST_CASE("neo::ref<T const> copy construction", "neo::ref")
 {
     SECTION("is defined for all references")
     {
-        CHECK((copy_construction_traits<neo::ref<int const>, int>::value));
-        CHECK((copy_construction_traits<neo::ref<int const>, int const>::value));
-        CHECK((copy_construction_traits<neo::ref<int const>, neo::ref<int>>::value));
-        CHECK((copy_construction_traits<neo::ref<int const>, neo::ref<int> const>::value));
-        CHECK((copy_construction_traits<neo::ref<int const>, neo::ref<int const>>::value));
-        CHECK((copy_construction_traits<neo::ref<int const>, neo::ref<int const> const>::value));
+        CHECK((std::is_constructible<neo::ref<int const>, int&>::value));
+        CHECK((std::is_constructible<neo::ref<int const>, int const&>::value));
+        CHECK((std::is_constructible<neo::ref<int const>, neo::ref<int>>::value));
+        CHECK((std::is_constructible<neo::ref<int const>, neo::ref<int> const>::value));
+        CHECK((std::is_constructible<neo::ref<int const>, neo::ref<int const>>::value));
+        CHECK((std::is_constructible<neo::ref<int const>, neo::ref<int const> const>::value));
     }
 
     SECTION("is defined for all subclass references")
     {
-        CHECK((copy_construction_traits<neo::ref<base const>, derived>::value));
-        CHECK((copy_construction_traits<neo::ref<base const>, derived const>::value));
-        CHECK((copy_construction_traits<neo::ref<base const>, neo::ref<derived>>::value));
-        CHECK((copy_construction_traits<neo::ref<base const>, neo::ref<derived> const>::value));
-        CHECK((copy_construction_traits<neo::ref<base const>, neo::ref<derived const>>::value));
-        CHECK((copy_construction_traits<neo::ref<base const>, neo::ref<derived const> const>::value));
+        CHECK((std::is_constructible<neo::ref<base const>, derived&>::value));
+        CHECK((std::is_constructible<neo::ref<base const>, derived const&>::value));
+        CHECK((std::is_constructible<neo::ref<base const>, neo::ref<derived>>::value));
+        CHECK((std::is_constructible<neo::ref<base const>, neo::ref<derived> const>::value));
+        CHECK((std::is_constructible<neo::ref<base const>, neo::ref<derived const>>::value));
+        CHECK((std::is_constructible<neo::ref<base const>, neo::ref<derived const> const>::value));
     }
 }
 
@@ -1077,38 +1077,38 @@ TEST_CASE("neo::ref<T> move construction", "neo::ref")
 {
     SECTION("is not defined for regular references")
     {
-        CHECK(!(move_construction_traits<neo::ref<int>, int>::value));
-        CHECK(!(move_construction_traits<neo::ref<int>, int const>::value));
+        CHECK(!(std::is_constructible<neo::ref<int>, int&&>::value));
+        CHECK(!(std::is_constructible<neo::ref<int>, int const&&>::value));
     }
 
     SECTION("is defined for references")
     {
-        CHECK((move_construction_traits<neo::ref<int>, neo::ref<int>>::value));
-        CHECK((move_construction_traits<neo::ref<int>, neo::ref<int> const>::value));
+        CHECK((std::is_constructible<neo::ref<int>, neo::ref<int>&&>::value));
+        CHECK((std::is_constructible<neo::ref<int>, neo::ref<int> const&&>::value));
     }
 
     SECTION("is not defined for references to const")
     {
-        CHECK(!(move_construction_traits<neo::ref<int>, neo::ref<int const>>::value));
-        CHECK(!(move_construction_traits<neo::ref<int>, neo::ref<int const> const>::value));
+        CHECK(!(std::is_constructible<neo::ref<int>, neo::ref<int const>&&>::value));
+        CHECK(!(std::is_constructible<neo::ref<int>, neo::ref<int const> const&&>::value));
     }
 
     SECTION("is not defined for regular subclass references")
     {
-        CHECK(!(move_construction_traits<neo::ref<base>, derived>::value));
-        CHECK(!(move_construction_traits<neo::ref<base>, derived const>::value));
+        CHECK(!(std::is_constructible<neo::ref<base>, derived&&>::value));
+        CHECK(!(std::is_constructible<neo::ref<base>, derived const&&>::value));
     }
 
     SECTION("is defined for subclass references")
     {
-        CHECK((move_construction_traits<neo::ref<base>, neo::ref<derived>>::value));
-        CHECK((move_construction_traits<neo::ref<base>, neo::ref<derived> const>::value));
+        CHECK((std::is_constructible<neo::ref<base>, neo::ref<derived>&&>::value));
+        CHECK((std::is_constructible<neo::ref<base>, neo::ref<derived> const&&>::value));
     }
 
     SECTION("is not defined for subclass references to const")
     {
-        CHECK(!(move_construction_traits<neo::ref<base>, neo::ref<derived const>>::value));
-        CHECK(!(move_construction_traits<neo::ref<base>, neo::ref<derived const> const>::value));
+        CHECK(!(std::is_constructible<neo::ref<base>, neo::ref<derived const>&&>::value));
+        CHECK(!(std::is_constructible<neo::ref<base>, neo::ref<derived const> const&&>::value));
     }
 }
 
@@ -1116,30 +1116,30 @@ TEST_CASE("neo::ref<T const> move construction", "neo::ref")
 {
     SECTION("is not defined for regular references")
     {
-        CHECK(!(move_construction_traits<neo::ref<int const>, int>::value));
-        CHECK(!(move_construction_traits<neo::ref<int const>, int const>::value));
+        CHECK(!(std::is_constructible<neo::ref<int const>, int&&>::value));
+        CHECK(!(std::is_constructible<neo::ref<int const>, int const&&>::value));
     }
 
     SECTION("is defined for references")
     {
-        CHECK((move_construction_traits<neo::ref<int const>, neo::ref<int>>::value));
-        CHECK((move_construction_traits<neo::ref<int const>, neo::ref<int> const>::value));
-        CHECK((move_construction_traits<neo::ref<int const>, neo::ref<int const>>::value));
-        CHECK((move_construction_traits<neo::ref<int const>, neo::ref<int const> const>::value));
+        CHECK((std::is_constructible<neo::ref<int const>, neo::ref<int>&&>::value));
+        CHECK((std::is_constructible<neo::ref<int const>, neo::ref<int> const&&>::value));
+        CHECK((std::is_constructible<neo::ref<int const>, neo::ref<int const>&&>::value));
+        CHECK((std::is_constructible<neo::ref<int const>, neo::ref<int const> const&&>::value));
     }
 
     SECTION("is not defined for regular subclass references")
     {
-        CHECK(!(move_construction_traits<neo::ref<base const>, derived>::value));
-        CHECK(!(move_construction_traits<neo::ref<base const>, derived const>::value));
+        CHECK(!(std::is_constructible<neo::ref<base const>, derived&&>::value));
+        CHECK(!(std::is_constructible<neo::ref<base const>, derived const&&>::value));
     }
 
     SECTION("is defined for subclass references")
     {
-        CHECK((move_construction_traits<neo::ref<base const>, neo::ref<derived>>::value));
-        CHECK((move_construction_traits<neo::ref<base const>, neo::ref<derived> const>::value));
-        CHECK((move_construction_traits<neo::ref<base const>, neo::ref<derived const>>::value));
-        CHECK((move_construction_traits<neo::ref<base const>, neo::ref<derived const> const>::value));
+        CHECK((std::is_constructible<neo::ref<base const>, neo::ref<derived>&&>::value));
+        CHECK((std::is_constructible<neo::ref<base const>, neo::ref<derived> const&&>::value));
+        CHECK((std::is_constructible<neo::ref<base const>, neo::ref<derived const>&&>::value));
+        CHECK((std::is_constructible<neo::ref<base const>, neo::ref<derived const> const&&>::value));
     }
 }
 
