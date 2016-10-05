@@ -344,6 +344,8 @@ TEST_CASE("neo::int_ explicit conversion", "neo::int_")
 
     SECTION("is defined for unsigned integer types")
     {
+        neo::int_ const ni;
+        int i = ni;
         CHECK((explicit_conversion_traits<neo::int_, ubyte>::value));
         CHECK((explicit_conversion_traits<neo::int_, ushort>::value));
         CHECK((explicit_conversion_traits<neo::int_, uint>::value));

@@ -70,7 +70,7 @@ struct are_unsigned_integral: std::integral_constant<bool,
 
 template<typename T1, typename T2>
 struct are_similar: std::integral_constant<bool,
-        are_numeric<T1, T2>::value &&
+        is_numeric<T1>::value == is_numeric<T2>::value &&
         std::is_integral<T1>::value == std::is_integral<T2>::value &&
         std::is_floating_point<T1>::value == std::is_floating_point<T2>::value &&
         std::is_signed<T1>::value == std::is_signed<T2>::value
@@ -86,7 +86,7 @@ struct are_similar_numeric: std::integral_constant<bool,
 };
 
 template<typename From, typename To, bool =
-    are_similar<From, To>::value
+    are_similar_numeric<From, To>::value
 >
 struct is_safely_convertible : std::integral_constant<bool,
         is_bounded<From, To>::value
@@ -100,17 +100,18 @@ struct is_safely_convertible<From, To, false> : std::false_type
 };
 
 template<typename From, typename To, bool =
-    are_numeric<From, To>::value
+    are_similar_numeric<From, To>::value
 >
 struct is_unsafely_convertible : std::integral_constant<bool,
-        !are_similar<From, To>::value ||
         !is_bounded<From, To>::value
     >
 {
 };
 
 template<typename From, typename To>
-struct is_unsafely_convertible<From, To, false> : std::false_type
+struct is_unsafely_convertible<From, To, false> : std::integral_constant<bool,
+        are_numeric<From, To>::value
+    >
 {
 };
 
