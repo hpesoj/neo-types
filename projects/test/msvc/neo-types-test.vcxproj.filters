@@ -39,6 +39,12 @@
     <ClInclude Include="..\..\..\api\neo\detail\type_traits.hpp">
       <Filter>neo\detail</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\api\neo\nullopt.hpp">
+      <Filter>neo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\api\neo\optional_ref.hpp">
+      <Filter>neo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\test\test_main.cpp">

@@ -148,6 +148,8 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\api\neo\detail\type_traits.hpp" />
     <ClInclude Include="..\..\..\api\neo\neo.hpp" />
+    <ClInclude Include="..\..\..\api\neo\nullopt.hpp" />
+    <ClInclude Include="..\..\..\api\neo\optional_ref.hpp" />
     <ClInclude Include="..\..\..\api\neo\ptr.hpp" />
     <ClInclude Include="..\..\..\api\neo\ref.hpp" />
     <ClInclude Include="..\..\..\api\neo\stdint.hpp" />

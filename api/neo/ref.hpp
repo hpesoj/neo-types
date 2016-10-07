@@ -43,14 +43,11 @@ public:
         return *this;
     }
 
-    ref(element_type&&) = delete;
-    ref& operator=(element_type&&) = delete;
-
     template<typename U, typename = detail::enable_if_t<
         std::is_convertible<U*, T*>::value>
     >
     constexpr ref(ref<U> const& other) noexcept :
-        m_value(other.get())
+        m_value(&other.value())
     {
     }
 
@@ -59,23 +56,23 @@ public:
     >
     ref& operator=(ref<U> const& other) noexcept
     {
-        m_value = other.get();
+        m_value = &other.value();
         return *this;
     }
 
-    constexpr operator element_type&() const noexcept
+    constexpr explicit operator bool() const noexcept
     {
-        return *m_value;
+        return true;
     }
 
-    constexpr pointer operator&() const noexcept
+    constexpr explicit operator ptr<bool>() const noexcept
     {
-        return m_value;
+        return static_cast<bool>(*this);
     }
 
     constexpr element_type& operator*() const noexcept
     {
-        return *m_value;
+        return value();
     }
 
     constexpr pointer operator->() const noexcept
@@ -83,9 +80,9 @@ public:
         return m_value;
     }
 
-    constexpr pointer get() const noexcept
+    constexpr element_type& value() const noexcept
     {
-        return m_value;
+        return *m_value;
     }
 };
 
@@ -94,7 +91,7 @@ template<typename T1, typename T2, typename =
 >
 constexpr value<bool> operator==(ref<T1> const& lhs, ref<T2> const& rhs) noexcept
 {
-    return &lhs.get() == &rhs.get();
+    return &lhs.value() == &rhs.value();
 }
 
 template<typename T1, typename T2, typename =
@@ -102,7 +99,7 @@ template<typename T1, typename T2, typename =
 >
 constexpr value<bool> operator!=(ref<T1> const& lhs, ref<T2> const& rhs) noexcept
 {
-    return &lhs.get() != &rhs.get();
+    return &lhs.value() != &rhs.value();
 }
 
 template<typename T1, typename T2, typename =
@@ -110,7 +107,7 @@ template<typename T1, typename T2, typename =
 >
 constexpr value<bool> operator<(ref<T1> const& lhs, ref<T2> const& rhs) noexcept
 {
-    return std::less<detail::common_type_t<T1*, T2*>>(&lhs.get(), &rhs.get());
+    return std::less<detail::common_type_t<T1*, T2*>>(&lhs.value(), &rhs.value());
 }
 
 template<typename T1, typename T2, typename =
@@ -135,20 +132,6 @@ template<typename T1, typename T2, typename =
 constexpr value<bool> operator>=(ref<T1> const& lhs, ref<T2> const& rhs) noexcept
 {
     return !(lhs < rhs);
-}
-
-template<typename T>
-std::ostream& operator<<(std::ostream& s, ref<T> const& v)
-{
-    s << v.get();
-    return s;
-}
-
-template<typename T>
-std::istream& operator>>(std::istream& s, ref<T>& v)
-{
-    s >> v.get();
-    return s;
 }
 
 template<typename T>

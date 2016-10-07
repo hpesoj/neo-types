@@ -29,6 +29,11 @@ private:
 
 public:
     constexpr ptr() noexcept :
+        ptr(nullptr)
+    {
+    }
+
+    constexpr ptr(std::nullptr_t) noexcept :
         m_value()
     {
     }
@@ -77,12 +82,7 @@ public:
 
     constexpr explicit operator ptr<bool>() const noexcept
     {
-        return m_value != nullptr;
-    }
-
-    constexpr pointer* operator&() const noexcept
-    {
-        return &m_value;
+        return static_cast<bool>(*this);
     }
 
     constexpr element_type& operator*() const noexcept

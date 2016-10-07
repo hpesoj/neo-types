@@ -1003,7 +1003,7 @@ TEST_CASE("neo::ref", "neo::ref")
 
     int myint = 0;
     neo::ref<int const> r = neo::make_ref(myint);
-    neo::ptr<int const> pr = &r;
+    neo::ptr<int const> pr = &*r;
     neo::ref<int const> pp = *r;
 
     neo::ptr<derived> asdasd;
